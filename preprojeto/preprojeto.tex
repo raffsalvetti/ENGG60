@@ -7,6 +7,7 @@
 \usepackage{amsmath,amsfonts,amssymb} % pacote matematico
 \usepackage{array}
 \usepackage{graphicx} % pacote grafico
+\usepackage{indentfirst}
 
 \usepackage{psfrag}
 \usepackage{pstricks}
@@ -68,30 +69,28 @@
 \pagenumbering{arabic}
 
 \begin{abstract}
-Inspeção de áreas de difícil acesso ou que apresentam perigo, como dutos de ventilação, linhas de distribuição de energia eletrica e reservátorios de produtos quimicos corrosivos, é uma realidade na indústria. O uso de robos operados remotamente é uma solução que oferece segurança ao operador. O objetivo deste trabalho é desenvolver de um robo remotamente controlado visando eficiencia, versatilidade e baixo custo de produção.
+	Inspeção de áreas de difícil acesso ou que apresentam perigo, como dutos de ventilação, sub-estações de energia eletrica e reservátorios de produtos corrosivos, é uma realidade na indústria. O uso de robos operados remotamente é uma solução que oferece segurança ao operador. O objetivo deste trabalho é desenvolver de um robo remotamente controlado visando eficiencia, versatilidade e baixo custo de produção.
 \end{abstract}
 
 
 %---------------------------------------------------------------------------------------------------------
-\section{Introdução ao Tema}
-
-Faça uma pesquisa bibliográfica prévia para mostrar o historico do problema, o que já foi pesquisado e onde estão as lacunas para investigação. Demonstre o estado da arte do problema e até onde as pesquisas recentes evoluíram o tema proposto. Introduza sua provável contribuição a ser obtida ao término do projeto de pesquisa de mestrado.
-
-
-%---------------------------------------------------------------------------------------------------------
-\section{Justificativa}
-Justificativa da razão da escolha do tema, sua relevancia, viabilidade e integração com as linhas de pesquisa do PPGSE.
-
-
+\section{Introdução}
+	Dutos de ventilação usado nos sistemas de ar-condicionado estão sujeitos a diversos tipos de danos, dentre os quais pode se listar os entupimentos progressivos devido ao acumulo de poeira e acumulo de pequenos animais mortos. Por normalmente ser um local de pouco acesso, apresentam dificuldades em sua manutenção, favorecendo a proliferação de bactérias e transmissão de vírus.\par
+	Sub-estações de energia elétrica oferecem riscos a vida de um operador por expor o corpo humano a uma quantidade enorme de energia, apesar de existir norma rigorosa para a realização de reparos ou manutenção preventiva, acontecem acidentes e algumas vezes com vitimas.\par
+	A inspeção de reservatórios de produtos quimicos requer uma minuciosa analise estrutural do reservatorio, o que necessita de muito tempo de exposição do operador aos riscos a saude.\par
+	As atividades descritas acima são uma das atividades extremamente necessárias no ambiente indústrial, que expõem pessoas a riscos de morte e que podem ser evitados atraves de dispositivos especializados que oferecem controle remoto. Os dispositivos usados para esse fim, são robôs especializados para cada tarefa que podem oferecer um sistema de navegação autonomo.
 
 %----------------------------------------------------------------------------------------------------------------------
 \section{Objetivos}
-Descreva o objetivo geral de sua proposta de pesquisa. Evidencie, através de objetivos específicos, o que deve ser investigado/trabalhado para se atingir o objetivo geral.
+	O objetivo deste trabalho é a construção de um robô que pode ser controlado remotamente através de um joystick. O dispositivo oferece uma visão imersiva, através de uma câmera embarcada, que pode funcionar em ambientes iluminados ou com pouca luz e tem eixos livres nas direções horizontal e vertical; possui também uma câmera localizada na parte traseira do robô que permite relizar manobras com mais conforto. É possível coletar informações do ambiente ao redor do robô atraves de sensores embarcados como: dois sensores de temperatura, um localizado na "cabeça" do robo, que pode ser direcionado, e outro no corpo; sensor de humidade do ar, sensor de particulas em suspensão no ar e etc. As leituras dos sensores são apresentadas na tela de navegação do robô e podem ser enviadas pela rede para um outro operador em tempo de coleta.
 
 
 %---------------------------------------------------------------------------------------------------------
 \section{Metodologia}
-Descreva como você pretende desenvolver o trabalho. Serão utilizadas simulaçoes? Será implantado um prototipo para validação experimental? Será uma análise matemática mais formal? Como você espera alcançar os resultados da sua dissertação? Você deve escrever como será o procedimento para conduzir seu trabalho de pesquisa. Procure destacar os prováveis materiais/equipamentos necessários.
+	Para o desenvolvimento do robô, sera usado uma plataforma feita em aluminio, o chassi, que deverá suportar o peso da bateria, motores, correntes, cameras e eletrônica necessária para seu funcionamento.\par
+	O movimento do robô se dará através de dois motores em conjunto com um par de correntes.\par
+	O desenvolvimento do software de operação será feito como módulo do ROS(Robot Operating System) e será dividido em 3 partes: uma parte que deve rodar num celular Android, responsável por mostrar as imagens capturadas pelas cameras embarcadas e fará a ponte de comunicação entre o joystick bluetooth e a plataforma robótica; uma segunda parte que rodará embarcada fará o controle dos motores de locomoção e da camera e coleta de dados dos sensores; e, por fim, uma terceira parte que rodará um computador remoto, responsável por armazenar dados e gerenciar a conexão entre os nós. Poderá ser implementado um plotador de mapa no terceiro nó. O desenvolvimento dos módulos ROS podem ser feitos de forma independente da parte fisica do robo pois pode-se usar simuladores de ambiente para esse fim, como o simulador GAZEBO.
+
 
 
 %---------------------------------------------------------------------------------------------------------
@@ -105,7 +104,7 @@ Todas as referências desta seção devem ser citadas ao longo do projeto. Prefe
 
 % OBSERVAÇÃO: A seção de referências deve ser gerada automaticamente usando os comandos \cite{} do LaTex. Recomenda-se o uso do padrão IEEE para citações, conforme abaixo.
 
-%\bibliographystyle{IEEEtran}
-%\bibliography{seu_arquivo_de_referencias}
+\bibliographystyle{IEEEtran}
+\bibliography{bibliografia}
 
 \end{document}
