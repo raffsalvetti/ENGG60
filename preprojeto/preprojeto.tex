@@ -8,6 +8,7 @@
 \usepackage{array}
 \usepackage{graphicx} % pacote grafico
 \usepackage{indentfirst}
+\usepackage[inline]{enumitem}
 
 \usepackage{psfrag}
 \usepackage{pstricks}
@@ -82,16 +83,45 @@
 
 %----------------------------------------------------------------------------------------------------------------------
 \section{Objetivos}
-	O objetivo deste trabalho é a construção de um robô que pode ser controlado remotamente através de um joystick. O dispositivo oferece uma visão imersiva, através de uma câmera embarcada, que pode funcionar em ambientes iluminados ou com pouca luz e tem eixos livres nas direções horizontal e vertical; possui também uma câmera localizada na parte traseira do robô que permite relizar manobras com mais conforto. É possível coletar informações do ambiente ao redor do robô atraves de sensores embarcados como: dois sensores de temperatura, um localizado na "cabeça" do robo, que pode ser direcionado, e outro no corpo; sensor de humidade do ar, sensor de particulas em suspensão no ar e etc. As leituras dos sensores são apresentadas na tela de navegação do robô e podem ser enviadas pela rede para um outro operador em tempo de coleta.
+	O objetivo deste trabalho é a construção de um robô que pode ser controlado remotamente através de um joystick. O dispositivo oferece uma visão imersiva, através de uma câmera embarcada, que pode funcionar em ambientes iluminados ou com pouca luz e tem eixos livres nas direções horizontal e vertical; possui também uma câmera localizada na parte traseira do robô que permite relizar manobras com mais precisão; É possível coletar informações do ambiente ao redor do robô atraves de sensores embarcados como: dois sensores de temperatura, um localizado na "cabeça" do robo (sensor laser), que pode ser direcionado, e outro no corpo do dispositivo; sensor de humidade do ar, sensor de particulas em suspensão no ar e etc. As leituras dos sensores são apresentadas na tela de navegação do robô e podem ser enviadas pela rede para um outro operador em tempo de coleta. Através dos dados envidos pela rede, pode ser montado um mapa, com o auxilio de um software especializado, do local onde o robô se encontra.
 
 
 %---------------------------------------------------------------------------------------------------------
 \section{Metodologia}
 	Para o desenvolvimento do robô, sera usado uma plataforma feita em aluminio, o chassi, que deverá suportar o peso da bateria, motores, correntes, cameras e eletrônica necessária para seu funcionamento.\par
-	O movimento do robô se dará através de dois motores em conjunto com um par de correntes.\par
-	O desenvolvimento do software de operação será feito como módulo do ROS(Robot Operating System) e será dividido em 3 partes: uma parte que deve rodar num celular Android, responsável por mostrar as imagens capturadas pelas cameras embarcadas e fará a ponte de comunicação entre o joystick bluetooth e a plataforma robótica; uma segunda parte que rodará embarcada fará o controle dos motores de locomoção e da camera e coleta de dados dos sensores; e, por fim, uma terceira parte que rodará um computador remoto, responsável por armazenar dados e gerenciar a conexão entre os nós. Poderá ser implementado um plotador de mapa no terceiro nó. O desenvolvimento dos módulos ROS podem ser feitos de forma independente da parte fisica do robo pois pode-se usar simuladores de ambiente para esse fim, como o simulador GAZEBO.
+	O movimento do robô se dará através de dois motores em conjunto com um par de correntes, acionados por uma placa microcontrolada, especialmente desenhada para esse propósito, que aciona os motores atraves de PWM\footnote{Modulação por largura de pulso}. A mesma placa que controla os motores de locomoção, controlará os motores que movimentam os motores da camera frontal. A comunicação entre a placa de controle de motores e o sistema computacional embarcado, um Raspberry PI 1 modelo B, acontecerá através do protocolo $I^2C$. \par
+	O software de operação consiste em três módulos e será desenvolvido usando o ROS(Robot Operating System). O três módulos são: uma nó que deverá rodar num celular Android, responsável por mostrar as imagens capturadas pelas cameras embarcadas e fará a ponte de comunicação entre os comandos originados de um joystick bluetooth e a plataforma robótica; uma segunda parte que rodará embarcada fará o controle dos motores de locomoção e da camera e coleta de dados dos sensores; e por fim, uma terceira parte que rodará num computador remoto, responsável por armazenar dados e gerenciar a conexão entre os nós. Poderá ser implementado no terceiro nó um construtor de mapa, que reproduz o "mundo capturado" pelos sensores. O desenvolvimento dos módulos ROS podem ser feitos de forma independente da parte fisica do robo pois pode-se usar simuladores de ambiente para esse fim.\par
+	
+\subsection{Descrição dos módulos \label{sec:desc-modulos}}
+\begin{enumerate}
+\item \textbf{Módulo do Celular Android - Visualização Imersiva\label{mod:celular}}\\
+	Esse módulo é um nó do ROS que mostra as imagens coletadas pelas cameras embarcadas no robô e processadas pelo nó master. Usa o celular juntamente com um oculos VR como um display para mostrar o vídeo e o som transmitido pelas cameras, dando a ideia de imersão. O módulo deve enviar os dados do giroscopio do celular afim de movimentar a camera frontal de acordo com o movimento da cabeça do operador. Um joystick comum, que oferece conectividade bluettoth, será usado para movimentar as esteiras do robo e interagir com as \emph{opções de menu}\footnote{Controle de sensore e luzes.} que aparecem no visor do celular.
+\item \textbf{Módulo de Controle Embarcado - Raspberry PI\label{mod:raspi}}\\
+	Esse módulo é um nó ROS que roda num \emph{Raspberry PI 1 modelo B}\footnote{Um micro computador do tipo SOC, do ingles "System on a Chip", ou computador num único chip.}, que oferece um processador ARM de 700MHz, 512Mb de memória RAM, 26 GPIO\footnote{Pinos de propósito geral.}, duas portas USB e uma porta Ethernet. É responsável por enviar os dados de navegação gerados pelo módulo \ref{mod:celular} para uma placa especializada, módulo \ref{mod:motor-driver}. A comunicação entre o módulo \ref{mod:motor-driver} e o Raspberry PI acontece pelos pinos GPIO reservados para a comunicação $I^2C$.
+\item \textbf{Módulo Driver - Controlador de Motores e Sensores\label{mod:motor-driver}}\\
+	O módulo drive é uma placa de circuito impresso que possui um microcontrolador AVR ou PIC com perifericos, memoria e quantidade de pinos suficientes para realizar as tarefas atribuidas a placa. As seguintes aplicações são obigações da placa driver: \begin{enumerate*} \item monitorar a tensão da bateria; \item fazer a regulação da tensão de 12V para 5V, tensão que alimenta o Raspberry PI; \item acionar os dois motores das esteiras e os dois  motores da camera frontal; \item coletar dados dos diversos sensores embarcados; \item controlar as luzes usadas na iluminação do ambiente\end{enumerate*}. A placa deve possuir um display indicativo para depuração e status do dispositivo, e um conector do tipo header de duas linhas com 26 pinos, usado para a conexão com o os pinos GPIO do Raspberry PI.
+\item \textbf{Módulo Principal - ROS Master\label{mod:ros-master}}\\
+	O módulo \ref{mod:ros-master} deverá rodar em um computador com um certo poder pre pcocessamento. Para o caso em questão, será um notebook com requisitos suficientes para rodas o ROS e ser o nó master, rodar processamentos do Open CV para um possível reconhecimento de imagens e recurso suficiente para possivelmente rodar um 
+\end{enumerate}
 
-
+\subsection{Conhecimento Necessário}
+	Para contruir os módulos listados na seção \ref{sec:desc-modulos}, se faz necessário os seguintes conhecimentos:
+\begin{enumerate}[noitemsep]
+	\item Eletrônica Geral
+	\item Microcontroladores
+	\item Protocolos de Comunicação (SPI e I2C)
+	\item Fontes de Alimentação
+	\item Supressão de Ruido (Interfêrencia Eletromagnética)
+	\item Acionamento de Motores
+	\item Sistemas de Transmissão Mecânica (Corrente de Transmissão)
+	\item Sistema Operaciona Linux
+	\item Sistema Operacional de Robôs - ROS
+	\item Sistema Operaciona Android
+	\item Linguagens de Programação (C e Java)
+	\item Android SDK (Cardboard SDK opcional)
+	\item Redes de Computadores (Ethernet e Bluetooth)
+	\item Visão Computacional (Open CV)
+\end{enumerate}
 
 %---------------------------------------------------------------------------------------------------------
 \section{Resultados Esperados}
