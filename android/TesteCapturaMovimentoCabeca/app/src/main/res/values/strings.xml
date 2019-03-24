@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TesteCapturaMovimentoCabeca</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="azimut">azimut</string>
+    <string name="pitch">pitch</string>
+    <string name="roll">roll</string>
+    <string name="reset">Reset</string>
+</resources>
