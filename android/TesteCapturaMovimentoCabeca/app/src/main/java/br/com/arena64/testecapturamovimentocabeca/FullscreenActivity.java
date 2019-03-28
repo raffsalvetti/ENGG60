@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 class TextViewTextChanger implements Runnable {
 
     private TextView tv;
@@ -122,6 +124,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private Button mButtonReset;
     private boolean calibrated = false;
     private float matrixR[] = new float[9];
+    private float matrixAdjustedR[] = new float[9];
     private float matrixI[] = new float[9];
     private float orientation[] = new float[3];
     private float orientationAdjust[] = new float[3];
@@ -204,38 +207,33 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
             mGeomagnetic = event.values;
         if (mGravity != null && mGeomagnetic != null) {
-            boolean success = false;
-            success = SensorManager.getRotationMatrix(matrixR, matrixI, mGravity, mGeomagnetic);
-            if (success) {
-                SensorManager.getOrientation(matrixR, orientation);
-                // orientation contains: azimut, pitch and roll
+//            boolean success = false;
+//            success = SensorManager.getRotationMatrix(matrixR, matrixI, mGravity, mGeomagnetic);
+//            if (success) {
+//                SensorManager.remapCoordinateSystem(matrixR, SensorManager.AXIS_Y, SensorManager.AXIS_X, matrixAdjustedR);
+//                SensorManager.getOrientation(matrixAdjustedR, orientation);
+//                // orientation contains: azimut, pitch and roll
 //                mAzimutTextViewTextChanger.updateText("Azimut: " + Math.toDegrees(orientation[0] + orientationAdjust[0]));
 //                mPitchTextViewTextChanger.updateText("Pitch: " + Math.toDegrees(orientation[1] + orientationAdjust[1]));
 //                mRollTextViewTextChanger.updateText("Roll: " + Math.toDegrees(orientation[2] + orientationAdjust[2]));
 //                this.runOnUiThread(mAzimutTextViewTextChanger);
 //                this.runOnUiThread(mPitchTextViewTextChanger);
 //                this.runOnUiThread(mRollTextViewTextChanger);
-
-//                Log.i("SENSOR", "onSensorChanged --> azimut: " + Math.toDegrees(orientation[0]));
-//                Log.i("SENSOR", "onSensorChanged --> pitch: " + Math.toDegrees(orientation[1]));
-//                Log.i("SENSOR", "onSensorChanged --> roll: " + Math.toDegrees(orientation[2]));
-            }
+//            }
         }
         if(event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
-            SensorManager.remapCoordinateSystem()
-            mAzimutTextViewTextChanger.updateText("Azimut: " + Math.toDegrees(event.values[0]));
-            mPitchTextViewTextChanger.updateText("Pitch: " + Math.toDegrees(event.values[1]));
-            mRollTextViewTextChanger.updateText("Roll: " + Math.toDegrees(event.values[2]));
+            orientation = Arrays.copyOf(event.values, event.values.length - 1);
+            mAzimutTextViewTextChanger.updateText("Azimut: " + Math.toDegrees(orientation[0] + orientationAdjust[0]));
+            mPitchTextViewTextChanger.updateText("Pitch: " + Math.toDegrees(orientation[1] + orientationAdjust[1]));
+            mRollTextViewTextChanger.updateText("Roll: " + Math.toDegrees(orientation[2] + orientationAdjust[2]));
             this.runOnUiThread(mAzimutTextViewTextChanger);
             this.runOnUiThread(mPitchTextViewTextChanger);
             this.runOnUiThread(mRollTextViewTextChanger);
-
         }
     }
 
     private void calibrate() {
         int i;
-
         for(i = 0 ; i < orientation.length ; i++) {
             orientationAdjust[i] = -1 * orientation[i];
         }
