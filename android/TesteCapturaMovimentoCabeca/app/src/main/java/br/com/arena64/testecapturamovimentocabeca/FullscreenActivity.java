@@ -17,8 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Arrays;
-
 class TextViewTextChanger implements Runnable {
 
     private TextView tv;
@@ -119,8 +117,11 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private Sensor mRotationVector;
     private float[] mGravity;
     private float[] mGeomagnetic;
-    private TextView mAzimut, mPitch, mRoll;
-    private TextViewTextChanger mAzimutTextViewTextChanger, mPitchTextViewTextChanger, mRollTextViewTextChanger;
+    private TextView mAzimutCalculated, mPitchCalculated, mRollCalculated, mAzimutGiven, mPitchGiven, mRollGiven,
+            mAccelerometerAccuracy, mMagnetometerAccuracy, mRotationVectorAccuracy;
+    private TextViewTextChanger mAzimutCalculatedTextViewTextChanger, mPitchCalculatedTextViewTextChanger, mRollCalculatedTextViewTextChanger,
+            mAzimutGivenTextViewTextChanger, mPitchGivenTextViewTextChanger, mRollGivenTextViewTextChanger,
+            mAccelerometerAccuracyTextViewTextChanger, mMagnetometerAccuracyTextChanger, mRotationVectorAccuracyTextChanger;
     private Button mButtonReset;
     private boolean calibrated = false;
     private float matrixR[] = new float[9];
@@ -138,14 +139,32 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
 //        mContentView = findViewById(R.id.fullscreen_content);
-        mAzimut = (TextView) findViewById(R.id.azimut);
-        mPitch = (TextView) findViewById(R.id.pitch);
-        mRoll = (TextView) findViewById(R.id.roll);
+
+        mAzimutCalculated = (TextView) findViewById(R.id.azimutCalculated);
+        mPitchCalculated = (TextView) findViewById(R.id.pitchCalculated);
+        mRollCalculated = (TextView) findViewById(R.id.rollCalculated);
+
+        mAzimutGiven = (TextView) findViewById(R.id.azimutGiven);
+        mPitchGiven = (TextView) findViewById(R.id.pitchGiven);
+        mRollGiven = (TextView) findViewById(R.id.rollGiven);
+
+        mAccelerometerAccuracy = (TextView) findViewById(R.id.accelerometerAccuracy);
+        mMagnetometerAccuracy = (TextView) findViewById(R.id.magnetometerAccuracy);
+        mRotationVectorAccuracy = (TextView) findViewById(R.id.rotationVectorAccuracy);
+
         mButtonReset = (Button) findViewById(R.id.button_reset);
 
-        mAzimutTextViewTextChanger = new TextViewTextChanger(mAzimut);
-        mPitchTextViewTextChanger = new TextViewTextChanger(mPitch);
-        mRollTextViewTextChanger = new TextViewTextChanger(mRoll);
+        mAzimutCalculatedTextViewTextChanger = new TextViewTextChanger(mAzimutCalculated);
+        mPitchCalculatedTextViewTextChanger = new TextViewTextChanger(mPitchCalculated);
+        mRollCalculatedTextViewTextChanger = new TextViewTextChanger(mRollCalculated);
+
+        mAzimutGivenTextViewTextChanger = new TextViewTextChanger(mAzimutGiven);
+        mPitchGivenTextViewTextChanger = new TextViewTextChanger(mPitchGiven);
+        mRollGivenTextViewTextChanger = new TextViewTextChanger(mRollGiven);
+
+        mAccelerometerAccuracyTextViewTextChanger = new TextViewTextChanger(mAccelerometerAccuracy);
+        mMagnetometerAccuracyTextChanger = new TextViewTextChanger(mMagnetometerAccuracy);
+        mRotationVectorAccuracyTextChanger = new TextViewTextChanger(mRotationVectorAccuracy);
 
         mButtonReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +174,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         });
 
         // Set up the user interaction to manually show or hide the system UI.
-        mAzimut.setOnClickListener(new View.OnClickListener() {
+        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toggle();
@@ -187,9 +206,9 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     protected void onPause() {
@@ -197,38 +216,72 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mSensorManager.unregisterListener(this);
     }
 
+    private String resolveAccuracy(int accuracy) {
+        switch (accuracy) {
+            case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
+                return "HIGH";
+            case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
+                return "MEDIUM";
+            case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
+                return "LOW";
+            case SensorManager.SENSOR_STATUS_UNRELIABLE:
+                return "UNRELIABLE";
+            default:
+                return "WTF";
+        }
+    }
+
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        Log.i("SENSOR", "onAccuracyChanged --> sensor: "+sensor+"; accuracy: " + accuracy);
+        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mAccelerometerAccuracyTextViewTextChanger.updateText("AccelerometerAccuracy: " + resolveAccuracy(accuracy));
+            this.runOnUiThread(mAccelerometerAccuracyTextViewTextChanger);
+        }
+        if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            mMagnetometerAccuracyTextChanger.updateText("MagnetometerAccuracy: " + resolveAccuracy(accuracy));
+            this.runOnUiThread(mMagnetometerAccuracyTextChanger);
+        }
+        if (sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
+            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + resolveAccuracy(accuracy));
+            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
+        }
     }
 
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+//            values[0]: Acceleration minus Gx on the x-axis
+//            values[1]: Acceleration minus Gy on the y-axis
+//            values[2]: Acceleration minus Gz on the z-axis
             mGravity = event.values;
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+//            All values are in micro-Tesla (uT) and measure the ambient magnetic field in the X, Y and Z axis.
             mGeomagnetic = event.values;
         if (mGravity != null && mGeomagnetic != null) {
-//            boolean success = false;
-//            success = SensorManager.getRotationMatrix(matrixR, matrixI, mGravity, mGeomagnetic);
-//            if (success) {
-//                SensorManager.remapCoordinateSystem(matrixR, SensorManager.AXIS_Y, SensorManager.AXIS_X, matrixAdjustedR);
-//                SensorManager.getOrientation(matrixAdjustedR, orientation);
-//                // orientation contains: azimut, pitch and roll
-//                mAzimutTextViewTextChanger.updateText("Azimut: " + Math.toDegrees(orientation[0] + orientationAdjust[0]));
-//                mPitchTextViewTextChanger.updateText("Pitch: " + Math.toDegrees(orientation[1] + orientationAdjust[1]));
-//                mRollTextViewTextChanger.updateText("Roll: " + Math.toDegrees(orientation[2] + orientationAdjust[2]));
-//                this.runOnUiThread(mAzimutTextViewTextChanger);
-//                this.runOnUiThread(mPitchTextViewTextChanger);
-//                this.runOnUiThread(mRollTextViewTextChanger);
-//            }
+            boolean success = false;
+            success = SensorManager.getRotationMatrix(matrixR, matrixI, mGravity, mGeomagnetic);
+            if (success) {
+                //SensorManager.remapCoordinateSystem(matrixR, SensorManager.AXIS_Y, SensorManager.AXIS_X, matrixAdjustedR);
+                SensorManager.getOrientation(matrixR, orientation);
+                // orientation contains: azimut, pitch and roll
+                mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0] + orientationAdjust[0])));
+                mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1] + orientationAdjust[1])));
+                mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2] + orientationAdjust[2])));
+                this.runOnUiThread(mAzimutCalculatedTextViewTextChanger);
+                this.runOnUiThread(mPitchCalculatedTextViewTextChanger);
+                this.runOnUiThread(mRollCalculatedTextViewTextChanger);
+            }
         }
         if(event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
-            orientation = Arrays.copyOf(event.values, event.values.length - 1);
-            mAzimutTextViewTextChanger.updateText("Azimut: " + Math.toDegrees(orientation[0] + orientationAdjust[0]));
-            mPitchTextViewTextChanger.updateText("Pitch: " + Math.toDegrees(orientation[1] + orientationAdjust[1]));
-            mRollTextViewTextChanger.updateText("Roll: " + Math.toDegrees(orientation[2] + orientationAdjust[2]));
-            this.runOnUiThread(mAzimutTextViewTextChanger);
-            this.runOnUiThread(mPitchTextViewTextChanger);
-            this.runOnUiThread(mRollTextViewTextChanger);
+//            Log.i("TESTE", "onSensorChanged: " + event.values.length);
+            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(event.values[0])));
+            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(event.values[1])));
+            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(event.values[2])));
+
+//            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
+//            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
+
+            this.runOnUiThread(mAzimutGivenTextViewTextChanger);
+            this.runOnUiThread(mPitchGivenTextViewTextChanger);
+            this.runOnUiThread(mRollGivenTextViewTextChanger);
         }
     }
 

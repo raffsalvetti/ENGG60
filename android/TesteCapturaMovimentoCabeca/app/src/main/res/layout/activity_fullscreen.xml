@@ -16,37 +16,125 @@
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
         <TextView
-            android:id="@+id/azimut"
+            android:id="@+id/accelerometerAccuracy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="fill_horizontal"
             android:keepScreenOn="true"
-            android:text="@string/azimut"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/pitch"
+            android:id="@+id/magnetometerAccuracy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="fill_horizontal"
             android:keepScreenOn="true"
-            android:text="@string/pitch"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/roll"
+            android:id="@+id/rotationVectorAccuracy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="fill_horizontal"
             android:keepScreenOn="true"
-            android:text="@string/roll"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/azimutCalculated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:keepScreenOn="true"
+                    android:text="@string/azimut"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pitchCalculated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:keepScreenOn="true"
+                    android:text="@string/pitch"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/rollCalculated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:keepScreenOn="true"
+                    android:text="@string/roll"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/azimutGiven"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:keepScreenOn="true"
+                    android:text="@string/azimut"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/pitchGiven"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:keepScreenOn="true"
+                    android:text="@string/pitch"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/rollGiven"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:keepScreenOn="true"
+                    android:text="@string/roll"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/button_reset"
