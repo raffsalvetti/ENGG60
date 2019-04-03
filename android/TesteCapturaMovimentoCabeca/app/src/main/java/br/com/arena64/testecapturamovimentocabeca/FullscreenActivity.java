@@ -19,7 +19,56 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+
+class MeanFilter extends ArrayList<Float> {
+    private int windowSize;
+
+    public MeanFilter(int windowSize) {
+        this.windowSize = windowSize;
+    }
+
+    public void addSample(Float sample) {
+        if(size() >= this.windowSize)
+            remove(0);
+        add(sample);
+    }
+
+    public float average() {
+        float sum = 0;
+        for(Float i : this) {
+            sum += i.floatValue();
+        }
+        return sum / size();
+    }
+}
+
+class SmoothOrientation {
+    private MeanFilter[] buffer;
+
+    public SmoothOrientation(int dimension, int windowSize) {
+        buffer = new MeanFilter[dimension];
+        for(int i = 0 ; i < buffer.length ; i++) {
+            buffer[i] = new MeanFilter(windowSize);
+        }
+    }
+
+    public void addSample(float[] samples) {
+        for(int i = 0 ; i < buffer.length ; i ++ ) {
+            buffer[i].addSample(samples[i]);
+        }
+    }
+
+    public float[] average() {
+        float[] av = new float[buffer.length];
+        for(int i = 0 ; i < buffer.length; i++) {
+            av[i] = buffer[i].average();
+        }
+        return av;
+    }
+
+}
 
 class TextViewTextChanger implements Runnable {
 
@@ -132,7 +181,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private float resetRotationMatrix[] = new float[9];
     private float inclinationMatrix[] = new float[9];
     private float orientation[] = new float[3];
-    private float orientationAdjust[] = new float[3];
+    private SmoothOrientation smoothOrientation = new SmoothOrientation(3, 80);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +317,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
                 } else {
                     SensorManager.getAngleChange(orientation, rotationMatrix, resetRotationMatrix);
                 }
+
                 // orientation contains: azimut, pitch and roll
                 mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0])));
                 mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1])));
@@ -275,26 +325,37 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
                 this.runOnUiThread(mAzimutCalculatedTextViewTextChanger);
                 this.runOnUiThread(mPitchCalculatedTextViewTextChanger);
                 this.runOnUiThread(mRollCalculatedTextViewTextChanger);
+
+                smoothOrientation.addSample(orientation);
+                float[] average = smoothOrientation.average();
+                mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(average[0])));
+                mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(average[1])));
+                mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(average[2])));
+
+                this.runOnUiThread(mAzimutGivenTextViewTextChanger);
+                this.runOnUiThread(mPitchGivenTextViewTextChanger);
+                this.runOnUiThread(mRollGivenTextViewTextChanger);
+
             }
         }
         if(event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
-            float[] tmpOrientaion = Arrays.copyOf(event.values, 3);
-            float[] tmpRotationMatrix = new float[9];
-            SensorManager.getRotationMatrixFromVector(tmpRotationMatrix, tmpOrientaion);
-            if(calibrated) {
-                SensorManager.getAngleChange(tmpOrientaion, tmpRotationMatrix, resetRotationMatrix);
-            }
-//            Log.i("TESTE", "onSensorChanged: " + event.values.length);
-            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[0])));
-            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[1])));
-            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[2])));
-
-//            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
-//            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
-
-            this.runOnUiThread(mAzimutGivenTextViewTextChanger);
-            this.runOnUiThread(mPitchGivenTextViewTextChanger);
-            this.runOnUiThread(mRollGivenTextViewTextChanger);
+//            float[] tmpOrientaion = Arrays.copyOf(event.values, 3);
+//            float[] tmpRotationMatrix = new float[9];
+//            SensorManager.getRotationMatrixFromVector(tmpRotationMatrix, tmpOrientaion);
+//            if(calibrated) {
+//                SensorManager.getAngleChange(tmpOrientaion, tmpRotationMatrix, resetRotationMatrix);
+//            }
+////            Log.i("TESTE", "onSensorChanged: " + event.values.length);
+//            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[0])));
+//            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[1])));
+//            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[2])));
+//
+////            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
+////            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
+//
+//            this.runOnUiThread(mAzimutGivenTextViewTextChanger);
+//            this.runOnUiThread(mPitchGivenTextViewTextChanger);
+//            this.runOnUiThread(mRollGivenTextViewTextChanger);
         }
     }
 
