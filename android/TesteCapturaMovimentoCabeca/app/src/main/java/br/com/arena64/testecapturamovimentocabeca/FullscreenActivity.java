@@ -2,6 +2,7 @@ package br.com.arena64.testecapturamovimentocabeca;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
+import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,12 +11,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.view.InputDevice;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Arrays;
 
 class TextViewTextChanger implements Runnable {
 
@@ -115,8 +119,8 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private Sensor mAccelerometer;
     private Sensor mAagnetometer;
     private Sensor mRotationVector;
-    private float[] mGravity;
-    private float[] mGeomagnetic;
+    private float[] mGravityVector;
+    private float[] mGeomagneticVector;
     private TextView mAzimutCalculated, mPitchCalculated, mRollCalculated, mAzimutGiven, mPitchGiven, mRollGiven,
             mAccelerometerAccuracy, mMagnetometerAccuracy, mRotationVectorAccuracy;
     private TextViewTextChanger mAzimutCalculatedTextViewTextChanger, mPitchCalculatedTextViewTextChanger, mRollCalculatedTextViewTextChanger,
@@ -124,9 +128,9 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
             mAccelerometerAccuracyTextViewTextChanger, mMagnetometerAccuracyTextChanger, mRotationVectorAccuracyTextChanger;
     private Button mButtonReset;
     private boolean calibrated = false;
-    private float matrixR[] = new float[9];
-    private float matrixAdjustedR[] = new float[9];
-    private float matrixI[] = new float[9];
+    private float rotationMatrix[] = new float[9];
+    private float resetRotationMatrix[] = new float[9];
+    private float inclinationMatrix[] = new float[9];
     private float orientation[] = new float[3];
     private float orientationAdjust[] = new float[3];
 
@@ -206,9 +210,9 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
-        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_GAME);
     }
 
     protected void onPause() {
@@ -251,30 +255,39 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 //            values[0]: Acceleration minus Gx on the x-axis
 //            values[1]: Acceleration minus Gy on the y-axis
 //            values[2]: Acceleration minus Gz on the z-axis
-            mGravity = event.values;
+            mGravityVector = event.values;
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
 //            All values are in micro-Tesla (uT) and measure the ambient magnetic field in the X, Y and Z axis.
-            mGeomagnetic = event.values;
-        if (mGravity != null && mGeomagnetic != null) {
+            mGeomagneticVector = event.values;
+        if (mGravityVector != null && mGeomagneticVector != null) {
             boolean success = false;
-            success = SensorManager.getRotationMatrix(matrixR, matrixI, mGravity, mGeomagnetic);
+            success = SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, mGravityVector, mGeomagneticVector);
             if (success) {
-                //SensorManager.remapCoordinateSystem(matrixR, SensorManager.AXIS_Y, SensorManager.AXIS_X, matrixAdjustedR);
-                SensorManager.getOrientation(matrixR, orientation);
+                if(!calibrated) {
+                    SensorManager.getOrientation(rotationMatrix, orientation);
+                } else {
+                    SensorManager.getAngleChange(orientation, rotationMatrix, resetRotationMatrix);
+                }
                 // orientation contains: azimut, pitch and roll
-                mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0] + orientationAdjust[0])));
-                mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1] + orientationAdjust[1])));
-                mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2] + orientationAdjust[2])));
+                mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0])));
+                mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1])));
+                mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2])));
                 this.runOnUiThread(mAzimutCalculatedTextViewTextChanger);
                 this.runOnUiThread(mPitchCalculatedTextViewTextChanger);
                 this.runOnUiThread(mRollCalculatedTextViewTextChanger);
             }
         }
         if(event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
+            float[] tmpOrientaion = Arrays.copyOf(event.values, 3);
+            float[] tmpRotationMatrix = new float[9];
+            SensorManager.getRotationMatrixFromVector(tmpRotationMatrix, tmpOrientaion);
+            if(calibrated) {
+                SensorManager.getAngleChange(tmpOrientaion, tmpRotationMatrix, resetRotationMatrix);
+            }
 //            Log.i("TESTE", "onSensorChanged: " + event.values.length);
-            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(event.values[0])));
-            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(event.values[1])));
-            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(event.values[2])));
+            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[0])));
+            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[1])));
+            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[2])));
 
 //            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
 //            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
@@ -286,10 +299,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     }
 
     private void calibrate() {
-        int i;
-        for(i = 0 ; i < orientation.length ; i++) {
-            orientationAdjust[i] = -1 * orientation[i];
-        }
+        resetRotationMatrix = Arrays.copyOf(rotationMatrix, rotationMatrix.length);
         calibrated = true;
     }
 
@@ -334,5 +344,15 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        // captura de eventos do joystick
+        if(event.getSource() == InputDevice.SOURCE_GAMEPAD || event.getSource() == InputDevice.SOURCE_DPAD || event.getSource() == InputDevice.SOURCE_JOYSTICK) {
+
+        }
+
+        return super.dispatchKeyEvent(event);
     }
 }
