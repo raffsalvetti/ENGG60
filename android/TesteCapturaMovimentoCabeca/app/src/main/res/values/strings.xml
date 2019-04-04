@@ -7,4 +7,5 @@
     <string name="pitch">pitch</string>
     <string name="roll">roll</string>
     <string name="reset">Reset</string>
+    <string name="send">Send</string>
 </resources>

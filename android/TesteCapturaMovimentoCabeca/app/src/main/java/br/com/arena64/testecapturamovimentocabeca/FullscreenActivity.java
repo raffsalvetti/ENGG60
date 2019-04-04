@@ -19,8 +19,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
 
 class MeanFilter extends ArrayList<Float> {
     private int windowSize;
@@ -175,13 +182,15 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private TextViewTextChanger mAzimutCalculatedTextViewTextChanger, mPitchCalculatedTextViewTextChanger, mRollCalculatedTextViewTextChanger,
             mAzimutGivenTextViewTextChanger, mPitchGivenTextViewTextChanger, mRollGivenTextViewTextChanger,
             mAccelerometerAccuracyTextViewTextChanger, mMagnetometerAccuracyTextChanger, mRotationVectorAccuracyTextChanger;
-    private Button mButtonReset;
+    private Button mButtonReset, mButtonSend;
     private boolean calibrated = false;
     private float rotationMatrix[] = new float[9];
     private float resetRotationMatrix[] = new float[9];
     private float inclinationMatrix[] = new float[9];
     private float orientation[] = new float[3];
     private SmoothOrientation smoothOrientation = new SmoothOrientation(3, 80);
+    private ConcurrentLinkedQueue buffer = new ConcurrentLinkedQueue();
+    private NetWorks netWorks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +215,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mRotationVectorAccuracy = (TextView) findViewById(R.id.rotationVectorAccuracy);
 
         mButtonReset = (Button) findViewById(R.id.button_reset);
+        mButtonSend = (Button) findViewById(R.id.button_send);
 
         mAzimutCalculatedTextViewTextChanger = new TextViewTextChanger(mAzimutCalculated);
         mPitchCalculatedTextViewTextChanger = new TextViewTextChanger(mPitchCalculated);
@@ -225,14 +235,21 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
                 calibrate();
             }
         });
+        mButtonSend.setOnClickListener(new View.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View view) {
+                                                       sendData();
+                                                   }
+                                               }
+        );
 
         // Set up the user interaction to manually show or hide the system UI.
-        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
+//        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                toggle();
+//            }
+//        });
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
@@ -245,6 +262,22 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        try {
+            netWorks = new NetWorks("10.75.1.56", 3200, buffer);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendData() {
+        if(netWorks.isActive()) {
+            netWorks.stop();
+        } else {
+            new Thread(netWorks).start();
+        }
     }
 
     @Override
@@ -328,6 +361,12 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
                 smoothOrientation.addSample(orientation);
                 float[] average = smoothOrientation.average();
+
+                buffer.add(new JSONArray(Arrays.asList(new double[] {
+                        Math.ceil(Math.toDegrees(average[0])),
+                        Math.ceil(Math.toDegrees(average[1])),
+                        Math.ceil(Math.toDegrees(average[2]))
+                })).toString());
                 mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(average[0])));
                 mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(average[1])));
                 mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(average[2])));

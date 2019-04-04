@@ -1,26 +1,52 @@
 import socket
 import sys
 import json
+import time
+import pygame
 
-HOST, PORT = "localhost", 9999
+WHITE =     (255, 255, 255)
+BLUE =      (  0,   0, 255)
+GREEN =     (  0, 255,   0)
+RED =       (255,   0,   0)
+TEXTCOLOR = (  0,   0,  0)
+(width, height) = (200, 300)
+localIP     = "10.75.1.56"
+localPort   = 3200
+bufferSize  = 1024
 
-m ='{"id": 2, "name": "abc"}'
-jsonObj = json.loads(m)
+running = True
 
-data = jsonObj
+def main():
+    global running, screen
 
-# Create a socket (SOCK_STREAM means a TCP socket)
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    pygame.init()
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("TUFF")
+    screen.fill(background_color)
+    pygame.display.update()
+    UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+    UDPServerSocket.bind((localIP, localPort))
 
-try:
-    # Connect to server and send data
-    sock.connect((HOST, PORT))
-    sock.sendall(jsonObj)
+    while running:
+        ev = pygame.event.get()
+        for event in ev:
+            if event.type == pygame.MOUSEBUTTONUP:
+                drawCircle()
+                pygame.display.update()
 
-    # Receive data from the server and shut down
-    received = sock.recv(1024)
-finally:
-    sock.close()
+            if event.type == pygame.QUIT:
+                running = False
 
-print "Sent:     {}".format(data)
-print "Received: {}".format(received)
+        bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+        print(bytesAddressPair)
+
+def getPos():
+    pos = pygame.mouse.get_pos()
+    return (pos)
+
+def drawCircle():
+    pos=getPos()
+    pygame.draw.circl(screen, BLUE, pos, 20)
+
+if __name__ == '__main__':
+    main()
