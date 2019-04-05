@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.JsonWriter;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -188,9 +191,10 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private float resetRotationMatrix[] = new float[9];
     private float inclinationMatrix[] = new float[9];
     private float orientation[] = new float[3];
-    private SmoothOrientation smoothOrientation = new SmoothOrientation(3, 80);
+    private SmoothOrientation smoothOrientation = new SmoothOrientation(3, 5);
     private ConcurrentLinkedQueue buffer = new ConcurrentLinkedQueue();
     private NetWorks netWorks;
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,9 +296,12 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mAccelerometer, 16000);
+        mSensorManager.registerListener(this, mAagnetometer, 16000);
+
+//        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+//        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_GAME);
+//        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_GAME);
     }
 
     protected void onPause() {
@@ -351,7 +358,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
                     SensorManager.getAngleChange(orientation, rotationMatrix, resetRotationMatrix);
                 }
 
-                // orientation contains: azimut, pitch and roll
+//                 orientation contains: azimut, pitch and roll
                 mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0])));
                 mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1])));
                 mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2])));
@@ -361,12 +368,14 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
                 smoothOrientation.addSample(orientation);
                 float[] average = smoothOrientation.average();
+//                float[] average = orientation;
 
-                buffer.add(new JSONArray(Arrays.asList(new double[] {
-                        Math.ceil(Math.toDegrees(average[0])),
-                        Math.ceil(Math.toDegrees(average[1])),
-                        Math.ceil(Math.toDegrees(average[2]))
-                })).toString());
+                buffer.add(gson.toJson(new double[] {
+                        Math.round(Math.toDegrees(average[0])),
+                        Math.round(Math.toDegrees(average[1])),
+                        Math.round(Math.toDegrees(average[2]))
+                }));
+
                 mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(average[0])));
                 mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(average[1])));
                 mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(average[2])));
