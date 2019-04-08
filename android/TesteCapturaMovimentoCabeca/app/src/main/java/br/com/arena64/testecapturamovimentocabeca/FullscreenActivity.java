@@ -268,7 +268,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         try {
-            netWorks = new NetWorks("10.75.1.56", 3200, buffer);
+            netWorks = new NetWorks("192.168.43.1", 3200, buffer);
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
