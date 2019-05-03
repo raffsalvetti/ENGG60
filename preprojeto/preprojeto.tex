@@ -30,6 +30,12 @@
 
 %\hyphenation{Trans-ac-tions}
 
+%\renewcommand{\contentsname}{Sumário}
+\addto\captionsportuguese{
+  \renewcommand{\contentsname}%
+    {\hspace*{\fill}\bfseries\Large Sumário\hspace*{\fill}}%
+}
+
 
 \begin{document}
 \pagenumbering{roman}
@@ -71,9 +77,9 @@
 
 %---------------------------------------------------------------------------
 
-\begin{titlepage}
+\pagebreak
 \begin{center}
-\Large{\bf{Tabela de Evolução}}
+\Large{\bf{Tabela de Modificações}}
 \end{center}
 
 \begin{center}
@@ -81,13 +87,17 @@
     \hline
     Versão & Data & Resumo \\ \hline
     1.0 & 20/03/2018 & Inicial.\par Desenvolvimento de uma plataforma robótica com movimento diferencial, sensores e câmeras embarcadas. O robô pode ser controlado remotamente através de um joystic e sua câmera de navegação através da captura de movimento da cabeça do operador com sensores de um smartfone. As imagens da câmera de navegação são enviadas para o celular acoplado a cabeça do usuário.\\ \hline
-    2.0 & 01/05/2019 & O escopo do projeto era extenso e foi reduzido.\par O projeto passa a ser a implementação de um sistema de controle para câmera (tilt, pan) operado remotamente orientado por sensores de posição disponíveis num smartfone acoplado a cabeça do usuário. \\ \hline
+    2.0 & 20/04/2019 & O escopo do projeto era extenso e foi reduzido.\par O projeto passa a ser a implementação de um sistema de controle para câmera (tilt, pan) operado remotamente orientado por sensores de posição disponíveis num smartfone acoplado a cabeça do usuário. \\ \hline
     \end{tabular}
 \end{center}
 
-\end{titlepage}
+\pagebreak
+
 
 %---------------------------------------------------------------------------
+
+\tableofcontents
+\newpage
 
 \pagenumbering{arabic}
 
@@ -116,7 +126,7 @@
 	Os softwares de operação serão desenvolvidos como módulos da solução nas linguagens Java (Android), python e C/C++ (Raspberry Pi).\par
 	Os módulos serão: \begin{enumerate*} \item um aplicativo que deverá rodar num celular Android, responsável por capturar dados relativos a posição e movimentação da cabeça do operador e enviar para o Raspberry Pi; \item um programa rodará num Raspberry PI e será responsável por traduzir os dados referentes aos movimentos da cabeça do operador em movimentos dos servo motores.\end{enumerate*}\par
 
-\subsection{Diagrama de blocos}
+\subsection{Diagrama de Blocos}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{diagrama-modulos} 
@@ -124,7 +134,7 @@
 	\caption{Diagrama de blocos da solução.}
 \end{figure}
 
-\subsection{Descrição dos módulos \label{sec:desc-modulos}}
+\subsection{Descrição dos Módulos \label{sec:desc-modulos}}
 \begin{enumerate}
 \item \textbf{Módulo do Celular Android - Visualização Imersiva\label{mod:celular}}\\
 	Esse módulo captura dados referentes a posição da cabeça do operador (usando os sensores giroscópio, acelerômetro e magnetômetro), aplica os filtros necessários nos dados e os envia para o módulo \ref{mod:raspi}. Esse módulo também é responsável por receber as imagens da câmera capturadas pelo módulo \ref{mod:raspi}. Será usado um celular juntamente com um \emph{óculos VR Cardboard}\footnote{Óculos de realidade virtual criado pelo Goole como kit de desenvolvimento básico para aplicações imersivas.} como um display para mostrar o vídeo e transmitido pela câmera, dando a ideia de imersão.
@@ -145,15 +155,6 @@
 	\item Android SDK (Cardboard SDK)
 	\item Redes de Computadores (Ethernet)
 \end{enumerate}
-
-\subsection{Modelo 3D}
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.65]{modelo} 
-	\caption{Modelo 3D do robô.}
-	\label{fig:modelo3d}
-\end{figure}
-	O modelo 3D da figura \ref{fig:modelo3d} ilustra a ideia geral do sistema.
 
 %---------------------------------------------------------------------------------------------------------
 \section{Resultados Esperados}
