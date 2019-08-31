@@ -1,0 +1,4 @@
+
+raspi/RaspCamViewCPP/.vscode/*
+!raspi/RaspCamViewCPP/.vscode/.gitkeep
+android/TesteCapturaMovimentoCabeca/.idea/*
