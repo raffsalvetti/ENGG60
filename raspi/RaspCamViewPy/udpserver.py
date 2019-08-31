@@ -30,11 +30,12 @@ def udp_server(host='127.0.0.1', port=1234):
         try:
             (data, addr) = s.recvfrom(bufferSize)
             if data:
+                print data
                 data = json.loads(data)
-                if data.t != None and data.t == 'w': #whois
-                    s.sendto('Im_the_master_of_the_universe', addr)
-                elif data.t != None and data.t == 'p': #position
-                    position = ((width/2) + int(data.p[1] * width / 90), ((height/2) + int(data.p[2] * height / 90) ))
+                #if data.t != None and data.t == 'w': #whois
+                #    s.sendto('Im_the_master_of_the_universe', addr)
+                #elif data.t != None and data.t == 'p': #position
+                position = ((width/2) + int(data.p[1] * width / 90), ((height/2) + int(data.p[2] * height / 90) ))
         except socket.error, ex:
             if ex.errno != errno.EAGAIN:
                 raise ex
