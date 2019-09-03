@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.JsonWriter;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -25,6 +26,12 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -103,7 +110,7 @@ class TextViewTextChanger implements Runnable {
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity implements SensorEventListener {
+public class FullscreenActivity extends AppCompatActivity implements Orientation.Listener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -192,9 +199,52 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     private float inclinationMatrix[] = new float[9];
     private float orientation[] = new float[3];
     private SmoothOrientation smoothOrientation = new SmoothOrientation(3, 5);
-    private ConcurrentLinkedQueue buffer = new ConcurrentLinkedQueue();
-    private NetWorks netWorks;
-    private Gson gson = new Gson();
+    private ClientSocketThread socketClient;
+    private static final int SERVERPORT = 3200;
+    private static final String SERVER_IP = "192.168.25.20";
+    private boolean sendata = false;
+    private Orientation mOrientation;
+
+    @Override
+    public void onOrientationChanged(int x, int y) {
+        if(sendata) {
+//            Log.i("FUCK", "onOrientationChanged: " + pitch + ";" + azimuth);
+            sendData(x + ";" + y);
+        }
+    }
+
+    class ClientSocketThread implements Runnable {
+        private Socket socket;
+
+        @Override
+        public void run() {
+            try {
+                socket = new Socket(InetAddress.getByName(SERVER_IP), SERVERPORT);
+            } catch (UnknownHostException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        void sendMessage(final String message) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (null != socket) {
+                            PrintWriter out = new PrintWriter(new BufferedWriter(
+                                    new OutputStreamWriter(socket.getOutputStream())),
+                                    true);
+                            out.println(message);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,10 +292,13 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mButtonSend.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {
-                                                       sendData();
+                                                       sendata = !sendata;
+                                                       mButtonSend.setText(sendata ? "Parar envio de dados" : "Enviar dados");
                                                    }
                                                }
         );
+
+
 
         // Set up the user interaction to manually show or hide the system UI.
 //        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
@@ -263,25 +316,32 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mAagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+//        mRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+        mRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        try {
-            netWorks = new NetWorks("192.168.25.20", 3200, buffer);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        socketClient = new ClientSocketThread();
+
+        mOrientation = new Orientation(this);
+
+        new Thread(socketClient).start();
     }
 
-    private void sendData() {
-        if(netWorks.isActive()) {
-            netWorks.stop();
-        } else {
-            new Thread(netWorks).start();
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mOrientation.startListening(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mOrientation.stopListening();
+    }
+
+    private void sendData(String str) {
+        socketClient.sendMessage(str);
     }
 
     @Override
@@ -296,8 +356,10 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, 16000);
-        mSensorManager.registerListener(this, mAagnetometer, 16000);
+        int delay = 50000;
+//        mSensorManager.registerListener(this, mAccelerometer, delay);
+//        mSensorManager.registerListener(this, mAagnetometer, delay);
+//        mSensorManager.registerListener(this, mRotationVector, delay);
 
 //        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 //        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_GAME);
@@ -306,7 +368,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
+//        mSensorManager.unregisterListener(this);
     }
 
     private String resolveAccuracy(int accuracy) {
@@ -333,11 +395,13 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
             mMagnetometerAccuracyTextChanger.updateText("MagnetometerAccuracy: " + resolveAccuracy(accuracy));
             this.runOnUiThread(mMagnetometerAccuracyTextChanger);
         }
-        if (sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
+//      if (sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
+        if (sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + resolveAccuracy(accuracy));
             this.runOnUiThread(mRotationVectorAccuracyTextChanger);
         }
     }
+
 
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
@@ -359,51 +423,57 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
                 }
 
 //                 orientation contains: azimut, pitch and roll
-                mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0])));
-                mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1])));
-                mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2])));
-                this.runOnUiThread(mAzimutCalculatedTextViewTextChanger);
-                this.runOnUiThread(mPitchCalculatedTextViewTextChanger);
-                this.runOnUiThread(mRollCalculatedTextViewTextChanger);
+//                mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0])));
+//                mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1])));
+//                mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2])));
+//                this.runOnUiThread(mAzimutCalculatedTextViewTextChanger);
+//                this.runOnUiThread(mPitchCalculatedTextViewTextChanger);
+//                this.runOnUiThread(mRollCalculatedTextViewTextChanger);
 
                 smoothOrientation.addSample(orientation);
                 float[] average = smoothOrientation.average();
 //                float[] average = orientation;
 
-                buffer.add(gson.toJson(new double[] {
-                        Math.round(Math.toDegrees(average[0])),
-                        Math.round(Math.toDegrees(average[1])),
-                        Math.round(Math.toDegrees(average[2]))
-                }));
+//                if(sendata) {
+//                    sendData(Math.round(Math.toDegrees(average[1])) + ";" + Math.round(Math.toDegrees(average[2])));
+//                }
 
-                mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(average[0])));
-                mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(average[1])));
-                mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(average[2])));
-
-                this.runOnUiThread(mAzimutGivenTextViewTextChanger);
-                this.runOnUiThread(mPitchGivenTextViewTextChanger);
-                this.runOnUiThread(mRollGivenTextViewTextChanger);
+//                mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(average[0])));
+//                mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(average[1])));
+//                mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(average[2])));
+//
+//                this.runOnUiThread(mAzimutGivenTextViewTextChanger);
+//                this.runOnUiThread(mPitchGivenTextViewTextChanger);
+//                this.runOnUiThread(mRollGivenTextViewTextChanger);
 
             }
         }
-        if(event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
-//            float[] tmpOrientaion = Arrays.copyOf(event.values, 3);
-//            float[] tmpRotationMatrix = new float[9];
-//            SensorManager.getRotationMatrixFromVector(tmpRotationMatrix, tmpOrientaion);
-//            if(calibrated) {
-//                SensorManager.getAngleChange(tmpOrientaion, tmpRotationMatrix, resetRotationMatrix);
-//            }
-////            Log.i("TESTE", "onSensorChanged: " + event.values.length);
-//            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[0])));
-//            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[1])));
-//            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[2])));
-//
-////            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
-////            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
-//
-//            this.runOnUiThread(mAzimutGivenTextViewTextChanger);
-//            this.runOnUiThread(mPitchGivenTextViewTextChanger);
-//            this.runOnUiThread(mRollGivenTextViewTextChanger);
+        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+            float[] tmpOrientaion = Arrays.copyOf(event.values, 3);
+            float[] tmpRotationMatrix = new float[9];
+            SensorManager.getRotationMatrixFromVector(tmpRotationMatrix, tmpOrientaion);
+            if(calibrated) {
+                SensorManager.getAngleChange(tmpOrientaion, tmpRotationMatrix, resetRotationMatrix);
+            }
+
+//            Log.i("TESTE", "onSensorChanged: " + event.values.length);
+            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[0])));
+            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[1])));
+            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[2])));
+
+            smoothOrientation.addSample(orientation);
+            float[] average = smoothOrientation.average();
+
+            if(sendata) {
+                sendData(Math.round(Math.toDegrees(average[1])) + ";" + Math.round(Math.toDegrees(average[2])));
+            }
+
+//            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
+//            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
+
+            this.runOnUiThread(mAzimutGivenTextViewTextChanger);
+            this.runOnUiThread(mPitchGivenTextViewTextChanger);
+            this.runOnUiThread(mRollGivenTextViewTextChanger);
         }
     }
 

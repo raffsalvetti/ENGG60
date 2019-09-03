@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <math.h>
+#include <pthread.h> 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include "include/display.h"
 
-const float _FPS = 60;
+const float _FPS = 15;
 
 // int _x = WIDTH / 2, _y = HEIGHT / 2;
 ALLEGRO_DISPLAY *display = NULL;
@@ -12,14 +15,27 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_MOUSE_STATE mouse_state;
 ALLEGRO_COLOR color_white, color_green;
+ALLEGRO_FONT *font;
 bool running = true;
 bool redraw = true;
 test_display_poin_generation_event poin_generation_handler;
 my_cicrle target;
+char *ipAddress;
 
+int coordinates_per_second = 0;
+int coordinates_per_second_counter = 0;
+pthread_mutex_t lock;
+pthread_t coordinates_per_second_counter_thread;
+
+void test_display_set_ip(char *ip_address){
+    ipAddress = ip_address;
+}
 
 void test_display_set_xy(int x, int y)
 {
+    pthread_mutex_lock(&lock);
+    coordinates_per_second_counter++;
+    pthread_mutex_unlock(&lock);
     if(!target.selected) {
         target.x = (WIDTH / 2) + (x * (WIDTH / 2))/100;
         target.y = (HEIGHT / 2) + (y * (HEIGHT / 2))/100;
@@ -29,6 +45,17 @@ void test_display_set_xy(int x, int y)
 void test_display_quit()
 {
     running = false;
+}
+
+static void *coordinates_per_second_updater() {
+    while (running) {
+        coordinates_per_second = coordinates_per_second_counter;
+        pthread_mutex_lock(&lock);
+        coordinates_per_second_counter = 0;
+        pthread_mutex_unlock(&lock);
+        sleep(1);
+    }
+    return NULL;
 }
 
 int test_display_init()
@@ -44,10 +71,26 @@ int test_display_init()
         fprintf(stderr, "Failed to initialize allegro.\n");
         return 1;
     }
+
     if (!al_install_mouse())
     {
         fprintf(stderr, "Failed to initialize mouse.\n");
         return 1;
+    }
+
+    if(!al_init_font_addon()) {
+        fprintf(stderr, "Failed to initialize font addon.\n");
+        return 1;
+    }
+
+    if(!al_init_ttf_addon()) {
+        fprintf(stderr, "Failed to initialize ttf addon.\n");
+        return 1;
+    }
+    font = al_load_ttf_font("DejaVuSansMono.ttf", 18, 0);
+    if (!font){
+        fprintf(stderr, "Could not load 'pirulen.ttf'.\n");
+        return -1;
     }
 
     if (!al_init_primitives_addon())
@@ -94,6 +137,9 @@ int test_display_init()
 
     // Start the timer
     al_start_timer(timer);
+
+    pthread_create(&coordinates_per_second_counter_thread, NULL, coordinates_per_second_updater, NULL); 
+    return 0;
 }
 
 static void test_display_destroy()
@@ -118,6 +164,7 @@ void test_display_show()
     {
         ALLEGRO_EVENT event;
         ALLEGRO_TIMEOUT timeout;
+        
 
         // Initialize timeout
         al_init_timeout(&timeout, 0.06);
@@ -131,6 +178,8 @@ void test_display_show()
             switch (event.type)
             {
             case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+                if(target.selected == 1)
+                    on_point_generation((100 * (target.x - (WIDTH / 2))) / (WIDTH / 2), (100 * (target.y - (HEIGHT / 2))) / (HEIGHT / 2));
                 target.selected = 0;
                 break;
 
@@ -143,9 +192,9 @@ void test_display_show()
                         target.selected = 1;
                         target.x = mouse_state.x;
                         target.y = mouse_state.y;
-                        on_point_generation((100 * (target.x - (WIDTH / 2))) / (WIDTH / 2), (100 * (target.y - (HEIGHT / 2))) / (HEIGHT / 2));
                     }
                     // fprintf(stdout, "Mouse position: (%d, %d)\n", (100 * (mouse_state.x - (WIDTH / 2))) / (WIDTH / 2), (100 * (mouse_state.y - (HEIGHT / 2))) / (HEIGHT / 2));
+                    // fprintf(stdout, "Mouse position: (%d, %d)\n", mouse_state.x, mouse_state.y);
                 }
                 break;
 
@@ -171,7 +220,11 @@ void test_display_show()
             al_draw_line((float)0, (float)(HEIGHT / 2), WIDTH, (float)(HEIGHT / 2), color_white, (float)1);
 
             al_draw_filled_circle((float)target.x, (float)target.y, (float)target.radius, target.selected ? color_green : color_white);
-            // al_draw_textf(const ALLEGRO_FONT *font, ALLEGRO_COLOR color, float x, float y, int flags, const char *format, ...);
+
+            if(ipAddress != NULL)
+                al_draw_textf(font, color_white, (float)((WIDTH / 2) + 10), (float)(0), ALLEGRO_ALIGN_LEFT, "eth0 ip: %s", ipAddress);
+            
+            al_draw_textf(font, color_white, (float)(10), (float)(0), ALLEGRO_ALIGN_LEFT, "Coord./Seg.: %d", coordinates_per_second);
 
             al_flip_display();
             redraw = false;
@@ -180,7 +233,6 @@ void test_display_show()
 
     test_display_destroy();
 }
-
 
 void test_display_add_poin_generation_callback(test_display_poin_generation_event poin_generation_callback) {
     poin_generation_handler = poin_generation_callback;

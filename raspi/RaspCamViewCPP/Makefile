@@ -1,4 +1,7 @@
+EXEC_NAME=controlador
+
 IDIR =./include
+#CC=gcc
 CC=gcc
 CFLAGS=-I$(IDIR) -Wall -g0 -O2
 
@@ -9,20 +12,20 @@ LDIR =./lib
 
 LIBS=-lm -lpthread $(ALLEGRO_LIBS)
 
-_DEPS = server.h display.h pwm.h
+_DEPS = server.h display.h servo.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o server.o display.o pwm.o
+_OBJ = main.o server.o display.o servo.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-server: $(OBJ)
+$(EXEC_NAME): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+	rm -f $(ODIR)/*.o *~ $(EXEC_NAME) $(INCDIR)/*~

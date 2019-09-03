@@ -12,5 +12,6 @@ void server_init(int port);
 void server_send(int socket, char *data);
 void server_start();
 void server_stop();
+void server_get_ip_address(char *ip_address);
 
 #endif

@@ -1,8 +1,8 @@
 #ifndef __DISPLAY_H__
 #define __DISPLAY_H__
 
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH   640
+#define HEIGHT  480
 
 typedef struct {
     int x;
@@ -18,5 +18,6 @@ void test_display_quit();
 int test_display_init();
 void test_display_show();
 void test_display_add_poin_generation_callback(test_display_poin_generation_event poin_generation_callback);
+void test_display_set_ip(char *ip_address);
 
 #endif

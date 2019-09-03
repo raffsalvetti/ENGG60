@@ -6,6 +6,10 @@
 #include <string.h>
 #include <pthread.h> 
 #include <stdarg.h>
+
+#include <netdb.h>
+#include <ifaddrs.h>
+
 #include "include/server.h"
 
 server_event error_handler, connect_handler, receive_handler, send_handler, disconnect_handler;
@@ -52,7 +56,7 @@ static void on_socket_error(int socket, char *message, ...) {
 static void on_socket_connect(int socket) {
 	if(connect_handler != NULL) {
 		memset(err_message_buffer, 0, 1024);
-		sprintf(err_message_buffer, "Conectado com sucesso!\n");
+		sprintf(err_message_buffer, "Cliente conectado!\n");
 		connect_handler(socket, err_message_buffer);
 	}
 }
@@ -103,12 +107,12 @@ static void *server_wait_for_connection() { //TODO: aceita somente uma conexao, 
 				memset(buffer, 0, REC_BUFFER_SIZE);
 				valread = read(new_socket, buffer, REC_BUFFER_SIZE);
 				if(valread == -1) {
-					on_socket_error(new_socket, "Erro lendo dados no socket!\n");
+					on_socket_error(new_socket, "Erro lendo dados!\n");
 					break;
 				} else if(valread == 0) {
 					if(strlen(buffer) > 0)
 						on_socket_read(new_socket, buffer);
-					on_socket_diconnect(new_socket, "Socket desconectado!\n");
+					on_socket_diconnect(new_socket, "Cliente desconectado!\n");
 					break;
 				} else {
 					on_socket_read(new_socket, buffer);
@@ -116,6 +120,7 @@ static void *server_wait_for_connection() { //TODO: aceita somente uma conexao, 
 			}
 		}
 	}
+	return NULL;
 }
 
 void server_send(int socket, char *data) {
@@ -134,4 +139,29 @@ void server_start() {
 
 void server_stop() {
 	active = 0;
+}
+
+void server_get_ip_address(char *ip_address) {
+	struct ifaddrs *ifa, *ifaddr;
+	int s;
+	char host[NI_MAXHOST];
+	if (getifaddrs(&ifaddr) == -1) {
+		perror("getifaddrs");
+        exit(EXIT_FAILURE);
+	}
+	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+		if (ifa->ifa_addr == NULL)
+            continue;
+		s = getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+		if((strcmp(ifa->ifa_name, "eth0")==0)&&(ifa->ifa_addr->sa_family==AF_INET)) {
+			if (s != 0) {
+                printf("getnameinfo() failed: %s\n", gai_strerror(s));
+                exit(EXIT_FAILURE);
+            }
+			// printf("Network Interface Name %s\n",ifa->ifa_name);
+			// printf("Network Address of %s\n",host);
+			memcpy(ip_address, host, strlen(host));
+		}
+	}
+	freeifaddrs(ifaddr);
 }
