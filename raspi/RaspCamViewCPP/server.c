@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
-#include <pthread.h> 
+#include <pthread.h>
 #include <stdarg.h>
 
 #include <netdb.h>
@@ -133,8 +133,8 @@ void server_send(int socket, char *data) {
 
 void server_start() {
 	active = 1;
-	pthread_create(&server_wait_for_connection_thread_id, NULL, server_wait_for_connection, NULL); 
-	// pthread_join(server_wait_for_connection_thread_id, NULL); 
+	pthread_create(&server_wait_for_connection_thread_id, NULL, server_wait_for_connection, NULL);
+	// pthread_join(server_wait_for_connection_thread_id, NULL);
 }
 
 void server_stop() {

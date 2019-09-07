@@ -12,7 +12,7 @@ int last_y = 0;
 static void write_to_dev(int servo_number, int position) {
     char buffer[10];
     memset(buffer, 0, 10);
-    sprintf(buffer, "%d=%d%%%%", servo_number, position);
+    sprintf(buffer, "%d=%d%%\n", servo_number, position);
     if(write(fd, buffer, strlen(buffer)) == -1)
         fprintf(stderr, "nao consegui mandar o comando %s para /dev/servoblaster\n", buffer);
 }
@@ -22,7 +22,7 @@ void servo_driver_set_x_position(int x) {
         write_to_dev(SERVO_X_GPIO, x);
         last_x = x;
     }
-    
+
 }
 
 void servo_driver_set_y_position(int y) {

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <pthread.h> 
+#include <pthread.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
@@ -64,7 +64,7 @@ int test_display_init()
     target.y = (HEIGHT / 2);
     target.radius = 15;
     target.selected = 0;
-    
+
     // Initialize allegro
     if (!al_init())
     {
@@ -138,7 +138,7 @@ int test_display_init()
     // Start the timer
     al_start_timer(timer);
 
-    pthread_create(&coordinates_per_second_counter_thread, NULL, coordinates_per_second_updater, NULL); 
+    pthread_create(&coordinates_per_second_counter_thread, NULL, coordinates_per_second_updater, NULL);
     return 0;
 }
 
@@ -164,7 +164,7 @@ void test_display_show()
     {
         ALLEGRO_EVENT event;
         ALLEGRO_TIMEOUT timeout;
-        
+
 
         // Initialize timeout
         al_init_timeout(&timeout, 0.06);
@@ -179,7 +179,7 @@ void test_display_show()
             {
             case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
                 if(target.selected == 1)
-                    on_point_generation((100 * (target.x - (WIDTH / 2))) / (WIDTH / 2), (100 * (target.y - (HEIGHT / 2))) / (HEIGHT / 2));
+                    on_point_generation((100 * (target.x)) / (WIDTH), (100 * (target.y)) / (HEIGHT));
                 target.selected = 0;
                 break;
 
@@ -223,7 +223,7 @@ void test_display_show()
 
             if(ipAddress != NULL)
                 al_draw_textf(font, color_white, (float)((WIDTH / 2) + 10), (float)(0), ALLEGRO_ALIGN_LEFT, "eth0 ip: %s", ipAddress);
-            
+
             al_draw_textf(font, color_white, (float)(10), (float)(0), ALLEGRO_ALIGN_LEFT, "Coord./Seg.: %d", coordinates_per_second);
 
             al_flip_display();
