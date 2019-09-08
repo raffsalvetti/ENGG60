@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import java.util.Arrays;
+
 public class Orientation implements SensorEventListener {
 
     private static final String TAG = "Orientation";
@@ -29,6 +31,10 @@ public class Orientation implements SensorEventListener {
 
     private int mLastAccuracy;
     private Listener mListener;
+
+    private boolean calibrate = false;
+    private boolean calibrated = false;
+    private float[] calibratedRotationMatrix = new float[9];
 
     public Orientation(Activity activity) {
         mWindowManager = activity.getWindow().getWindowManager();
@@ -110,17 +116,30 @@ public class Orientation implements SensorEventListener {
         }
 
         float[] adjustedRotationMatrix = new float[9];
-        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisForDeviceAxisX,
-                worldAxisForDeviceAxisY, adjustedRotationMatrix);
+        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisForDeviceAxisX, worldAxisForDeviceAxisY, adjustedRotationMatrix);
 
         // Transform rotation matrix into azimuth/pitch/roll
         float[] orientation = new float[3];
         SensorManager.getOrientation(adjustedRotationMatrix, orientation);
 
+        if(calibrate) {
+            Log.i(TAG, "updateOrientation: " + Arrays.toString(adjustedRotationMatrix));
+
+            calibrate = false;
+        }
+
+
         // Convert radians to degrees
         int x = (int)Math.round(Math.toDegrees(orientation[0]));
         int y = (int)Math.round(Math.toDegrees(orientation[1]));
 
+        x = 100 * (x + 90) / 180;
+        y = 100 * (y + 90) / 180;
+
         mListener.onOrientationChanged(x, y);
+    }
+
+    public void calibrate(){
+        calibrate = true;
     }
 }

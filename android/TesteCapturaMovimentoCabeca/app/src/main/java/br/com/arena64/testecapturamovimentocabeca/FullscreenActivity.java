@@ -2,42 +2,28 @@ package br.com.arena64.testecapturamovimentocabeca;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
-import android.graphics.Matrix;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.MediaController;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.VideoView;
 
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executor;
 
 class MeanFilter extends ArrayList<Float> {
     private int windowSize;
@@ -87,30 +73,11 @@ class SmoothOrientation {
 
 }
 
-class TextViewTextChanger implements Runnable {
-
-    private TextView tv;
-    private String value;
-
-    public TextViewTextChanger(TextView tv) {
-        this.tv = tv;
-    }
-
-    public void updateText(String value){
-        this.value = value;
-    }
-
-    @Override
-    public void run() {
-        tv.setText(value);
-    }
-}
-
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity implements Orientation.Listener {
+public class FullscreenActivity extends AppCompatActivity implements Orientation.Listener, NetWorks.Listener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -181,124 +148,50 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         }
     };
 
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private Sensor mAagnetometer;
-    private Sensor mRotationVector;
-    private float[] mGravityVector;
-    private float[] mGeomagneticVector;
-    private TextView mAzimutCalculated, mPitchCalculated, mRollCalculated, mAzimutGiven, mPitchGiven, mRollGiven,
-            mAccelerometerAccuracy, mMagnetometerAccuracy, mRotationVectorAccuracy;
-    private TextViewTextChanger mAzimutCalculatedTextViewTextChanger, mPitchCalculatedTextViewTextChanger, mRollCalculatedTextViewTextChanger,
-            mAzimutGivenTextViewTextChanger, mPitchGivenTextViewTextChanger, mRollGivenTextViewTextChanger,
-            mAccelerometerAccuracyTextViewTextChanger, mMagnetometerAccuracyTextChanger, mRotationVectorAccuracyTextChanger;
-    private Button mButtonReset, mButtonSend;
-    private boolean calibrated = false;
-    private float rotationMatrix[] = new float[9];
-    private float resetRotationMatrix[] = new float[9];
-    private float inclinationMatrix[] = new float[9];
-    private float orientation[] = new float[3];
-    private SmoothOrientation smoothOrientation = new SmoothOrientation(3, 5);
-    private ClientSocketThread socketClient;
-    private static final int SERVERPORT = 3200;
-    private static final String SERVER_IP = "192.168.25.20";
-    private boolean sendata = false;
+    private static final String TAG = "FullscreenActivity";
+    private Button mButtonReset;
+    private Switch aSwitchSendData;
+    private TextView textViewConectado, textViewStatus;
     private Orientation mOrientation;
+    private NetWorks netWorks;
 
-    @Override
-    public void onOrientationChanged(int x, int y) {
-        if(sendata) {
-//            Log.i("FUCK", "onOrientationChanged: " + pitch + ";" + azimuth);
-            sendData(x + ";" + y);
-        }
-    }
 
-    class ClientSocketThread implements Runnable {
-        private Socket socket;
-
-        @Override
-        public void run() {
-            try {
-                socket = new Socket(InetAddress.getByName(SERVER_IP), SERVERPORT);
-            } catch (UnknownHostException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        void sendMessage(final String message) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (null != socket) {
-                            PrintWriter out = new PrintWriter(new BufferedWriter(
-                                    new OutputStreamWriter(socket.getOutputStream())),
-                                    true);
-                            out.println(message);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setContentView(R.layout.activity_fullscreen);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+
+                setContentView(R.layout.activity_fullscreen);
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
 //        mContentView = findViewById(R.id.fullscreen_content);
 
-        mAzimutCalculated = (TextView) findViewById(R.id.azimutCalculated);
-        mPitchCalculated = (TextView) findViewById(R.id.pitchCalculated);
-        mRollCalculated = (TextView) findViewById(R.id.rollCalculated);
-
-        mAzimutGiven = (TextView) findViewById(R.id.azimutGiven);
-        mPitchGiven = (TextView) findViewById(R.id.pitchGiven);
-        mRollGiven = (TextView) findViewById(R.id.rollGiven);
-
-        mAccelerometerAccuracy = (TextView) findViewById(R.id.accelerometerAccuracy);
-        mMagnetometerAccuracy = (TextView) findViewById(R.id.magnetometerAccuracy);
-        mRotationVectorAccuracy = (TextView) findViewById(R.id.rotationVectorAccuracy);
-
-        mButtonReset = (Button) findViewById(R.id.button_reset);
-        mButtonSend = (Button) findViewById(R.id.button_send);
-
-        mAzimutCalculatedTextViewTextChanger = new TextViewTextChanger(mAzimutCalculated);
-        mPitchCalculatedTextViewTextChanger = new TextViewTextChanger(mPitchCalculated);
-        mRollCalculatedTextViewTextChanger = new TextViewTextChanger(mRollCalculated);
-
-        mAzimutGivenTextViewTextChanger = new TextViewTextChanger(mAzimutGiven);
-        mPitchGivenTextViewTextChanger = new TextViewTextChanger(mPitchGiven);
-        mRollGivenTextViewTextChanger = new TextViewTextChanger(mRollGiven);
-
-        mAccelerometerAccuracyTextViewTextChanger = new TextViewTextChanger(mAccelerometerAccuracy);
-        mMagnetometerAccuracyTextChanger = new TextViewTextChanger(mMagnetometerAccuracy);
-        mRotationVectorAccuracyTextChanger = new TextViewTextChanger(mRotationVectorAccuracy);
-
+        mButtonReset = findViewById(R.id.button_calibrar_celular);
         mButtonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calibrate();
             }
         });
-        mButtonSend.setOnClickListener(new View.OnClickListener() {
-                                                   @Override
-                                                   public void onClick(View view) {
-                                                       sendata = !sendata;
-                                                       mButtonSend.setText(sendata ? "Parar envio de dados" : "Enviar dados");
-                                                   }
-                                               }
-        );
 
+        aSwitchSendData = findViewById(R.id.switchSendCoordinates);
+        aSwitchSendData.setClickable(false);
+        aSwitchSendData.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked)
+                    textViewStatus.setText(String.format("Sem enviar coordenadas."));
+            }
+        });
 
+        textViewConectado = findViewById(R.id.textView_conctado);
+        textViewStatus = findViewById(R.id.textView_status);
 
         // Set up the user interaction to manually show or hide the system UI.
 //        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
@@ -311,21 +204,21 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+//        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mAagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-//        mRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
-        mRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        socketClient = new ClientSocketThread();
+//        String uri = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
+         String uri = "rtsp://192.168.25.20:8888/live.sdp";
+        VideoView v = findViewById( R.id.videoView );
+//        Uri uri_add = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,"1");
+//        Log.i("TOSCO", uri_add.parse(uri).toString());
+        v.setVideoURI( Uri.parse(uri) );
+//        v.setMediaController( new MediaController( this ) );
+        v.requestFocus();
+        v.start();
 
         mOrientation = new Orientation(this);
-
-        new Thread(socketClient).start();
+        netWorks = new NetWorks(true, this);
+        netWorks.startBeacon();
     }
 
     @Override
@@ -340,10 +233,6 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         mOrientation.stopListening();
     }
 
-    private void sendData(String str) {
-        socketClient.sendMessage(str);
-    }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -356,14 +245,6 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 
     protected void onResume() {
         super.onResume();
-        int delay = 50000;
-//        mSensorManager.registerListener(this, mAccelerometer, delay);
-//        mSensorManager.registerListener(this, mAagnetometer, delay);
-//        mSensorManager.registerListener(this, mRotationVector, delay);
-
-//        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-//        mSensorManager.registerListener(this, mAagnetometer, SensorManager.SENSOR_DELAY_GAME);
-//        mSensorManager.registerListener(this, mRotationVector, SensorManager.SENSOR_DELAY_GAME);
     }
 
     protected void onPause() {
@@ -371,115 +252,8 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 //        mSensorManager.unregisterListener(this);
     }
 
-    private String resolveAccuracy(int accuracy) {
-        switch (accuracy) {
-            case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
-                return "HIGH";
-            case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
-                return "MEDIUM";
-            case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
-                return "LOW";
-            case SensorManager.SENSOR_STATUS_UNRELIABLE:
-                return "UNRELIABLE";
-            default:
-                return "WTF";
-        }
-    }
-
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            mAccelerometerAccuracyTextViewTextChanger.updateText("AccelerometerAccuracy: " + resolveAccuracy(accuracy));
-            this.runOnUiThread(mAccelerometerAccuracyTextViewTextChanger);
-        }
-        if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            mMagnetometerAccuracyTextChanger.updateText("MagnetometerAccuracy: " + resolveAccuracy(accuracy));
-            this.runOnUiThread(mMagnetometerAccuracyTextChanger);
-        }
-//      if (sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
-        if (sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + resolveAccuracy(accuracy));
-            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
-        }
-    }
-
-
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-//            values[0]: Acceleration minus Gx on the x-axis
-//            values[1]: Acceleration minus Gy on the y-axis
-//            values[2]: Acceleration minus Gz on the z-axis
-            mGravityVector = event.values;
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-//            All values are in micro-Tesla (uT) and measure the ambient magnetic field in the X, Y and Z axis.
-            mGeomagneticVector = event.values;
-        if (mGravityVector != null && mGeomagneticVector != null) {
-            boolean success = false;
-            success = SensorManager.getRotationMatrix(rotationMatrix, inclinationMatrix, mGravityVector, mGeomagneticVector);
-            if (success) {
-                if(!calibrated) {
-                    SensorManager.getOrientation(rotationMatrix, orientation);
-                } else {
-                    SensorManager.getAngleChange(orientation, rotationMatrix, resetRotationMatrix);
-                }
-
-//                 orientation contains: azimut, pitch and roll
-//                mAzimutCalculatedTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(orientation[0])));
-//                mPitchCalculatedTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(orientation[1])));
-//                mRollCalculatedTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(orientation[2])));
-//                this.runOnUiThread(mAzimutCalculatedTextViewTextChanger);
-//                this.runOnUiThread(mPitchCalculatedTextViewTextChanger);
-//                this.runOnUiThread(mRollCalculatedTextViewTextChanger);
-
-                smoothOrientation.addSample(orientation);
-                float[] average = smoothOrientation.average();
-//                float[] average = orientation;
-
-//                if(sendata) {
-//                    sendData(Math.round(Math.toDegrees(average[1])) + ";" + Math.round(Math.toDegrees(average[2])));
-//                }
-
-//                mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(average[0])));
-//                mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(average[1])));
-//                mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(average[2])));
-//
-//                this.runOnUiThread(mAzimutGivenTextViewTextChanger);
-//                this.runOnUiThread(mPitchGivenTextViewTextChanger);
-//                this.runOnUiThread(mRollGivenTextViewTextChanger);
-
-            }
-        }
-        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            float[] tmpOrientaion = Arrays.copyOf(event.values, 3);
-            float[] tmpRotationMatrix = new float[9];
-            SensorManager.getRotationMatrixFromVector(tmpRotationMatrix, tmpOrientaion);
-            if(calibrated) {
-                SensorManager.getAngleChange(tmpOrientaion, tmpRotationMatrix, resetRotationMatrix);
-            }
-
-//            Log.i("TESTE", "onSensorChanged: " + event.values.length);
-            mAzimutGivenTextViewTextChanger.updateText("Azimut: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[0])));
-            mPitchGivenTextViewTextChanger.updateText("Pitch: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[1])));
-            mRollGivenTextViewTextChanger.updateText("Roll: " + String.format("%.2f", Math.toDegrees(tmpOrientaion[2])));
-
-            smoothOrientation.addSample(orientation);
-            float[] average = smoothOrientation.average();
-
-            if(sendata) {
-                sendData(Math.round(Math.toDegrees(average[1])) + ";" + Math.round(Math.toDegrees(average[2])));
-            }
-
-//            mRotationVectorAccuracyTextChanger.updateText("RotationVectorAccuracy: " + String.format("%.2f", Math.toDegrees(event.values[3])));
-//            this.runOnUiThread(mRotationVectorAccuracyTextChanger);
-
-            this.runOnUiThread(mAzimutGivenTextViewTextChanger);
-            this.runOnUiThread(mPitchGivenTextViewTextChanger);
-            this.runOnUiThread(mRollGivenTextViewTextChanger);
-        }
-    }
-
     private void calibrate() {
-        resetRotationMatrix = Arrays.copyOf(rotationMatrix, rotationMatrix.length);
-        calibrated = true;
+        mOrientation.calibrate();
     }
 
     private void toggle() {
@@ -507,8 +281,7 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         mVisible = true;
 
         // Schedule a runnable to display UI elements after a delay
@@ -533,5 +306,54 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void onOrientationChanged(final int x, final int y) {
+        if(aSwitchSendData.isChecked()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textViewStatus.setText(String.format("Enviando coordenadas: %d:%d", x, y));
+                }
+            });
+            netWorks.sendMessage(x + ";" + y);
+        }
+    }
+
+    @Override
+    public void onConnect(final String ipAddress) {
+        Log.i(TAG, "Conectado em : " + ipAddress);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                aSwitchSendData.setClickable(true);
+                textViewConectado.setText(String.format("Conectado em: %s", ipAddress));
+                textViewStatus.setText(String.format("Conectado no controlador %s", ipAddress));
+            }
+        });
+    }
+
+    @Override
+    public void onDisconnect() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                aSwitchSendData.setChecked(false);
+                aSwitchSendData.setClickable(false);
+                textViewConectado.setText(R.string.conectado_em);
+                textViewStatus.setText(String.format("Desconectado do controlador!"));
+            }
+        });
+    }
+
+    @Override
+    public void onBeacon() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewStatus.setText(String.format("Localizando controlador..."));
+            }
+        });
     }
 }

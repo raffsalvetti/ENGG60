@@ -6,7 +6,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <stdarg.h>
-
+#include <errno.h>
 #include <netdb.h>
 #include <ifaddrs.h>
 
@@ -34,20 +34,18 @@ void server_add_on_disconnect_callback(server_event disconnect_callback) {
 	disconnect_handler = disconnect_callback;
 }
 
-int server_fd, new_socket, valread;
-struct sockaddr_in address;
-int addrlen = sizeof(address);
-char buffer[REC_BUFFER_SIZE] = {0};
+int tcp_server_fd, udp_server_fd;
+struct sockaddr_in tcp_server_address, udp_server_address, udp_client_address;
 char err_message_buffer[1024] = {0};
 int active = 0;
-pthread_t server_wait_for_connection_thread_id;
+pthread_t server_wait_for_connection_thread_id, server_udp_server_beacon_thread_id;
 
 static void on_socket_error(int socket, char *message, ...) {
 	if(error_handler != NULL) {
 		va_list args;
 		va_start(args, message);
 		memset(err_message_buffer, 0, 1024);
-		sprintf(err_message_buffer, message, args);
+		vsnprintf(err_message_buffer, 1024, message, args);
 		va_end(args);
 		error_handler(socket, err_message_buffer);
 	}
@@ -79,43 +77,93 @@ static void on_socket_diconnect(int socket, char *message) {
 	}
 }
 
-void server_init(int port) {
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-		on_socket_error(server_fd, "Nao foi possivel criar o socket!\n");
+static void tcp_server_init(int port) {
+	if ((tcp_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+		on_socket_error(tcp_server_fd, "Nao foi possivel criar o socket!\n");
 	}
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &(int){1}, sizeof(int))) {
-		on_socket_error(server_fd, "Nao foi possivel configurar o socket!\n");
+	if (setsockopt(tcp_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &(int){1}, sizeof(int))) {
+		on_socket_error(tcp_server_fd, "Nao foi possivel configurar o socket!\n");
 	}
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(port);
-	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
-		on_socket_error(server_fd, "Nao foi possivel ligar a porta %i ao socket!\n", port);
+	tcp_server_address.sin_family = AF_INET;
+	tcp_server_address.sin_addr.s_addr = INADDR_ANY;
+	tcp_server_address.sin_port = htons(port);
+	if (bind(tcp_server_fd, (struct sockaddr *)&tcp_server_address, sizeof(tcp_server_address)) < 0) {
+		on_socket_error(tcp_server_fd, "Nao foi possivel ligar a porta %i ao socket!\n", port);
 	}
-	if (listen(server_fd, 3) < 0) {
-		on_socket_error(server_fd, "Nao foi possivel escutar na porta %d!\n", port);
+	if (listen(tcp_server_fd, 3) < 0) {
+		on_socket_error(tcp_server_fd, "Nao foi possivel escutar na porta %d!\n", port);
 	}
 }
 
-static void *server_wait_for_connection() { //TODO: aceita somente uma conexao, quem sabe modificar para aceitar varias conexoes no futuro?
+static void *udp_server_beacon() {
+	char udp_receive_buffer[REC_BUFFER_SIZE] = {0};
+	int udp_socket_read_bytes;
+	socklen_t len;
+	char response[] = "DISCOVER_CONTROLLER_RESPONSE";
 	while(active) {
-		if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
-			on_socket_error(server_fd, "Nao foi possivel aceitar conexao!\n");
+		memset(udp_receive_buffer, 0, REC_BUFFER_SIZE);
+		udp_socket_read_bytes = recvfrom(udp_server_fd, (char *)udp_receive_buffer, REC_BUFFER_SIZE, MSG_WAITALL, ( struct sockaddr *) &udp_client_address, &len);
+		if(udp_socket_read_bytes != -1) {
+			on_socket_read(udp_server_fd, udp_receive_buffer);
+			if(strcmp("DISCOVER_CONTROLLER_REQUEST", udp_receive_buffer) == 0) {
+				fprintf(stdout, "Tentando enviar %s\n", response);
+				if(sendto(udp_server_fd, (const char *)response, strlen(response), MSG_CONFIRM, (const struct sockaddr *) &udp_client_address, len) != -1) {
+					on_socket_write(udp_server_fd, response);
+				} else {
+					on_socket_error(udp_server_fd, "Erro enviando DISCOVER_CONTROLLER_RESPONSE: %s\n", strerror(errno));
+				}
+			}
 		} else {
-			on_socket_connect(new_socket);
+			on_socket_error(udp_server_fd, "Erro lendo DISCOVER CONTROLLER MESSAGE: %s\n", strerror(errno));
+		}
+	}
+	return NULL;
+}
+
+static void udp_server_init(int port) {
+	if ((udp_server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
+		on_socket_error(udp_server_fd, "Nao foi possivel criar o servidor identificador de servico!\n");
+	}
+	memset(&udp_server_address, 0, sizeof(udp_server_address));
+	memset(&udp_client_address, 0, sizeof(udp_client_address));
+	udp_server_address.sin_family = AF_INET; // IPv4
+	udp_server_address.sin_addr.s_addr = INADDR_ANY;
+	udp_server_address.sin_port = htons(port);
+
+	if (bind(udp_server_fd, (struct sockaddr *)&udp_server_address, sizeof(udp_server_address)) < 0) {
+		on_socket_error(udp_server_fd, "Nao foi possivel ligar o servidor identificador de servico a porta %i!\n", port);
+	}
+
+}
+
+void server_init(int port) {
+	tcp_server_init(port);
+	udp_server_init(port);
+}
+
+static void *server_wait_for_connection() { //TODO: aceita somente uma conexao, quem sabe modificar para aceitar varias conexoes no futuro?
+	char tcp_receive_buffer[REC_BUFFER_SIZE] = {0};
+	int tcp_socket_read_bytes = 0;
+	int new_tcp_client;
+	int addrlen = sizeof(tcp_server_address);
+	while(active) {
+		if ((new_tcp_client = accept(tcp_server_fd, (struct sockaddr *)&tcp_server_address, (socklen_t *)&addrlen)) < 0) {
+			on_socket_error(tcp_server_fd, "Nao foi possivel aceitar conexao: %s\n", strerror(errno));
+		} else {
+			on_socket_connect(new_tcp_client);
 			while(active) {
-				memset(buffer, 0, REC_BUFFER_SIZE);
-				valread = read(new_socket, buffer, REC_BUFFER_SIZE);
-				if(valread == -1) {
-					on_socket_error(new_socket, "Erro lendo dados!\n");
+				memset(tcp_receive_buffer, 0, REC_BUFFER_SIZE);
+				tcp_socket_read_bytes = read(new_tcp_client, tcp_receive_buffer, REC_BUFFER_SIZE);
+				if(tcp_socket_read_bytes == -1) {
+					on_socket_error(new_tcp_client, "Erro lendo dados: %s\n", strerror(errno));
 					break;
-				} else if(valread == 0) {
-					if(strlen(buffer) > 0)
-						on_socket_read(new_socket, buffer);
-					on_socket_diconnect(new_socket, "Cliente desconectado!\n");
+				} else if(tcp_socket_read_bytes == 0) {
+					if(strlen(tcp_receive_buffer) > 0)
+						on_socket_read(new_tcp_client, tcp_receive_buffer);
+					on_socket_diconnect(new_tcp_client, "Cliente desconectado!\n");
 					break;
 				} else {
-					on_socket_read(new_socket, buffer);
+					on_socket_read(new_tcp_client, tcp_receive_buffer);
 				}
 			}
 		}
@@ -134,7 +182,7 @@ void server_send(int socket, char *data) {
 void server_start() {
 	active = 1;
 	pthread_create(&server_wait_for_connection_thread_id, NULL, server_wait_for_connection, NULL);
-	// pthread_join(server_wait_for_connection_thread_id, NULL);
+	pthread_create(&server_udp_server_beacon_thread_id, NULL, udp_server_beacon, NULL);
 }
 
 void server_stop() {
@@ -147,17 +195,17 @@ void server_get_ip_address(char *ip_address) {
 	char host[NI_MAXHOST];
 	if (getifaddrs(&ifaddr) == -1) {
 		perror("getifaddrs");
-        exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
 		if (ifa->ifa_addr == NULL)
-            continue;
+			continue;
 		s = getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
 		if((strcmp(ifa->ifa_name, "eth0")==0)&&(ifa->ifa_addr->sa_family==AF_INET)) {
 			if (s != 0) {
-                printf("getnameinfo() failed: %s\n", gai_strerror(s));
-                exit(EXIT_FAILURE);
-            }
+				printf("getnameinfo() failed: %s\n", gai_strerror(s));
+				exit(EXIT_FAILURE);
+			}
 			// printf("Network Interface Name %s\n",ifa->ifa_name);
 			// printf("Network Address of %s\n",host);
 			memcpy(ip_address, host, strlen(host));

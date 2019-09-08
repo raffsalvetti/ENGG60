@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">TesteCapturaMovimentoCabeca</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="azimut">azimut</string>
-    <string name="pitch">pitch</string>
-    <string name="roll">roll</string>
-    <string name="reset">Reset</string>
-    <string name="send">Send</string>
+    <string name="calibrar_celular">Calibrar Celular</string>
+    <string name="calibrar_camera">Calibrar Câmera</string>
+    <string name="enviar_coordenadas">Enviar Coordenadas</string>
+    <string name="conectado_em">Conectado em: 0.0.0.0</string>
+    <string name="camera">Câmera</string>
 </resources>

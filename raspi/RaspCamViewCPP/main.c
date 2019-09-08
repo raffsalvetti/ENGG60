@@ -5,6 +5,8 @@
 #include "include/display.h"
 #include "include/servo.h"
 
+//#define DEV
+
 void print_socket_event(int socket, char *message) {
   printf("socket %d => %s",socket, message);
   if(!strcmp(message, "echo\n")) {
@@ -47,14 +49,21 @@ int main(int argc, char *argv[]) {
   fprintf(stdout, "endereco ip retornado: %s\n", ip_address);
 
   server_start();
-  
   servo_driver_init();
 
+#ifdef DEV
   test_display_init();
   test_display_set_ip(ip_address);
   test_display_add_poin_generation_callback(change_coodinates_from_test_display);
   test_display_show();
-  
+#else
+  char op = 'N';
+  while(op != 'S') {
+    fprintf(stdout, "Para sair digite S a qualqer momento.\n");
+    op = getchar();
+  }
+#endif
+
   servo_driver_destroy();
   server_stop();
 

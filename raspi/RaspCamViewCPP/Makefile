@@ -18,6 +18,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = main.o server.o display.o servo.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
+all: $(EXEC_NAME)
 
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -25,7 +26,7 @@ $(ODIR)/%.o: %.c $(DEPS)
 $(EXEC_NAME): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-.PHONY: clean
+.PHONY: clean, all
 
 clean:
 	rm -f $(ODIR)/*.o *~ $(EXEC_NAME) $(INCDIR)/*~

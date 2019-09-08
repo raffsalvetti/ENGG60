@@ -5,6 +5,11 @@ android/TesteCapturaMovimentoCabeca/.idea/*
 raspi/RaspCamViewCPP/obj/*
 raspi/RaspCamViewCPP/obj/.gitkeep
 raspi/RaspCamViewCPP/controlador
+RemoteSystemsTempFiles/*
+raspi/RaspCamViewCPP/.cproject
+raspi/RaspCamViewCPP/.project
+raspi/RaspCamViewCPP/.settings/*
+
 
 # Built application files
 *.apk
@@ -88,3 +93,4 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+/.metadata/
