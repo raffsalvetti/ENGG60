@@ -25,15 +25,12 @@ void server_add_on_connect_callback(server_event connect_callback) {
 void server_add_on_receive_callback(server_event receive_callback) {
 	receive_handler = receive_callback;
 }
-
 void server_add_on_send_callback(server_event send_callback) {
 	send_handler = send_callback;
 }
-
 void server_add_on_disconnect_callback(server_event disconnect_callback) {
 	disconnect_handler = disconnect_callback;
 }
-
 int tcp_server_fd, udp_server_fd;
 struct sockaddr_in tcp_server_address, udp_server_address, udp_client_address;
 char err_message_buffer[1024] = {0};
