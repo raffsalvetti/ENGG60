@@ -9,6 +9,10 @@ RemoteSystemsTempFiles/*
 raspi/RaspCamViewCPP/.cproject
 raspi/RaspCamViewCPP/.project
 raspi/RaspCamViewCPP/.settings/*
+android/TesteCapturaMovimentoCabeca/libvlc.aar
+android/ffmpeg/*
+android/vlc-android/*
+
 
 
 # Built application files

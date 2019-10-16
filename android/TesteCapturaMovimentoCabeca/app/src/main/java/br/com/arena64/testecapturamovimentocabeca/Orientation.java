@@ -123,9 +123,14 @@ public class Orientation implements SensorEventListener {
         SensorManager.getOrientation(adjustedRotationMatrix, orientation);
 
         if(calibrate) {
-            Log.i(TAG, "updateOrientation: " + Arrays.toString(adjustedRotationMatrix));
-
+            Log.i(TAG, "Calibrando: " + Arrays.toString(adjustedRotationMatrix));
+            calibratedRotationMatrix = adjustedRotationMatrix.clone();
             calibrate = false;
+            calibrated = true;
+        }
+
+        if(calibrated) {
+            SensorManager.getAngleChange(orientation, adjustedRotationMatrix, calibratedRotationMatrix);
         }
 
 

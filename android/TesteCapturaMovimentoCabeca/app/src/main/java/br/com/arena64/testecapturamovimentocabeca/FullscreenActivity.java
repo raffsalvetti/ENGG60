@@ -2,8 +2,6 @@ package br.com.arena64.testecapturamovimentocabeca;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +15,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.MediaController;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.VideoView;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 class MeanFilter extends ArrayList<Float> {
@@ -151,10 +146,10 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
     private static final String TAG = "FullscreenActivity";
     private Button mButtonReset;
     private Switch aSwitchSendData;
-    private TextView textViewConectado, textViewStatus;
+    private TextView textViewConectado, textViewStatus, textViewCoordenadas;
     private Orientation mOrientation;
     private NetWorks netWorks;
-
+    private VlcSurfaceView vlcSurfaceView;
 
 
     @Override
@@ -192,6 +187,7 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 
         textViewConectado = findViewById(R.id.textView_conctado);
         textViewStatus = findViewById(R.id.textView_status);
+        textViewCoordenadas = findViewById(R.id.textView_coordenadas);
 
         // Set up the user interaction to manually show or hide the system UI.
 //        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
@@ -208,13 +204,8 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 
 //        String uri = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
          String uri = "rtsp://192.168.25.20:8888/live.sdp";
-        VideoView v = findViewById( R.id.videoView );
-//        Uri uri_add = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,"1");
-//        Log.i("TOSCO", uri_add.parse(uri).toString());
-        v.setVideoURI( Uri.parse(uri) );
-//        v.setMediaController( new MediaController( this ) );
-        v.requestFocus();
-        v.start();
+        vlcSurfaceView = findViewById(R.id.vlc_surface_view);
+
 
         mOrientation = new Orientation(this);
         netWorks = new NetWorks(true, this);
@@ -231,6 +222,7 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
     protected void onStop() {
         super.onStop();
         mOrientation.stopListening();
+
     }
 
     @Override
@@ -245,11 +237,20 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 
     protected void onResume() {
         super.onResume();
+//        vlcSurfaceView.setSize(800, 600);
+        vlcSurfaceView.createPlayer("rtsp://192.168.25.20:8888/live.sdp");
     }
 
     protected void onPause() {
         super.onPause();
 //        mSensorManager.unregisterListener(this);
+        vlcSurfaceView.releasePlayer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        vlcSurfaceView.releasePlayer();
     }
 
     private void calibrate() {
@@ -310,6 +311,12 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 
     @Override
     public void onOrientationChanged(final int x, final int y) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewCoordenadas.setText(String.format("%d,%d", x, y));
+            }
+        });
         if(aSwitchSendData.isChecked()) {
             runOnUiThread(new Runnable() {
                 @Override
