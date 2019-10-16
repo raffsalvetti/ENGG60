@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: preprojeto.aux
+The style file: ieeetr.bst
+Database file #1: bibliografia.bib
+Warning--entry type for "raspberrypi.org2012" isn't style-file defined
+--line 1 of file bibliografia.bib
+A bad cross reference---entry "raspberrypi.org2012"
+refers to entry "https://www.raspberrypi.org/documentation/hardware/raspberrypi/README.md", which doesn't exist
+Warning--empty journal in bortoletto2002contaminaccao
+Warning--empty journal in souza2012inspeccao
+Warning--can't use both volume and number fields in quigley2009ros
+You've used 9 entries,
+            1876 wiz_defined-function locations,
+            521 strings with 5303 characters,
+and the built_in function-call counts, 1525 in all, are:
+= -- 119
+> -- 101
+< -- 0
++ -- 37
+- -- 28
+* -- 99
+:= -- 263
+add.period$ -- 12
+call.type$ -- 9
+change.case$ -- 5
+chr.to.int$ -- 0
+cite$ -- 12
+duplicate$ -- 77
+empty$ -- 152
+format.name$ -- 28
+if$ -- 347
+int.to.chr$ -- 0
+int.to.str$ -- 9
+missing$ -- 7
+newline$ -- 33
+num.names$ -- 9
+pop$ -- 41
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 24
+stack$ -- 0
+substring$ -- 2
+swap$ -- 9
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 3
+while$ -- 10
+width$ -- 10
+write$ -- 78
+(There was 1 error message)
