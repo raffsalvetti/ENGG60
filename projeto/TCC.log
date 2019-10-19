@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.6.4)  15 OCT 2019 23:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.6.4)  18 OCT 2019 23:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1467,7 +1467,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 28--28
 \openout2 = `pre-textuais/resumo.aux'.
 
  (./pre-textuais/resumo.tex
-Underfull \hbox (badness 10000) in paragraph at lines 6--7
+Underfull \hbox (badness 10000) in paragraph at lines 6--8
 
  []
 
@@ -1849,13 +1849,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 58.
  ) 
 Here is how much of TeX's memory you used:
- 17062 strings out of 494789
- 259329 string characters out of 6177365
+ 17085 strings out of 494789
+ 259524 string characters out of 6177365
  446550 words of memory out of 5000000
- 19539 multiletter control sequences out of 15000+600000
- 59901 words of font info for 294 fonts, out of 8000000 for 9000
+ 19541 multiletter control sequences out of 15000+600000
+ 61470 words of font info for 312 fonts, out of 8000000 for 9000
  85 hyphenation exceptions out of 8191
- 52i,12n,42p,625b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 52i,12n,42p,780b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/en
 c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
 hare/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texlive/texmf-dist/font
@@ -1869,7 +1869,7 @@ m/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
 1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/
 share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/publi
 c/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on TCC.pdf (30 pages, 1267496 bytes).
+Output written on TCC.pdf (30 pages, 1269141 bytes).
 PDF statistics:
  507 PDF objects out of 1000 (max. 8388607)
  420 compressed objects within 5 object streams
