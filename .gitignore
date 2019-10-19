@@ -12,6 +12,8 @@ raspi/RaspCamViewCPP/.settings/*
 android/TesteCapturaMovimentoCabeca/libvlc.aar
 android/ffmpeg/*
 android/vlc-android/*
+referencia/livros/*.pdf
+!referencia/livros/livros.txt
 
 
 
