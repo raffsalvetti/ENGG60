@@ -3,19 +3,52 @@
 \chapter{FUNDAMENTAÇÃO TEÓRICA}
 \label{chap:fundamentacao-teorica}
 
-\section{Double-multiple streamtube model - DMST}
-\label{sec:dmst}
+Este capítulo descreve as tecnologias e conceitos centrais utilizados durante a
+concepção do projeto. As definições apresentadas são embasadas no material bibliográfico
+revisado, que serviu de apoio no desenvolvimento de um trabalho fundamentado nas teorias
+existentes.
 
-Considerando a \autoref{fig:EsquemaVelocidade} que apresenta o comportamento das velocidades envolvidas em uma pá, a velocidade relativa ($u_r$) pode ser calculada pela \autoref{eq:Vrelativa}, o ângulo de trajetória ($\beta$) pela \autoref{eq:beta} e o ângulo de ataque ($\alpha$) pela \autoref{eq:alfa}, todos em função do ângulo azimute ($\theta$) da turbina.
+\section{Raspberry Pi}
+\label{sec:raspi}
 
-\begin{figure}
+O Raspberry Pi é uma família de computadores em placa única (SOC em inglês), com o tamanho de um cartão de crédito. Inicialmente seu objetivo era promover o ensino de computação (programação) básica em escolas, principalmente públicas, de todo o mundo. Entretanto, por possuir poder computacional razoável, uma boa quantidade de memória ram (a partir do modelo B) e um preço relativamente baixo, passou a ser usado para outros objetivos como: console de videogame clássico (emulação de jogos), gerencia de mídia (vídeos, fotos e musicas), estudos em eletrônica, domótica (automação residencial), internet das coisas e robótica. \citeonline{jucapereira2018aplicacoes} \par
+Uma versão do sistema operacional Debian Linux, chamada Raspbian, foi criada para o Raspberry Pi, portando também uma serie de aplicativos e ferramentas de desenvolvimentos já existentes para computadores da plataforma PC. Dessa modo, o desenvolvimento de programas se torna uma tarefa extremamente simples, já que o hardware é abstraído pelo sistema operacional, e não é necessário conhecimento especifico do hardware do Raspberry Pi (plataforma ARM). As linguagens mais utilizadas para desenvolvimento de software com bibliotecas disponíveis para interação com o hardware são o C/C++ e Python, porém, é possível desenvolver em outras linguagens de programação como o PHP e Java. \citeonline{jucapereira2018aplicacoes} \par
+
+\begin{figure}[H]
 	\centering
-	\caption{Esquema do escoamento e forças na pá.}
-	\includegraphics[width=0.7\textwidth]{figuras/EsquemaVelocidade.pdf}
-	\fonte{ \citeonline{vallverdu2014}}
-	\label{fig:EsquemaVelocidade}
+	\includegraphics[width=0.6\textwidth]{figuras/raspberrypi_model_b.jpg}
+	\caption{Raspberry Pi (Modelo B).}
+	\fonte{ \citeonline{sparkfun2019}}
+	\label{fig:raspi_modelb}
 \end{figure}
 
+\section{Servo Motor}
+\label{sec:servomotor}
+
+Um Servo motor é um atuador rotatório, ou atuador linear, que permite um controle preciso da posição linear ou angular, velocidade e aceleração de uma carga ligada ao seu eixo. Consiste em um motor de corrente continua (para o caso particular desse trabalho), acoplado a um sensor para ler sua posição durante o movimento. \citeonline{petruzella2009electric} \par
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figuras/servo_g9.jpg}
+	\caption{Servo Micro TG9.}
+	\fonte{ \citeonline{hobbyking2019}}
+	\label{fig:servo_g9}
+\end{figure}
+
+O servo motor opera em malha fechada, isto é, seu controlador compara a velocidade de movimento e sua posição para gerar o próximo comando de movimento, minimizando o erro. \citeonline{petruzella2009electric} O esquema de funcionamento do servo motor é mostrado na figura \autoref{fig:servo_closed_loop}. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figuras/servo_closed_loop.png}
+	\caption{Sistema de controle de um servo motor em malha fechada.}
+	\fonte{ \citeonline{petruzella2009electric}}
+	\label{fig:servo_closed_loop}
+\end{figure}
+
+
+
+
+\begin{comment}
 %Modelo de inclusão de equação. É só copiar, tomar como modelo e modificar.
 \begin{equation}
 {u_r} = \sqrt {{u^2} + {{(\dot \theta R)}^2} + 2u(\dot \theta R)\cos \theta }
@@ -47,3 +80,4 @@ D = \frac{1}{2}\rho cu_r^2{C_D}
 
 \section{Modelagem dinâmica}
 \label{sec:modelagemdinamica}
+\end{comment}

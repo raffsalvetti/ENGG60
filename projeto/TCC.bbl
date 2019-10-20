@@ -1,0 +1,118 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.6 }
+
+\bibitem[Bortoletto et al. 2002]{bortoletto2002contaminaccao}
+\abntrefinfo{Bortoletto et al.}{BORTOLETTO et al.}{2002}
+{BORTOLETTO, M.~{\'E}.; MACHADO, R.~R.; COUTINHO, E. et al.
+  Contamina{\c{c}}{\~a}o f{\'u}ngica do acervo da biblioteca de manguinhos da
+  funda{\c{c}}{\~a}o oswaldo cruz: A{\c{c}}{\~o}es desenvolvidas para sua
+  solu{\c{c}}{\~a}o.
+Universidade Federal de Santa Catarina, 2002.}
+
+\bibitem[Carmo e Prado 1999]{carmo1999qualidade}
+\abntrefinfo{Carmo e Prado}{CARMO; PRADO}{1999}
+{CARMO, A.~T.; PRADO, R. T.~A. \textbf{Qualidade do ar interno}. [S.l.]: EPUSP
+  S{\~a}o Paulo, 1999.}
+
+\bibitem[Harris e Kotzalas 2006]{harris2006essential}
+\abntrefinfo{Harris e Kotzalas}{HARRIS; KOTZALAS}{2006}
+{HARRIS, T.; KOTZALAS, M. \textbf{Essential Concepts of Bearing Technology}.
+  [S.l.]: CRC Press, 2006.  (Rolling Bearing Analysis, Fifth Edtion).
+ISBN 9781420006599.}
+
+\bibitem[hobbyking.com 2019]{hobbyking2019}
+\abntrefinfo{hobbyking.com}{HOBBYKING.COM}{2019}
+{HOBBYKING.COM. \textbf{Servo Motor TG9}. 2019.
+Online; acessado em 18/08/2019.
+Dispon{\'\i}vel em:
+  \url{https://cdn-global-hk.hobbyking.com/media/catalog/product/cache/9/image/660x415/17f82f742ffe127f42dca9de82fb58b1/legacy/catalog/9549.jpg}.}
+
+\bibitem[Jucá e Pereira 2018]{jucapereira2018aplicacoes}
+\abntrefinfo{Jucá e Pereira}{JUCá; PEREIRA}{2018}
+{JUCá, S.; PEREIRA, R. \textbf{Aplicações Práticas de sistemas embarcados
+  Linux utilizando Raspberry Pi}. [S.l.]: PoD, 2018.}
+
+\bibitem[Mesquita et al. 2014]{AMARANTEMESQUITA20141261}
+\abntrefinfo{Mesquita et al.}{MESQUITA et al.}{2014}
+{MESQUITA, A. L.~A.; MESQUITA, A. L.~A.; PALHETA, F.~C.; VAZ, J. R.~P.; MORAIS,
+  M. V.~G. de; GONçALVES, C. A methodology for the transient behavior of
+  horizontal axis hydrokinetic turbines.
+\textbf{Energy Conversion and Management}, v.~87, p. 1261 -- 1268, 2014.
+ISSN 0196-8904.
+Dispon{\'\i}vel em:
+  \url{http://www.sciencedirect.com/science/article/pii/S0196890414005433}.}
+
+\bibitem[Molina et al. 2008]{molina2008metodo}
+\abntrefinfo{Molina et al.}{MOLINA et al.}{2008}
+{MOLINA, L.; CARVALHO, E.; MOURA, M.; FREIRE, E.; MONTALV{\~A}O, J. Um
+  m{\'e}todo de vis{\~a}o rob{\'o}tica para identifica{\c{c}}{\~a}o de
+  cord{\~o}es de solda em tanques de armazenamento visando inspe{\c{c}}{\~a}o
+  automatizada.
+\textbf{XVII CBA}, 2008.}
+
+\bibitem[Petruzella 2009]{petruzella2009electric}
+\abntrefinfo{Petruzella}{PETRUZELLA}{2009}
+{PETRUZELLA, F. \textbf{Electric motors and control systems}. [S.l.]:
+  McGraw-Hill, Inc., 2009.}
+
+\bibitem[processonline.com.au 2019]{processonline2019abb}
+\abntrefinfo{processonline.com.au}{PROCESSONLINE.COM.AU}{2019}
+{PROCESSONLINE.COM.AU. \textbf{ABB wins award for submersible inspection
+  robot}. 2019.
+Online; acessado em 18/08/2019.
+Dispon{\'\i}vel em:
+  \url{https://www.processonline.com.au/content/factory-automation/news/abb-wins-award-for-submersible-inspection-robot-993485352}.}
+
+\bibitem[Santos et al. 2012]{santos2012inspeccao}
+\abntrefinfo{Santos et al.}{SANTOS et al.}{2012}
+{SANTOS, E. C. d.~S. et al.
+\textbf{Inspe{\c{c}}{\~a}o e adequa{\c{c}}{\~a}o das instala{\c{c}}{\~o}es
+  el{\'e}tricas e procedimentos de trabalho de uma empresa {\`a} norma
+  regulamentadora NR-10.}
+Tese (Doutorado) --- UNIVERSIDADE DE S{\~A}O PAULO, 2012.}
+
+\bibitem[Shinomiya 2015]{SHINOMIYA2015d}
+\abntrefinfo{Shinomiya}{SHINOMIYA}{2015}
+{SHINOMIYA, L.~D.
+\textbf{Projeto de rotores hidrocinéticos de eixo horizontal considerando o
+  efeito da cavitação}.
+2015. 96~f. Disserta\c{c}\~{a}o (Mestrado em Engenharia Mecânica) ---
+  Universidade Federal do Pará. Programa de Pós-Graduação em Engenharia
+  Mecânica, Belém, PA, Brasil, 2015.
+Dispon{\'\i}vel em:
+  \url{http://www.ppgem.ufpa.br/index.php?option=com\_content&view=article&id=76\%3Asessao201&catid=5\%3Adefesas&Itemid=13}.}
+
+\bibitem[Sparkfun 2011]{sparkfun2019}
+\abntrefinfo{Sparkfun}{SPARKFUN}{2011}
+{SPARKFUN. \textbf{Prduto Raspberry Pi - Model B}. 2011.
+Online; acessado em 18/08/2019.
+Dispon{\'\i}vel em:
+  \url{https://cdn.sparkfun.com//assets/parts/7/4/9/7/11546-01.jpg}.}
+
+\bibitem[tractica.com 2016]{tractica2019sensabot}
+\abntrefinfo{tractica.com}{TRACTICA.COM}{2016}
+{TRACTICA.COM. \textbf{Sensabot Is the First Inspection Robot Approved for Use
+  by Oil and Gas Companies}. 2016.
+Online; acessado em 18/08/2019.
+Dispon{\'\i}vel em:
+  \url{https://www.tractica.com/robotics/sensabot-is-the-first-inspection-robot-approved-for-use-by-oil-and-gas-companies/}.}
+
+\bibitem[Vallverd{\'{u}} 2014]{vallverdu2014}
+\abntrefinfo{Vallverd{\'{u}}}{VALLVERD{\'{U}}}{2014}
+{VALLVERD{\'{U}}, D. \textbf{Study on vertical-axis wind turbines using
+  streamtube and dynamic stall models}. 2014.}
+
+\bibitem[Vaz et al. 2018]{VAZ2018509}
+\abntrefinfo{Vaz et al.}{VAZ et al.}{2018}
+{VAZ, J.~R.; WOOD, D.~H.; BHATTACHARJEE, D.; LINS, E.~F. Drivetrain resistance
+  and starting performance of a small wind turbine.
+\textbf{Renewable Energy}, v.~117, p. 509 -- 519, 2018.
+ISSN 0960-1481.
+Dispon{\'\i}vel em:
+  \url{http://www.sciencedirect.com/science/article/pii/S0960148117310339}.}
+
+\end{thebibliography}
