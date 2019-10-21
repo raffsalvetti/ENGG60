@@ -18,12 +18,6 @@ Universidade Federal de Santa Catarina, 2002.}
 {CARMO, A.~T.; PRADO, R. T.~A. \textbf{Qualidade do ar interno}. [S.l.]: EPUSP
   S{\~a}o Paulo, 1999.}
 
-\bibitem[Harris e Kotzalas 2006]{harris2006essential}
-\abntrefinfo{Harris e Kotzalas}{HARRIS; KOTZALAS}{2006}
-{HARRIS, T.; KOTZALAS, M. \textbf{Essential Concepts of Bearing Technology}.
-  [S.l.]: CRC Press, 2006.  (Rolling Bearing Analysis, Fifth Edtion).
-ISBN 9781420006599.}
-
 \bibitem[hobbyking.com 2019]{hobbyking2019}
 \abntrefinfo{hobbyking.com}{HOBBYKING.COM}{2019}
 {HOBBYKING.COM. \textbf{Servo Motor TG9}. 2019.
@@ -31,20 +25,16 @@ Online; acessado em 18/08/2019.
 Dispon{\'\i}vel em:
   \url{https://cdn-global-hk.hobbyking.com/media/catalog/product/cache/9/image/660x415/17f82f742ffe127f42dca9de82fb58b1/legacy/catalog/9549.jpg}.}
 
+\bibitem[Hughes e Lewis 2004]{hughes2004robotic}
+\abntrefinfo{Hughes e Lewis}{HUGHES; LEWIS}{2004}
+{HUGHES, S.; LEWIS, M. Robotic camera control for remote exploration. In:  ACM.
+  \textbf{Proceedings of the SIGCHI conference on Human factors in computing
+  systems}. [S.l.], 2004. p. 511--517.}
+
 \bibitem[Jucá e Pereira 2018]{jucapereira2018aplicacoes}
 \abntrefinfo{Jucá e Pereira}{JUCá; PEREIRA}{2018}
 {JUCá, S.; PEREIRA, R. \textbf{Aplicações Práticas de sistemas embarcados
   Linux utilizando Raspberry Pi}. [S.l.]: PoD, 2018.}
-
-\bibitem[Mesquita et al. 2014]{AMARANTEMESQUITA20141261}
-\abntrefinfo{Mesquita et al.}{MESQUITA et al.}{2014}
-{MESQUITA, A. L.~A.; MESQUITA, A. L.~A.; PALHETA, F.~C.; VAZ, J. R.~P.; MORAIS,
-  M. V.~G. de; GONçALVES, C. A methodology for the transient behavior of
-  horizontal axis hydrokinetic turbines.
-\textbf{Energy Conversion and Management}, v.~87, p. 1261 -- 1268, 2014.
-ISSN 0196-8904.
-Dispon{\'\i}vel em:
-  \url{http://www.sciencedirect.com/science/article/pii/S0196890414005433}.}
 
 \bibitem[Molina et al. 2008]{molina2008metodo}
 \abntrefinfo{Molina et al.}{MOLINA et al.}{2008}
@@ -75,17 +65,6 @@ Dispon{\'\i}vel em:
   regulamentadora NR-10.}
 Tese (Doutorado) --- UNIVERSIDADE DE S{\~A}O PAULO, 2012.}
 
-\bibitem[Shinomiya 2015]{SHINOMIYA2015d}
-\abntrefinfo{Shinomiya}{SHINOMIYA}{2015}
-{SHINOMIYA, L.~D.
-\textbf{Projeto de rotores hidrocinéticos de eixo horizontal considerando o
-  efeito da cavitação}.
-2015. 96~f. Disserta\c{c}\~{a}o (Mestrado em Engenharia Mecânica) ---
-  Universidade Federal do Pará. Programa de Pós-Graduação em Engenharia
-  Mecânica, Belém, PA, Brasil, 2015.
-Dispon{\'\i}vel em:
-  \url{http://www.ppgem.ufpa.br/index.php?option=com\_content&view=article&id=76\%3Asessao201&catid=5\%3Adefesas&Itemid=13}.}
-
 \bibitem[Sparkfun 2011]{sparkfun2019}
 \abntrefinfo{Sparkfun}{SPARKFUN}{2011}
 {SPARKFUN. \textbf{Prduto Raspberry Pi - Model B}. 2011.
@@ -100,19 +79,5 @@ Dispon{\'\i}vel em:
 Online; acessado em 18/08/2019.
 Dispon{\'\i}vel em:
   \url{https://www.tractica.com/robotics/sensabot-is-the-first-inspection-robot-approved-for-use-by-oil-and-gas-companies/}.}
-
-\bibitem[Vallverd{\'{u}} 2014]{vallverdu2014}
-\abntrefinfo{Vallverd{\'{u}}}{VALLVERD{\'{U}}}{2014}
-{VALLVERD{\'{U}}, D. \textbf{Study on vertical-axis wind turbines using
-  streamtube and dynamic stall models}. 2014.}
-
-\bibitem[Vaz et al. 2018]{VAZ2018509}
-\abntrefinfo{Vaz et al.}{VAZ et al.}{2018}
-{VAZ, J.~R.; WOOD, D.~H.; BHATTACHARJEE, D.; LINS, E.~F. Drivetrain resistance
-  and starting performance of a small wind turbine.
-\textbf{Renewable Energy}, v.~117, p. 509 -- 519, 2018.
-ISSN 0960-1481.
-Dispon{\'\i}vel em:
-  \url{http://www.sciencedirect.com/science/article/pii/S0960148117310339}.}
 
 \end{thebibliography}
