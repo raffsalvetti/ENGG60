@@ -35,9 +35,9 @@ Estudos sugerem que disponibilizar uma câmera controlada independentemente da o
 A dificuldade de operação de um robô é proporcional ao seu grau de liberdade (DOF em inglês), isto é, quanto maior a variedade de movimentos o robô pode executar (considerando seu deslocamento, movimento de braços mecânicos e câmera), mais difícil é o controle para o operador.
 Pensando nisso, o desenvolvimento de controles mais intuitivos para a câmera do robô diminui a complexidade geral do controle de movimentos totais do robô. \par
 
-Com o objetivo de aprofundar os conhecimentos adquiridos ao longo do curso, este trabalho visa criar um controle de câmera do tipo (Pan e Tilt), baseando-se nos dados de movimento coletados e enviados de um smartfone, através de rede sem fio, acoplado a cabeça do operador. O projeto foi elaborado usando um Raspberry Pi, como unidade de controle dos servo motores da câmera e um celular smartfone Android, responsável por coletar e enviar informações referentes a posição espacial do aparelho. O desenvolvimento do projeto proporcionou um melhor entendimento em aspetos relacionados a rede de computadores, sistemas operacionais, interfaces de hardware, modulação por largura de pulso e desenvolvimento de sistemas para plataformas móveis.\par
+Com o objetivo de aprofundar os conhecimentos adquiridos ao longo do curso, este trabalho visa criar um controle de câmera do tipo (Pan e Tilt), baseando-se nos dados de movimento coletados e enviados de um smartfone, através de rede sem fio, acoplado a cabeça do operador, dessa forma, os movimentos da cabeça do operador são traduzidos em movimentos da câmera montada no robô. O projeto foi elaborado usando um Raspberry Pi, como unidade de controle dos servo motores da câmera, e um celular smartfone Android, responsável por coletar e enviar informações referentes a posição espacial do aparelho. O desenvolvimento do projeto proporcionou um melhor entendimento em aspetos relacionados a rede de computadores, sistemas operacionais, interfaces de hardware, modulação por largura de pulso, eletrônica e desenvolvimento de sistemas para plataformas móveis.\par
 
-Competências ligadas a construção de software puderam ser evoluídas, já que o módulo de controle , embarcado no Raspberry Pi, foi construído em linguagem C (usando bibliotecas de baixo nível para ativar sinais de PWM) e o módulo de coleta de dados foi desenvolvido em Java, usando a API do sistema operacional Android.
+Competências ligadas a construção de software puderam ser evoluídas, já que o módulo de controle, embarcado no Raspberry Pi, foi construído em linguagem C e o módulo de coleta de dados foi desenvolvido em Java, usando a API do sistema operacional Android.
 
 \begin{comment}
 Alguns programas podem ser utilizados para auxílio da escrita do TCC entre eles o \textit{MathType} (com relação a equações), \textit{Inkscape} (com relação a imagens). \\ %enter
@@ -79,11 +79,11 @@ As figuras devem ser adicionadas a pasta ``$\backslash$figuras'' no diretório d
 
 %Modelo de inclusão de figura. É só copiar, tomar como modelo e modificar.
 \begin{figure}[H]
-	\centering
-	\caption{Consumo mundial de energia por fonte de energia em quatrilhões de BTU.}
-	\includegraphics[width=1.0\textwidth]{figuras/consumodeenergiamundialporfonte.pdf}
-	\fonte{\citeonline{harris2006essential}.}
-	\label{fig:consumomundialporfonte-fig1}
+\centering
+\caption{Consumo mundial de energia por fonte de energia em quatrilhões de BTU.}
+\includegraphics[width=1.0\textwidth]{figuras/consumodeenergiamundialporfonte.pdf}
+\fonte{\citeonline{harris2006essential}.}
+\label{fig:consumomundialporfonte-fig1}
 \end{figure}
 
 5) Referências

@@ -36,6 +36,11 @@ Dispon{\'\i}vel em:
 {JUCá, S.; PEREIRA, R. \textbf{Aplicações Práticas de sistemas embarcados
   Linux utilizando Raspberry Pi}. [S.l.]: PoD, 2018.}
 
+\bibitem[Mecaweb 2019]{mecaweb2019}
+\abntrefinfo{Mecaweb}{MECAWEB}{2019}
+{MECAWEB. \textbf{PWM - Modulação Por Largura de Pulso}. 2019.
+Dispon{\'\i}vel em: \url{http://www.mecaweb.com.br/eletronica/content/e\_pwm}.}
+
 \bibitem[Molina et al. 2008]{molina2008metodo}
 \abntrefinfo{Molina et al.}{MOLINA et al.}{2008}
 {MOLINA, L.; CARVALHO, E.; MOURA, M.; FREIRE, E.; MONTALV{\~A}O, J. Um
@@ -48,6 +53,11 @@ Dispon{\'\i}vel em:
 \abntrefinfo{Petruzella}{PETRUZELLA}{2009}
 {PETRUZELLA, F. \textbf{Electric motors and control systems}. [S.l.]:
   McGraw-Hill, Inc., 2009.}
+
+\bibitem[Pinckney 2006]{pinckney2006pulse}
+\abntrefinfo{Pinckney}{PINCKNEY}{2006}
+{PINCKNEY, N. Pulse-width modulation for microcontroller servo control.
+\textbf{IEEE potentials}, IEEE, v.~25, n.~1, p. 27--29, 2006.}
 
 \bibitem[processonline.com.au 2019]{processonline2019abb}
 \abntrefinfo{processonline.com.au}{PROCESSONLINE.COM.AU}{2019}

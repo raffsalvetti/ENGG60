@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.8.12)  20 OCT 2019 22:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.8.12)  24 OCT 2019 01:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1525,12 +1525,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 7--8
 \openout2 = `textuais/introducao.aux'.
 
  (./textuais/introducao.tex
-<figuras/sensabot.jpg, id=113, 356.33125pt x 198.7425pt>
+<figuras/sensabot.jpg, id=117, 356.33125pt x 198.7425pt>
 File: figuras/sensabot.jpg Graphic file (type jpg)
 <use figuras/sensabot.jpg>
 Package pdftex.def Info: figuras/sensabot.jpg  used on input line 15.
 (pdftex.def)             Requested size: 216.1243pt x 120.5413pt.
-<figuras/abb.jpg, id=116, 461.725pt x 259.97125pt>
+<figuras/abb.jpg, id=120, 461.725pt x 259.97125pt>
 File: figuras/abb.jpg Graphic file (type jpg)
 <use figuras/abb.jpg>
 Package pdftex.def Info: figuras/abb.jpg  used on input line 21.
@@ -1546,7 +1546,7 @@ Package pdftex.def Info: figuras/abb.jpg  used on input line 21.
 \openout2 = `textuais/fundamentacao-teorica.aux'.
 
  (./textuais/fundamentacao-teorica.tex
-<figuras/raspberrypi_model_b.jpg, id=143, 570.13pt x 409.53pt>
+<figuras/raspberrypi_model_b.jpg, id=147, 570.13pt x 409.53pt>
 File: figuras/raspberrypi_model_b.jpg Graphic file (type jpg)
 <use figuras/raspberrypi_model_b.jpg>
 Package pdftex.def Info: figuras/raspberrypi_model_b.jpg  used on input line 19
@@ -1558,32 +1558,66 @@ Package pdftex.def Info: figuras/raspberrypi_model_b.jpg  used on input line 19
 
 
  <./figuras/raspberrypi_model_b.jpg>]
-<figuras/servo_g9.jpg, id=157, 426.09187pt x 250.68657pt>
+<figuras/servo_g9.jpg, id=163, 426.09187pt x 250.68657pt>
 File: figuras/servo_g9.jpg Graphic file (type jpg)
 <use figuras/servo_g9.jpg>
 Package pdftex.def Info: figuras/servo_g9.jpg  used on input line 32.
 (pdftex.def)             Requested size: 273.00278pt x 160.62628pt.
-<figuras/servo_closed_loop.png, id=163, 257.46187pt x 195.73125pt>
+<figuras/servo_closed_loop.png, id=169, 257.46187pt x 195.73125pt>
 File: figuras/servo_closed_loop.png Graphic file (type png)
 <use figuras/servo_closed_loop.png>
-Package pdftex.def Info: figuras/servo_closed_loop.png  used on input line 42.
-(pdftex.def)             Requested size: 273.00278pt x 207.56372pt.
-) [15 <./figuras/servo_g9.jpg> <./figuras/servo_closed_loop.png>]
+Package pdftex.def Info: figuras/servo_closed_loop.png  used on input line 43.
+(pdftex.def)             Requested size: 216.1243pt x 164.30858pt.
+<figuras/inside_a_servo.jpg, id=172, 400.49625pt x 274.77657pt>
+File: figuras/inside_a_servo.jpg Graphic file (type jpg)
+<use figuras/inside_a_servo.jpg>
+Package pdftex.def Info: figuras/inside_a_servo.jpg  used on input line 49.
+(pdftex.def)             Requested size: 216.1243pt x 148.28069pt.
+ [15 <./figuras/servo_g9.jpg> <./figuras/servo_closed_loop.png> <./figuras/insi
+de_a_servo.jpg>]
+<figuras/pwm.jpg, id=187, 552.56438pt x 293.59688pt>
+File: figuras/pwm.jpg Graphic file (type jpg)
+<use figuras/pwm.jpg>
+Package pdftex.def Info: figuras/pwm.jpg  used on input line 64.
+(pdftex.def)             Requested size: 455.0pt x 241.75449pt.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 73.
+
+
+LaTeX Warning: Command \~ invalid in math mode on input line 82.
+
+
+LaTeX Warning: Command \' invalid in math mode on input line 82.
+
+
+LaTeX Warning: Command \~ invalid in math mode on input line 82.
+
+<figuras/pwm_tensao_media.png, id=192, 541.27219pt x 204.01219pt>
+File: figuras/pwm_tensao_media.png Graphic file (type png)
+<use figuras/pwm_tensao_media.png>
+Package pdftex.def Info: figuras/pwm_tensao_media.png  used on input line 88.
+(pdftex.def)             Requested size: 455.0pt x 171.4998pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [16 <./figuras/pwm.jpg>] [17 <./figuras/pwm_tensao_media.png>]
 \openout2 = `textuais/implementacao.aux'.
 
- (./textuais/implementacao.tex
+
+(./textuais/implementacao.tex
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figuras/diagrama-modulos-eps-converte
 d-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> al
 lowed
-<figuras/diagrama-modulos-eps-converted-to.pdf, id=175, 952.55875pt x 771.88374
+<figuras/diagrama-modulos-eps-converted-to.pdf, id=208, 952.55875pt x 771.88374
 pt>
 File: figuras/diagrama-modulos-eps-converted-to.pdf Graphic file (type pdf)
 <use figuras/diagrama-modulos-eps-converted-to.pdf>
 Package pdftex.def Info: figuras/diagrama-modulos-eps-converted-to.pdf  used on
  input line 15.
 (pdftex.def)             Requested size: 409.49722pt x 331.83287pt.
-) [16
+) [18
 
 
 
@@ -1593,16 +1627,16 @@ Package pdftex.def Info: figuras/diagrama-modulos-eps-converted-to.pdf  used on
 
 (./textuais/resultados.tex (./tabelas/resultfreqturbina.tex)
 
-LaTeX Warning: Reference `fig:resultmodotubos' on page 17 undefined on input li
+LaTeX Warning: Reference `fig:resultmodotubos' on page 19 undefined on input li
 ne 21.
 
-<figuras/resultmodalmacico1.pdf, id=186, 412.97142pt x 546.04pt>
+<figuras/resultmodalmacico1.pdf, id=220, 412.97142pt x 546.04pt>
 File: figuras/resultmodalmacico1.pdf Graphic file (type pdf)
 <use figuras/resultmodalmacico1.pdf>
 Package pdftex.def Info: figuras/resultmodalmacico1.pdf  used on input line 28.
 
 (pdftex.def)             Requested size: 227.5pt x 300.80617pt.
-<figuras/resultmodalmacico6.pdf, id=187, 404.94142pt x 548.33427pt>
+<figuras/resultmodalmacico6.pdf, id=221, 404.94142pt x 548.33427pt>
 File: figuras/resultmodalmacico6.pdf Graphic file (type pdf)
 <use figuras/resultmodalmacico6.pdf>
 Package pdftex.def Info: figuras/resultmodalmacico6.pdf  used on input line 34.
@@ -1624,7 +1658,7 @@ to.pdf>
 t-eps-converted-to.pdf figuras/resultCtPaFrontPost.eps>
 (epstopdf)             \includegraphics on input line 50.
 Package epstopdf Info: Output file is already uptodate.
-<figuras/resultCtPaFrontPost-eps-converted-to.pdf, id=189, 421.575pt x 316.1812
+<figuras/resultCtPaFrontPost-eps-converted-to.pdf, id=223, 421.575pt x 316.1812
 4pt>
 File: figuras/resultCtPaFrontPost-eps-converted-to.pdf Graphic file (type pdf)
 <use figuras/resultCtPaFrontPost-eps-converted-to.pdf>
@@ -1636,15 +1670,15 @@ Overfull \hbox (10.7888pt too wide) in paragraph at lines 1--65
  [][] 
  []
 
-[17
+[19
 
 
 
-]) [18 <./figuras/resultmodalmacico1.pdf> <./figuras/resultmodalmacico6.pdf
+]) [20 <./figuras/resultmodalmacico1.pdf> <./figuras/resultmodalmacico6.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figuras/resultmodalmacico6.pdf): PDF 
 inclusion: multiple pdfs with page group included in a single page
->] [19 <./figuras/resultCtPaFrontPost-eps-converted-to.pdf>]
+>] [21 <./figuras/resultCtPaFrontPost-eps-converted-to.pdf>]
 \openout2 = `textuais/conclusao.aux'.
 
 
@@ -1655,7 +1689,7 @@ File: omsaer.fd 1999/12/27
 )
 LaTeX Font Info:    Font shape `OMS/aer/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 12.
-) [20
+) [22
 
 
 
@@ -1673,78 +1707,61 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 
 bibitemlist
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--59
+Underfull \hbox (badness 10000) in paragraph at lines 69--69
 []\T1/aer/m/n/12 (+20) PROCESSONLINE.COM.AU. \T1/aer/bx/n/12 ABB wins award for
  sub-mer-si-ble ins-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--59
+Underfull \hbox (badness 10000) in paragraph at lines 69--69
 \T1/aer/bx/n/12 pec-tion ro-bot\T1/aer/m/n/12 (+20) . 2019. On-line; aces-sado 
 em 18/08/2019. Dis-po-ní-vel
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 59--59
+Underfull \hbox (badness 10000) in paragraph at lines 69--69
 \T1/aer/m/n/12 (+20) em: [][]$<[]https : / / www . processonline . com . au / c
 ontent / factory-[]automation / news /
  []
 
 
-Underfull \hbox (badness 3049) in paragraph at lines 59--59
+Underfull \hbox (badness 3049) in paragraph at lines 69--69
 \T1/aer/m/n/12 (+20) abb-[]wins-[]award-[]for-[]submersible-[]inspection-[]robo
 t-[]993485352>[]$[][].  Ci-tado na pá-gina
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 82--82
+Underfull \hbox (badness 10000) in paragraph at lines 92--92
 []\T1/aer/m/n/12 (+20) TRACTICA.COM. \T1/aer/bx/n/12 Sen-sa-bot Is the First In
 s-pec-tion Ro-bot Ap-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 82--82
+Underfull \hbox (badness 10000) in paragraph at lines 92--92
 \T1/aer/bx/n/12 pro-ved for Use by Oil and Gas Com-pa-nies\T1/aer/m/n/12 (+20) 
 . 2016. On-line; aces-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 82--82
+Underfull \hbox (badness 10000) in paragraph at lines 92--92
 \T1/aer/m/n/12 (+20) sado em 18/08/2019. Dis-po-ní-vel em: [][]$<[]https : / / 
 www . tractica . com / robotics /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 82--82
+Underfull \hbox (badness 10000) in paragraph at lines 92--92
 \T1/aer/m/n/12 (+20) sensabot-[]is-[]the-[]^^\rst-[]inspection-[]robot-[]approv
 ed-[]for-[]use-[]by-[]oil-[]and-[]gas-[]companies / >[]$[][].
  []
 
-)) [21
+[23
 
 
 
-]
+])) [24]
 \openout2 = `pos-textuais/apendices.aux'.
 
  (./pos-textuais/apendices.tex
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\uppercase' on input line 5.
-
-[22
-
-
-
-
-] [23
-
-]) [24
-
-]
-\openout2 = `pos-textuais/anexos.aux'.
-
- (./pos-textuais/anexos.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `\uppercase' on input line 5.
@@ -1757,6 +1774,23 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 ] [26
 
 ]) [27
+
+]
+\openout2 = `pos-textuais/anexos.aux'.
+
+ (./pos-textuais/anexos.tex
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\uppercase' on input line 5.
+
+[28
+
+
+
+
+] [29
+
+]) [30
 
 ] 
 AED: lastpage setting LastPage
@@ -1781,7 +1815,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 59.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 59.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 59.
 Package rerunfilecheck Info: File `TCC.brf' has not changed.
-(rerunfilecheck)             Checksum: E151655E0E2CF13F9E96F342D6B53ED0;822.
+(rerunfilecheck)             Checksum: 97A38A61AA9BE783824745F517B2A5E5;1052.
 
 
 LaTeX Warning: There were undefined references.
@@ -1792,13 +1826,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
  ) 
 Here is how much of TeX's memory you used:
- 17186 strings out of 494830
- 261375 string characters out of 6178379
- 445895 words of memory out of 5000000
- 19586 multiletter control sequences out of 15000+600000
- 63218 words of font info for 359 fonts, out of 8000000 for 9000
+ 17247 strings out of 494830
+ 262478 string characters out of 6178379
+ 446952 words of memory out of 5000000
+ 19627 multiletter control sequences out of 15000+600000
+ 63741 words of font info for 365 fonts, out of 8000000 for 9000
  63 hyphenation exceptions out of 8191
- 52i,12n,42p,943b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 52i,12n,42p,943b,585s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/en
 c/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}</usr/s
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/t
@@ -1809,10 +1843,10 @@ nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmti12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi1
 2.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmsy10.pfb>
-Output written on TCC.pdf (28 pages, 1294994 bytes).
+Output written on TCC.pdf (31 pages, 1418569 bytes).
 PDF statistics:
- 439 PDF objects out of 1000 (max. 8388607)
- 379 compressed objects within 4 object streams
- 92 named destinations out of 1000 (max. 500000)
- 58139 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 489 PDF objects out of 1000 (max. 8388607)
+ 422 compressed objects within 5 object streams
+ 102 named destinations out of 1000 (max. 500000)
+ 58162 words of extra memory for PDF output out of 61914 (max. 10000000)
 

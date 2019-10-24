@@ -25,7 +25,7 @@ Uma versão do sistema operacional Debian Linux, chamada Raspbian, foi criada pa
 \section{Servo Motor}
 \label{sec:servomotor}
 
-Um Servo motor é um atuador rotatório, ou atuador linear, que permite um controle preciso da posição linear ou angular, velocidade e aceleração de uma carga ligada ao seu eixo. Consiste em um motor de corrente continua (para o caso particular desse trabalho), acoplado a um sensor para ler sua posição durante o movimento. \citeonline{petruzella2009electric} \par
+Um servo motor, visto na \autoref{fig:servo_g9}, é um atuador rotatório, ou atuador linear, que permite um controle preciso da posição linear ou angular, velocidade e aceleração de uma carga ligada ao seu eixo. Consiste basicamente em um motor de corrente continua (para o caso particular desse trabalho), acoplado a um sensor (potenciômetro), como ilustrado na \autoref{fig:insideaservo}, para ler sua posição durante o movimento. Normalmente, os motores servos necessitam de um sinal de controle modulado por largura de pulso (PWM em ingles) para operar. \citeonline{petruzella2009electric} \par
 
 \begin{figure}[h]
 	\centering
@@ -39,14 +39,57 @@ O servo motor opera em malha fechada, isto é, seu controlador compara a velocid
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.6\textwidth]{figuras/servo_closed_loop.png}
-	\caption{Sistema de controle de um servo motor em malha fechada.}
-	\fonte{ \citeonline{petruzella2009electric}}
-	\label{fig:servo_closed_loop}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/servo_closed_loop.png}
+		\caption{Sistema em malha fechada.}
+		\fonte{ \citeonline{petruzella2009electric}}
+		\label{fig:servo_closed_loop}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/inside_a_servo.jpg}
+		\caption{Componentes internos.}
+		\fonte{\citeonline{pinckney2006pulse}.}
+		\label{fig:insideaservo}
+	\end{subfigure}
+	\caption{Sistema de controle de um servo motor.}
 \end{figure}
 
+\section{Modulação por Largura de Pulso}
+\label{sec:pwm}
 
+A modulação por largura de pulso é uma técnica empregada em diversas áreas da eletrônica, sendo utilizada para controlar fontes chaveadas, velocidade de motores, luminosidade, servo motores e diversas outras aplicações. Consiste em variar a o tempo em que um pulso de tensão oscila entre os níveis alto e baixo numa taxa rápida o suficiente para que a média dos pulsos crie um valor médio de tensão efetivo, ilustrado na \autoref{fig:pwm}. Ao valor definido pela divisão entre: a largura de pulso com a tensão em nível alto, e o período do sinal; é dado o nome ciclo de trabalho ou \textit{dutty cycle}. Variar o \textit{dutty cycle} significa variar a tensão média, isto é, a potência é proporcional a tensão média resultante. \citeonline{pinckney2006pulse}.
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/pwm.jpg}
+	\caption{Modulação por largura de pulso e tensão média resultante}
+	\fonte{ \citeonline{pinckney2006pulse}}
+	\label{fig:pwm}
+\end{figure}
+
+A largura de pulso pode ser calculada usando a equação \autoref{eq:duttycicle}.
+
+\begin{equation}
+{Dutty Cycle} = 100 \times \frac{Largura do Pulso}{Período}  
+\label{eq:duttycicle}
+\end{equation}
+
+Onde: Duty Cycle é um valor dado em porcento, Largura do pulso e Período são valores dados em segundos.\par
+
+Uma vez calculado o ciclo de trabalho, é possível calcular o valor da tensão média gerada pelo sinal através da \autoref{eq:avervoltage}.
+
+\begin{equation}
+{Tensão Média} = {Tensão do Pulso} \times {Duty Cycle}
+\label{eq:avervoltage}
+\end{equation}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/pwm_tensao_media.png}
+	\caption{Tensão média produzida por um sinal PWM}
+	\fonte{ \citeonline{mecaweb2019}}
+	\label{fig:avervoltagepwm}
+\end{figure}
 
 \begin{comment}
 %Modelo de inclusão de equação. É só copiar, tomar como modelo e modificar.

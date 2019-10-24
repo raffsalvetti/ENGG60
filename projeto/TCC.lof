@@ -2,7 +2,9 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Rob\IeC {\^o}s de inspe\IeC {\c c}\IeC {\~a}o\relax }}{12}{figure.caption.13}
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Raspberry Pi (Modelo B).\relax }}{14}{figure.caption.14}
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Servo Micro TG9.\relax }}{15}{figure.caption.15}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Sistema de controle de um servo motor em malha fechada.\relax }}{15}{figure.caption.16}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagrama de blocos da comunica\IeC {\c c}\IeC {\~a}o entre os m\IeC {\'o}dulos\relax }}{16}{figure.caption.17}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Modos de vibra\IeC {\c c}\IeC {\~a}o do sistema com eixo e bra\IeC {\c c}o maci\IeC {\c c}os.\relax }}{18}{figure.caption.19}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Coeficiente de torque para uma p\IeC {\'a}.\relax }}{19}{figure.caption.20}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Sistema de controle de um servo motor.\relax }}{15}{figure.caption.16}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Modula\IeC {\c c}\IeC {\~a}o por largura de pulso e tens\IeC {\~a}o m\IeC {\'e}dia resultante\relax }}{16}{figure.caption.17}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Tens\IeC {\~a}o m\IeC {\'e}dia produzida por um sinal PWM\relax }}{17}{figure.caption.18}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagrama de blocos da comunica\IeC {\c c}\IeC {\~a}o entre os m\IeC {\'o}dulos\relax }}{18}{figure.caption.19}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Modos de vibra\IeC {\c c}\IeC {\~a}o do sistema com eixo e bra\IeC {\c c}o maci\IeC {\c c}os.\relax }}{20}{figure.caption.21}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Coeficiente de torque para uma p\IeC {\'a}.\relax }}{21}{figure.caption.22}

@@ -13,7 +13,7 @@ A level-1 auxiliary file: pre-textuais/lista-simbolos.aux
 A level-1 auxiliary file: pre-textuais/sumario.aux
 A level-1 auxiliary file: textuais/introducao.aux
 A level-1 auxiliary file: textuais/fundamentacao-teorica.aux
-A level-1 auxiliary file: textuais/metodologia.aux
+A level-1 auxiliary file: textuais/implementacao.aux
 A level-1 auxiliary file: textuais/resultados.aux
 A level-1 auxiliary file: textuais/conclusao.aux
 A level-1 auxiliary file: pos-textuais/naomexapostext/referencias.aux
@@ -31,6 +31,8 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Database file #1: abntex2-options.bib
 Database file #2: ./base-referencias.bib
+Warning--entry type for "mecaweb2019" isn't style-file defined
+--line 233 of file ./base-referencias.bib
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=20001) to 20 items from 10.
@@ -40,44 +42,45 @@ Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 | Em caso de dúvidas ou problemas com este estilo procure |
 | http://www.abntex.net.br/                               |
 +---------------------------------------------------------+
-You've used 17 entries,
+You've used 19 entries,
             6714 wiz_defined-function locations,
-            1278 strings with 12105 characters,
-and the built_in function-call counts, 18447 in all, are:
-= -- 2146
-> -- 308
-< -- 440
-+ -- 602
-- -- 97
-* -- 1081
-:= -- 2266
-add.period$ -- 44
-call.type$ -- 18
-change.case$ -- 127
-chr.to.int$ -- 24
-cite$ -- 11
-duplicate$ -- 1711
-empty$ -- 910
-format.name$ -- 460
-if$ -- 3807
+            1290 strings with 12336 characters,
+and the built_in function-call counts, 20701 in all, are:
+= -- 2389
+> -- 339
+< -- 495
++ -- 663
+- -- 107
+* -- 1217
+:= -- 2551
+add.period$ -- 51
+call.type$ -- 20
+change.case$ -- 140
+chr.to.int$ -- 29
+cite$ -- 13
+duplicate$ -- 1931
+empty$ -- 1025
+format.name$ -- 506
+if$ -- 4265
 int.to.chr$ -- 5
 int.to.str$ -- 3
-missing$ -- 262
-newline$ -- 64
-num.names$ -- 55
-pop$ -- 310
+missing$ -- 295
+newline$ -- 74
+num.names$ -- 65
+pop$ -- 348
 preamble$ -- 1
-purify$ -- 59
+purify$ -- 65
 quote$ -- 0
-skip$ -- 2046
+skip$ -- 2268
 stack$ -- 1
-substring$ -- 741
-swap$ -- 596
-text.length$ -- 5
+substring$ -- 851
+swap$ -- 680
+text.length$ -- 9
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 2
 warning$ -- 0
-while$ -- 75
+while$ -- 91
 width$ -- 0
-write$ -- 170
+write$ -- 202
+(There was 1 warning)
