@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.8.12)  24 OCT 2019 01:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.8.12)  24 OCT 2019 22:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1525,12 +1525,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 7--8
 \openout2 = `textuais/introducao.aux'.
 
  (./textuais/introducao.tex
-<figuras/sensabot.jpg, id=117, 356.33125pt x 198.7425pt>
+<figuras/sensabot.jpg, id=115, 356.33125pt x 198.7425pt>
 File: figuras/sensabot.jpg Graphic file (type jpg)
 <use figuras/sensabot.jpg>
 Package pdftex.def Info: figuras/sensabot.jpg  used on input line 15.
 (pdftex.def)             Requested size: 216.1243pt x 120.5413pt.
-<figuras/abb.jpg, id=120, 461.725pt x 259.97125pt>
+<figuras/abb.jpg, id=118, 461.725pt x 259.97125pt>
 File: figuras/abb.jpg Graphic file (type jpg)
 <use figuras/abb.jpg>
 Package pdftex.def Info: figuras/abb.jpg  used on input line 21.
@@ -1546,7 +1546,7 @@ Package pdftex.def Info: figuras/abb.jpg  used on input line 21.
 \openout2 = `textuais/fundamentacao-teorica.aux'.
 
  (./textuais/fundamentacao-teorica.tex
-<figuras/raspberrypi_model_b.jpg, id=147, 570.13pt x 409.53pt>
+<figuras/raspberrypi_model_b.jpg, id=145, 570.13pt x 409.53pt>
 File: figuras/raspberrypi_model_b.jpg Graphic file (type jpg)
 <use figuras/raspberrypi_model_b.jpg>
 Package pdftex.def Info: figuras/raspberrypi_model_b.jpg  used on input line 19
@@ -1558,24 +1558,24 @@ Package pdftex.def Info: figuras/raspberrypi_model_b.jpg  used on input line 19
 
 
  <./figuras/raspberrypi_model_b.jpg>]
-<figuras/servo_g9.jpg, id=163, 426.09187pt x 250.68657pt>
+<figuras/servo_g9.jpg, id=161, 426.09187pt x 250.68657pt>
 File: figuras/servo_g9.jpg Graphic file (type jpg)
 <use figuras/servo_g9.jpg>
 Package pdftex.def Info: figuras/servo_g9.jpg  used on input line 32.
 (pdftex.def)             Requested size: 273.00278pt x 160.62628pt.
-<figuras/servo_closed_loop.png, id=169, 257.46187pt x 195.73125pt>
+<figuras/servo_closed_loop.png, id=167, 257.46187pt x 195.73125pt>
 File: figuras/servo_closed_loop.png Graphic file (type png)
 <use figuras/servo_closed_loop.png>
 Package pdftex.def Info: figuras/servo_closed_loop.png  used on input line 43.
 (pdftex.def)             Requested size: 216.1243pt x 164.30858pt.
-<figuras/inside_a_servo.jpg, id=172, 400.49625pt x 274.77657pt>
+<figuras/inside_a_servo.jpg, id=170, 400.49625pt x 274.77657pt>
 File: figuras/inside_a_servo.jpg Graphic file (type jpg)
 <use figuras/inside_a_servo.jpg>
 Package pdftex.def Info: figuras/inside_a_servo.jpg  used on input line 49.
 (pdftex.def)             Requested size: 216.1243pt x 148.28069pt.
  [15 <./figuras/servo_g9.jpg> <./figuras/servo_closed_loop.png> <./figuras/insi
 de_a_servo.jpg>]
-<figuras/pwm.jpg, id=187, 552.56438pt x 293.59688pt>
+<figuras/pwm.jpg, id=185, 552.56438pt x 293.59688pt>
 File: figuras/pwm.jpg Graphic file (type jpg)
 <use figuras/pwm.jpg>
 Package pdftex.def Info: figuras/pwm.jpg  used on input line 64.
@@ -1593,24 +1593,15 @@ LaTeX Warning: Command \' invalid in math mode on input line 82.
 
 LaTeX Warning: Command \~ invalid in math mode on input line 82.
 
-<figuras/pwm_tensao_media.png, id=192, 541.27219pt x 204.01219pt>
-File: figuras/pwm_tensao_media.png Graphic file (type png)
-<use figuras/pwm_tensao_media.png>
-Package pdftex.def Info: figuras/pwm_tensao_media.png  used on input line 88.
-(pdftex.def)             Requested size: 455.0pt x 171.4998pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-) [16 <./figuras/pwm.jpg>] [17 <./figuras/pwm_tensao_media.png>]
+[16 <./figuras/pwm.jpg>]) [17]
 \openout2 = `textuais/implementacao.aux'.
 
-
-(./textuais/implementacao.tex
+ (./textuais/implementacao.tex
 
 pdfTeX warning: /usr/bin/pdflatex (file ./figuras/diagrama-modulos-eps-converte
 d-to.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> al
 lowed
-<figuras/diagrama-modulos-eps-converted-to.pdf, id=208, 952.55875pt x 771.88374
+<figuras/diagrama-modulos-eps-converted-to.pdf, id=203, 952.55875pt x 771.88374
 pt>
 File: figuras/diagrama-modulos-eps-converted-to.pdf Graphic file (type pdf)
 <use figuras/diagrama-modulos-eps-converted-to.pdf>
@@ -1630,13 +1621,13 @@ Package pdftex.def Info: figuras/diagrama-modulos-eps-converted-to.pdf  used on
 LaTeX Warning: Reference `fig:resultmodotubos' on page 19 undefined on input li
 ne 21.
 
-<figuras/resultmodalmacico1.pdf, id=220, 412.97142pt x 546.04pt>
+<figuras/resultmodalmacico1.pdf, id=215, 412.97142pt x 546.04pt>
 File: figuras/resultmodalmacico1.pdf Graphic file (type pdf)
 <use figuras/resultmodalmacico1.pdf>
 Package pdftex.def Info: figuras/resultmodalmacico1.pdf  used on input line 28.
 
 (pdftex.def)             Requested size: 227.5pt x 300.80617pt.
-<figuras/resultmodalmacico6.pdf, id=221, 404.94142pt x 548.33427pt>
+<figuras/resultmodalmacico6.pdf, id=216, 404.94142pt x 548.33427pt>
 File: figuras/resultmodalmacico6.pdf Graphic file (type pdf)
 <use figuras/resultmodalmacico6.pdf>
 Package pdftex.def Info: figuras/resultmodalmacico6.pdf  used on input line 34.
@@ -1658,7 +1649,7 @@ to.pdf>
 t-eps-converted-to.pdf figuras/resultCtPaFrontPost.eps>
 (epstopdf)             \includegraphics on input line 50.
 Package epstopdf Info: Output file is already uptodate.
-<figuras/resultCtPaFrontPost-eps-converted-to.pdf, id=223, 421.575pt x 316.1812
+<figuras/resultCtPaFrontPost-eps-converted-to.pdf, id=218, 421.575pt x 316.1812
 4pt>
 File: figuras/resultCtPaFrontPost-eps-converted-to.pdf Graphic file (type pdf)
 <use figuras/resultCtPaFrontPost-eps-converted-to.pdf>
@@ -1815,7 +1806,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 59.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 59.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 59.
 Package rerunfilecheck Info: File `TCC.brf' has not changed.
-(rerunfilecheck)             Checksum: 97A38A61AA9BE783824745F517B2A5E5;1052.
+(rerunfilecheck)             Checksum: 1CD13577A33C54B45308742197E409F0;998.
 
 
 LaTeX Warning: There were undefined references.
@@ -1826,13 +1817,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 59.
  ) 
 Here is how much of TeX's memory you used:
- 17247 strings out of 494830
- 262478 string characters out of 6178379
- 446952 words of memory out of 5000000
- 19627 multiletter control sequences out of 15000+600000
- 63741 words of font info for 365 fonts, out of 8000000 for 9000
+ 17249 strings out of 494830
+ 262370 string characters out of 6178379
+ 446904 words of memory out of 5000000
+ 19623 multiletter control sequences out of 15000+600000
+ 64411 words of font info for 371 fonts, out of 8000000 for 9000
  63 hyphenation exceptions out of 8191
- 52i,12n,42p,943b,585s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 52i,12n,42p,997b,585s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/en
 c/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}</usr/s
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/t
@@ -1843,10 +1834,10 @@ nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmti12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi1
 2.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts
 /type1/public/lm/lmsy10.pfb>
-Output written on TCC.pdf (31 pages, 1418569 bytes).
+Output written on TCC.pdf (31 pages, 1388466 bytes).
 PDF statistics:
- 489 PDF objects out of 1000 (max. 8388607)
- 422 compressed objects within 5 object streams
+ 487 PDF objects out of 1000 (max. 8388607)
+ 421 compressed objects within 5 object streams
  102 named destinations out of 1000 (max. 500000)
- 58162 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 58165 words of extra memory for PDF output out of 61914 (max. 10000000)
 
