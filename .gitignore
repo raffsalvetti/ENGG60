@@ -19,6 +19,7 @@ referencia/livros/*.pdf
 !referencia/livros/livros.txt
 
 projeto/**/*.aux
+projeto/**/*.idx
 projeto/**/*.bbl
 projeto/**/*.blg
 projeto/**/*.brf
@@ -30,7 +31,7 @@ projeto/**/*.gz
 projeto/**/*.ilg
 projeto/**/*.ind
 projeto/**/*.toc
-
+projeto/MODELO.zip
 
 # Built application files
 *.apk
