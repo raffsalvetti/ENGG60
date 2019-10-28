@@ -1,20 +1,35 @@
 
+RemoteSystemsTempFiles/*
+
 raspi/RaspCamViewCPP/.vscode/*
 !raspi/RaspCamViewCPP/.vscode/.gitkeep
-android/TesteCapturaMovimentoCabeca/.idea/*
 raspi/RaspCamViewCPP/obj/*
 raspi/RaspCamViewCPP/obj/.gitkeep
 raspi/RaspCamViewCPP/controlador
-RemoteSystemsTempFiles/*
 raspi/RaspCamViewCPP/.cproject
 raspi/RaspCamViewCPP/.project
 raspi/RaspCamViewCPP/.settings/*
+
 android/TesteCapturaMovimentoCabeca/libvlc.aar
+android/TesteCapturaMovimentoCabeca/.idea/*
 android/ffmpeg/*
 android/vlc-android/*
+
 referencia/livros/*.pdf
 !referencia/livros/livros.txt
 
+projeto/**/*.aux
+projeto/**/*.bbl
+projeto/**/*.blg
+projeto/**/*.brf
+projeto/**/*.lof
+projeto/**/*.log
+projeto/**/*.lot
+projeto/**/*.pdf
+projeto/**/*.gz
+projeto/**/*.ilg
+projeto/**/*.ind
+projeto/**/*.toc
 
 
 # Built application files

@@ -65,7 +65,7 @@
 \renewcommand{\backref}{}
 
 % Define as listas de item compactas (sem espaçamento entre os itens)
-\setlist{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+%\setlist{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 
 % Define os textos da citação
 \renewcommand*{\backrefalt}[4]
@@ -86,9 +86,12 @@
 % Define a numeração das equações de forma sequencial
 %\counterwithout{equation}{chapter}
 
+
+
 % -----------------------------------------------------------------------------
 % Comandos de dados
 % -----------------------------------------------------------------------------
+\renewcommand{\baselinestretch}{1.5}
 
 % Comandos de dados - Departamento
 \providecommand{\imprimirdepartamento}{}
@@ -187,8 +190,8 @@
 \renewcommand{\textual}
 {%
     %\pagenumbering{arabic} % A numeração das páginas é em algarismos arábicos, inciando em 1
-    \pagestyle{simple}
-	%\pagestyle{abntheadings}
+    %\pagestyle{simple}
+	\pagestyle{abntheadings}
     \aliaspagestyle{chapter}{abntchapfirst}
     \nouppercaseheads
     \bookmarksetup{startatroot}
@@ -651,3 +654,8 @@ abnt-thesis-year=final
 	qua-dros-cha-ve
 	Kat-sa-gge-los
 }
+
+\renewcommand{\citeonline}[1]{(\citeauthor{#1}, \citeyear{#1})}
+
+%\renewcommand{\baselinestretch}{1.5}
+

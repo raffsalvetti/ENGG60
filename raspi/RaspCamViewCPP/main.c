@@ -5,7 +5,7 @@
 #include "include/display.h"
 #include "include/servo.h"
 
-//#define DEV
+#define DEV
 
 void print_socket_event(int socket, char *message) {
   printf("socket %d => %s",socket, message);

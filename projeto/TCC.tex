@@ -13,7 +13,6 @@
 oneside,                                   % Impressão apenas frente
 ]{ufpa-fem-abntex2}
 
-
 %INCLUI ARQUIVOS DO TRABALHO DE CONCLUSÃO DE CURSO (PRÉ-TEXTUAIS, TEXTUAIS, PÓS-TEXTUAIS)-----------------------
 %%%%%
 
@@ -23,7 +22,6 @@ oneside,                                   % Impressão apenas frente
 \include{pre-textuais/folha-aprovacao}
 
 \begin{document}
-	
 	\pretextual
 	\imprimircapa                                  \imprimirfolhaderosto{}                           \imprimirfolhadeaprovacao{}                       \include{pre-textuais/dedicatoria}          			\include{pre-textuais/agradecimentos}
 	\include{pre-textuais/epigrafe}
@@ -40,6 +38,7 @@ oneside,                                   % Impressão apenas frente
 	% Sumário
 	
 	\textual
+	\begin{OnehalfSpace}
 	% INSERE ELEMENTOS TEXTUAIS
 	\include{textuais/introducao}
 	%\include{textuais/revisao-de-literatura}
@@ -49,7 +48,8 @@ oneside,                                   % Impressão apenas frente
 	\include{textuais/resultados}
 	%\include{textuais/orientacoes}                  % Capítulo com Orientações de uso do Template, depois pode-se ocultar com o símbolo de porcentagem
 	\include{textuais/conclusao}                 			           % Conclusão
-	
+	\end{OnehalfSpace}
+
 	\postextual
 	% INSERE ELEMENTOS PÓS-TEXTUAIS
 	\include{pos-textuais/naomexapostext/referencias}           			   % Referências

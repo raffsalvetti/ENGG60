@@ -83,43 +83,79 @@ Uma vez calculado o ciclo de trabalho, é possível calcular o valor da tensão 
 \label{eq:avervoltage}
 \end{equation}
 
-\section{Sensores de Posição}
-\label{sec:positionsensors}
+\section{Smartfone Android}
+\label{sec:android}
 
-Boa parte dos smartfones vendidos atualmente, possuem uma gama de sensores embutidos capazes de fornecer dados, com um grau de precisão aceitável, relativos a orientação, movimento e até condições do ambiente como iluminação, pressão atmosférica e umidade do ar. Esses sensores encontram-se divididos em três grupos. \textit{Ambientais}, que podem ser utilizados em aplicações simples como coletar o nível de iluminação de um ambiente, a umidade e temperatura para calcular o ponto de orvalho (condição em que a água em vapor presente num ambiente se condensa tornando-se o orvalho), e os sensores de \textit{Posição} e \textit{Movimento}, que são usados em jogos que, por exemplo, utilizam a aceleração da gravidade para inferir movimentos complexos do usuário como rotações, sacudidas e inclinações do aparelho. Estes dois últimos grupos sendo o ponto de interesse para o trabalho, e portanto explicado adiante.\par
+O smartfone é um dispositivo móvel que mescla recursos de um telefone celular (receber e efetuar chamadas, mensagens de texto curto e etc) e recursos de um computador pessoal garantindo a possibilidade de instalar novos aplicativos e assim, agregar novas funcionalidades ao aparelho.\par
 
+O Android é um sistema operacional de código livre, baseado em núcleo Linux (responsável por gerenciar dispositivos de entrada e saída, memória e processos), marcado em vermelho na \autoref{fig:androidsysarch}, e desenvolvido por uma das maiores empresas de tecnologia da atualidade, a Google. \citeonline{ronamadeo2018} Sua interface com o usuário é baseada na manipulação direta, isto é, apresenta continuamente o objeto de interesse permitindo sua manipulação usando recursos que correspondem proximamente ao mundo físico. \citeonline{barbosa2010interaccao} Atualmente o sistema operacional Android pode ser encontrado em outros aparelhos como relógios, televisores e dispositivos gerenciadores de mídia. \citeonline{androidcom2019} \par
 
+\begin{figure}[H]
+	\centering
+%	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.7\textwidth]{figuras/android_sys_arch.pdf}
+		\caption{Arquitetura do sistema operacional Android.}
+		\fonte{ \citeonline{brady2008anatomy}.}
+		\label{fig:androidsysarch}
+%	\end{subfigure}%
+%	\begin{subfigure}{.5\textwidth}
+%		\includegraphics[width=0.95\textwidth]{figuras/axis_globe.png}
+%		\caption{em relação ao globo terrestre.}
+%		\label{fig:axisglobe}
+%	\end{subfigure}
+%	\caption{Sistema operacional Android.}
+\end{figure}
 
-\begin{comment}
-%Modelo de inclusão de equação. É só copiar, tomar como modelo e modificar.
+Boa parte dos smartfones vendidos atualmente com o sistema operacional Android, possuem uma gama de sensores embutidos capazes de fornecer dados, com um grau de precisão aceitável, relativos a orientação e movimento do aparelho e até condições do ambiente como iluminação, pressão atmosférica e umidade do ar. \citeonline{androidcom2019} Esses sensores encontram-se divididos em três grupos básicos na API de desenvolvimento fornecida pelo Android. Sensores \textit{Ambientais}, que podem ser utilizados em aplicações simples como coletar o nível de iluminação do ambiente, a umidade e temperatura para calcular o ponto de orvalho (condição em que a água em vapor presente num ambiente se condensa tornando-se o orvalho), e os sensores de \textit{Posição} e \textit{Movimento}, que podem ser usados em aplicações como jogos que, por exemplo, utilizam a aceleração da gravidade para inferir movimentos complexos do usuário como rotações, sacudidas e inclinações do aparelho. Este último grupo sendo o ponto de interesse para o trabalho, e portanto detalhado adiante.\par
+
+\subsection{Sensores de Movimento}
+\label{subsec:motionsensors}
+
+A plataforma de desenvolvimento do Android oferece vários sensores que permitem sentir o movimento de um dispositivo. Dentre eles, os mais utilizados são os sensores de gravidade, aceleração linear e vetor de rotação, que podem ser implementados em hardware ou software (baseando-se em dados fornecidos por outros sensores implementados em hardware), e os sensores acelerômetro e giroscópio, que sempre são implementados em hardware. Todos eles descrevem o movimento do dispositivo em formato matricial.\par
+
+De forma geral, os sensores usam um sistema de coordenadas com três eixos para expressas os dados. Para a maioria dos sensores da API, o sistema de coordenadas é definido relativo a tela do dispositivo, quando segurado na orientação padrão (porta retrato para celulares e paisagem para tablets), como mostrado na \autoref{fig:axisdevice}. Dessa forma, o eixo X é horizontal e aponta para a direita, o eixo Y é vertical e aponta para cima e o eixo Z, perpendicular a tela do dispositivo, estando seus valores positivos do lado da tela e os negativos atrás da tela. Um ponto importante de ser notado, é que a orientação do sistema de eixos não muda quando o dispositivo é segurado de maneira diferente da sua orientação padrão.\par
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.85\textwidth]{figuras/axis_device.png}
+		\caption{em relação ao aparelho.}
+		\label{fig:axisdevice}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/axis_globe.png}
+		\caption{em relação ao globo terrestre.}
+		\label{fig:axisglobe}
+	\end{subfigure}
+	\caption{Sistema de coordenadas.}
+	\fonte{ \citeonline{google2019devsensors}.}
+\end{figure}
+
+O sensor vetor de rotação representa a orientação do dispositivo como uma combinação  de um angulo e um eixo no qual o dispositivo rotacionou com um ângulo $\theta$ em torno de um eixo (x, y ou z). \citeonline{google2019devsensors} \par
+Os três componentes do vetor re rotação são expressos como:\\
+
 \begin{equation}
-{u_r} = \sqrt {{u^2} + {{(\dot \theta R)}^2} + 2u(\dot \theta R)\cos \theta }
-\label{eq:Vrelativa}
+\Delta_x = x \times sen(\frac{\theta}{2})
+\label{eq:vec_rot_x}
 \end{equation}
 
 \begin{equation}
-\beta  = \arctan \left( {\frac{{\dot \theta Rsen\theta }}{{u + \dot \theta R\cos \theta }}} \right)
-\label{eq:beta}
+\Delta_y = y \times sen(\frac{\theta}{2})
+\label{eq:vec_rot_y}
 \end{equation}
 
 \begin{equation}
-\alpha  = \left| {\frac{{\pi  + \beta  - \theta }}{{2\pi }}} \right| - \pi
-\label{eq:alfa}
+\Delta_z = z \times sen(\frac{\theta}{2})
+\label{eq:vec_rot_z}
 \end{equation}
 
-Uma vez que o angulo de ataque é conhecido os coeficiente de sustentação ($C_L$) e arrasto ($C_D$) podem ser obtidos. Assim as forças de sustentação ($L$) e arrasto ($D$) podem ser calculadas conforme \autoref{eq:L} e \autoref{eq:D}, respectivamente. Sendo $\rho$ a massa específica do fluido, $c$ a corda, ....
+Onde a magnitude do vetor de rotação é expresso por $sen(\frac{\theta}{2})$, e sua direção é a mesma do eixo de rotação.\par
 
-\begin{equation}
-L = \frac{1}{2}\rho cu_r^2{C_L}
-\label{eq:L}
-\end{equation}
+A o sistema de coordenada de referencia é definido como uma base ortogonal direta, como mostrado na \autoref{fig:axisglobe}, e possui as seguintes características:\par
+\begin{itemize}
+\item O eixo X é definido como o produto vetorial dos eixos Y e Z, é tangente a superfície terrestre no local onde o dispositivo se encontra e aponta aproximadamente para o leste.\par
 
-\begin{equation}
-D = \frac{1}{2}\rho cu_r^2{C_D}
-\label{eq:D}
-\end{equation}
+\item O eixo Y é tangente a superfície terrestre no local onde o dispositivo se encontra e aponta para o norte magnético. \par
 
-
-\section{Modelagem dinâmica}
-\label{sec:modelagemdinamica}
-\end{comment}
+\item O eixo Z aponta para o céu e é perpendicular ao solo.
+\end{itemize}
