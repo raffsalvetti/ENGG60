@@ -611,6 +611,7 @@ abnt-thesis-year=final
 \usepackage{ae, aecompl}                                    % Fontes de alta qualidade
 \usepackage{latexsym}                                       % Símbolos matemáticos
 \usepackage{lscape}                                         % Permite páginas em modo "paisagem"
+\usepackage{gensymb}  
 
 %\usepackage{picinpar}                                      % Dispor imagens em parágrafos
 %\usepackage{scalefnt}                                      % Permite redimensionar tamanho da fonte

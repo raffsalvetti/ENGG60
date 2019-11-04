@@ -49,12 +49,52 @@ O módulo de envio de coordenadas é um smartfone Android Motorola G6 com proces
 \section{Montagem do Protótipo}
 \label{sec:assemprototipo}
 
-\subsection{Montagem do Módulo de Controle de Câmeras}
+O protótipo foi construído usando uma fonte de alimentação de computador de mesa, padrão ATX, como fonte de alimentação e suporte para os outros componentes com exceção do smartfone Android.\par
+Cola quente foi usada para fixar o Raspberry Pi, o corpo de montagem da câmera e motores servos (suporte articulado) e um ponto de acesso sem fio, que fornece a infra-estrutura de rede Wi-Fi para o projeto, à fonte e base. \par
+O suporte dos motores servo e da câmera é uma estrutura moldada em plástico, observado na \autoref{fig:basedesmontada}, que precisa ser montada com parafusos e fixa os motores em sua posição de descanso (centro de curso), não sendo possível modificar está posição facilmente depois de montado, ilustrado na \autoref{fig:basemontada}.\par
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/base2.jpg}
+		\caption{Componentes do suporte.}
+		\label{fig:basedesmontada}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.75\textwidth]{figuras/base3.jpg}
+		\caption{Montagem com motores.}
+		\label{fig:basemontada}
+	\end{subfigure}
+	\caption{Base de suporta para motores e câmera.}
+\end{figure}
+
+Com a intensão de testar os motores, e preservar o Raspberry Pi (um dispositivo menos tolerante a falhas quando se trata de níveis de tensão nos pinos de propósito geral), foi desenvolvido um circuito gerador de PWM (drive PWM), onde era possível ajustar tanto a frequência do sinal quanto a largura dos pulsos, através de mudança de resistores e um potenciômetro. O propósito do circuito foi descobrir a posição central dos motores e verificar sua estabilidade enquanto se variava a frequência do sinal. O drive foi montado usando o circuito integrado NE555, um componente eletrônico bastante usado em aplicações que envolve temporização, geração de pulso e PWM. \par
+
+Ativando individualmente os motores com o drive construído e com o auxilio de um osciloscópio, foi possível notar que os motores operam de forma estável com pulsos gerados numa frequência de 50Hz, e que é possível controlar a sua posição variando a largura do pulso entre valores próximos a 1ms, posição de angulo $180\degree$ (ângulo máximo), e valores próximos 2ms, posição de angulo $0\degree$ (ângulo mínimo), como ilustrado na \autoref{fig:pwmservo}. Foi possível observar também que existe uma correspondência linear entre a largura do pulso e a posição angular do eixo do motor, sendo assim, a posição de repouso ou centro, pode ser alcançada com uma largura de pulso próximo a 1,5 milissegundos. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figuras/pwm_servo.jpg}
+	\caption{Posição do eixo do motor em função da largura de pulso PWM.}
+	\fonte{\citeonline{pinckney2006pulse}}
+	\label{fig:pwmservo}
+\end{figure}
+
+Para conectar os motores ao módulo de câmera (Raspberry Pi), foi necessário construir um circuito de acionamento dos motores, que consiste em dois transistores bipolares de junção (BJT), um para cada motor, configurados no modo emissor-comum, funcionando como um interruptor acionado pelo sinal PWM gerado pelos pinos GPIO do Raspberry Pi. A fonte do sinal PWM foi ligada ao terminal base do transistor através de um resistor de 1Kohm, com a função de limitar a corrente $I_b$ e a via de sinal do motor foi conectado ao terminal coletor do transistor e também a uma fonte de 5V através de um resistor de 10Kohm, responsável por limitar a corrente $I_c$, máxima quando o transistor está ativado, como ilustrado no circuito da .\par
+Esse circuito foi construído numa mini \textit{breadboard} e tem o objetivo proteger o Raspberry Pi, evitando o consumo excessivo de corrente (mais que 15mA) ou uma possível corrente de retorno para um dos pinos GPIO numa eventual falha do circuito interno de controle dos motores. Como o circuito de proteção inverte o sinal PWM, foi necessário gerar um sinal invertido no módulo de controle de câmera, para que esse fosse invertido novamente pelo circuito de proteção e assim chegar como devido ao circuito de controle interno do motor.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim={6.5cm 5cm 7.5cm 4cm},clip,width=0.7\textwidth]{figuras/circ_acionamento.pdf}
+	\caption{Circuito de acionamento de motores.}
+	\label{fig:circprotecao}
+\end{figure}
+
+\subsection{Montagem do Módulo de Controle de Câmera}
 \label{subsec:assemmodconcam}
 
-- instalação do SO\\
-- configuração do SO\\
-- instalação de pacotes necessarios para o desenvolvimento\\
+O módulo de controle de câmera na verdade controla os motores usados para movimentar uma câmera. 
+
 - construção da classe server\\
 - construção da classe servo\\
 - construção da classe display\\
