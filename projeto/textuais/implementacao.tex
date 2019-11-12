@@ -3,12 +3,12 @@
 \chapter{Implementação do Protótipo}
 \label{chap:prototipo}
 
-Este capitulo descreve a montagem do protótipo para testes. Será feita uma introdução do funcionamento geral, e suas principais características. Posteriormente será mostrado o funcionamento da base de testes da câmera, conexões entre os servo motores e os pinos GPIO, instalação e configuração do sistema operacional para o Raspberry Pi, e desenvolvimento do programa e controle dos servo motores, desenvolvimento do aplicativo Android, responsável por capturar dados dos sensores de posição e envio pela rede sem fio.
+Este capitulo descreve a montagem do protótipo para testes. Será feita uma introdução do funcionamento geral, e suas principais características. Posteriormente será mostrado o funcionamento da base de testes da câmera, conexões entre os servo motores e os pinos GPIO do Raspberry Pi, desenvolvimento do programa de controle dos servo motores, desenvolvimento do aplicativo Android, responsável por capturar dados dos sensores de posição e envio pela rede sem fio.
 
 \section{Especificação do Projeto}
 \label{sec:especificacao}
 
-Apesar de ser composto por diversos módulos, o projeto pode ser dividido conceitualmente em duas partes, denominados por módulo de coleta de dados, ou celular Android, e módulo de controle de câmera, ou Raspberry Pi. O módulo de controle de câmera é responsável por receber os dados de posição através de uma conexão socket, converter o sistema de coordenadas, aplicar um filtro para evitar o acionamento desnecessário dos motores e acionar os servos, quando necessário. O módulo de coleta de dados é responsável por configurar os sensores de localização disponíveis no smartfone, aplicar os filtros necessários para minimizar ruídos na coleta de dados, encontrar o módulo de controle de câmeras através de uma busca na rede e enviar para ele, os dados das coordenadas através de uma conexão socket. \par
+O projeto pode ser dividido conceitualmente em duas partes, denominados por módulo de coleta de dados, ou celular Android, e módulo de controle de câmera, ou Raspberry Pi. O módulo de controle de câmera é responsável por receber os dados de posição através de uma conexão socket, converter o sistema de coordenadas, aplicar um filtro para evitar o acionamento desnecessário dos motores e acionar os servos, quando necessário. O módulo de coleta de dados é responsável por configurar os sensores de localização disponíveis no smartfone, aplicar os filtros necessários para minimizar ruídos na coleta de dados, encontrar o módulo de controle de câmeras através de uma busca na rede e enviar para ele, os dados das coordenadas através de uma conexão socket. \par
 
 \begin{figure}[H]
 	\centering
@@ -80,20 +80,51 @@ Ativando individualmente os motores com o drive construído e com o auxilio de u
 	\label{fig:pwmservo}
 \end{figure}
 
-Para conectar os motores ao módulo de câmera (Raspberry Pi), foi necessário construir um circuito de acionamento dos motores, que consiste em dois transistores bipolares de junção (BJT), um para cada motor, configurados no modo emissor-comum, funcionando como um interruptor acionado pelo sinal PWM gerado pelos pinos GPIO do Raspberry Pi. A fonte do sinal PWM foi ligada ao terminal base do transistor através de um resistor de 1Kohm, com a função de limitar a corrente $I_b$ e a via de sinal do motor foi conectado ao terminal coletor do transistor e também a uma fonte de 5V através de um resistor de 10Kohm, responsável por limitar a corrente $I_c$, máxima quando o transistor está ativado, como ilustrado no circuito da .\par
-Esse circuito foi construído numa mini \textit{breadboard} e tem o objetivo proteger o Raspberry Pi, evitando o consumo excessivo de corrente (mais que 15mA) ou uma possível corrente de retorno para um dos pinos GPIO numa eventual falha do circuito interno de controle dos motores. Como o circuito de proteção inverte o sinal PWM, foi necessário gerar um sinal invertido no módulo de controle de câmera, para que esse fosse invertido novamente pelo circuito de proteção e assim chegar como devido ao circuito de controle interno do motor.
+Para conectar os motores ao módulo de câmera (Raspberry Pi), foi necessário construir um circuito de acionamento dos motores, que consiste em dois transistores bipolares de junção (BJT 2N2222), um para cada motor, configurados no modo emissor-comum, funcionando como um interruptor acionado pelo sinal PWM gerado pelos pinos GPIO do Raspberry Pi. A fonte do sinal PWM foi ligada ao terminal base do transistor através de um resistor de 1Kohm, com a função de limitar a corrente $I_b$ e a via de sinal do motor foi conectado ao terminal coletor do transistor e também a uma fonte de 5V através de um resistor de 10Kohm, responsável por limitar a corrente $I_c$, máxima quando o transistor está ativado, como ilustrado no circuito da \autoref{fig:circprotecao}.\par
+Esse circuito foi construído numa mini \textit{breadboard} e tem o objetivo proteger o Raspberry Pi, evitando o consumo excessivo de corrente (mais que 15mA) ou uma possível corrente de retorno para um dos pinos GPIO numa eventual falha do circuito interno de controle dos motores. Como o circuito de proteção inverte o sinal PWM, foi necessário gerar um sinal invertido no módulo de controle de câmera, para que esse fosse invertido novamente pelo circuito de proteção e assim chegar como devido ao circuito de controle interno do motor.\par
+A alimentação dos motores é fornecida por um outro circuito composto por um regulador linear de tensão, o LM7805, e dois capacitores, ilustrado na \autoref{fig:circfonte}, que reduz a tensão fornecida pela PSU de de 12V pra 5V. A linha de 12V foi usada para isolar as fontes de alimentação dos motores e da unidade computacional, o Raspberry Pi, para evitar ruídos causados pelo acionamento dos motores.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[trim={6.5cm 5cm 7.5cm 4cm},clip,width=0.7\textwidth]{figuras/circ_acionamento.pdf}
-	\caption{Circuito de acionamento de motores.}
-	\label{fig:circprotecao}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[trim={6.5cm 5cm 9cm 5cm},clip,width=0.9\textwidth]{figuras/circ_acionamento.pdf}
+		\caption{Acionamento de motores.}
+		\label{fig:circprotecao}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[trim={6.5cm 5cm 8.5cm 4cm},clip,width=0.9\textwidth]{figuras/fonte_motores.pdf}
+		\caption{Regulador de tensão.}
+		\label{fig:circfonte}
+	\end{subfigure}
+	\caption{Circuitos usados pelos motores.}
 \end{figure}
 
-\subsection{Montagem do Módulo de Controle de Câmera}
+\subsection{Construção do Módulo de Controle de Câmera}
 \label{subsec:assemmodconcam}
 
-O módulo de controle de câmera na verdade controla os motores usados para movimentar uma câmera. 
+O módulo de controle de câmera é responsável por acionar os motores usados para movimentar a câmera e iniciar um serviço de \textit{stream} de mídia que disponibiliza na rede, usando um protocolo de tempo real, as imagens capturadas pela câmera.\par
+Um software de controle foi construído, usando a linguagem C, para receber valores de coordenadas enviados por um socket e acionar os motores.\par
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/controlador.jpg}
+		\caption{iniciado.}
+		\label{fig:controlador_teste}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/controlador2.jpg}
+		\caption{gerando posição com o click do mouse.}
+		\label{fig:controlador_teste_coordenada}
+	\end{subfigure}
+	\caption{Captura de tela de depuração e teste dos motores do software de controle.}
+\end{figure}
+
+O software de controle possui um modo de depuração/teste habilitado através da diretiva \textbf{\#define DEV}, que mostra uma tela com um painel negro e quatro quadrantes, indicando a posição da câmera, através de um ponto branco (localizado no centro dos quadrantes quando o programa inicia); um indicador contendo a contagem de coordenadas recebidas por segundo (no canto superior esquerdo) e o endereço IP que está associado a interface de rede do Raspberry Pi (no canto superior direito), ilustrado na \autoref{fig:controlador_teste}. \par
+Através dessa interface é possível gerar posições da câmera usando o mouse. Para isso, o circulo branco deve ser clicado e arrastado para uma posição qualquer dos quadrantes. Ao arrastar e soltar o ponto branco, uma coordenada relativa a posição do ponto na tela é calculada e enviada para os motores, ilustrado na \autoref{fig:controlador_teste_coordenada}.\par
+Quando o ponto é movido no sentido horizontal, o motor horizontal é acionada, e de forma semelhante, quando o ponto se move na direção do eixo vertical, o motor vertical é acionado.\par
+As coordenadas do ponto branco são capturadas em relação a sua posição, em \textit{pixels} horizontais e verticais, dentro do painel negro, sendo a coordenada (0;0), a menor possível, localizada no canto superior esquerdo e a coordenada (640, 480), a maior possível, localizada no canto inferior direito do painel negro.
+
 
 - construção da classe server\\
 - construção da classe servo\\
