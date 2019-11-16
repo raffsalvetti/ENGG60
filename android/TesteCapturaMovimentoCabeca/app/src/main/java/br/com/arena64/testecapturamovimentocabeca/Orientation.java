@@ -42,8 +42,8 @@ public class Orientation implements SensorEventListener {
 
         // Can be null if the sensor hardware is not available
 //        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-//        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
-        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_POSE_6DOF);
+        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+//        mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_POSE_6DOF);
     }
 
     public void startListening(Listener listener) {

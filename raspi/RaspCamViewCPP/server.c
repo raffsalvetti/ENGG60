@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <string.h>
 #include <pthread.h>
 #include <stdarg.h>
@@ -25,12 +26,15 @@ void server_add_on_connect_callback(server_event connect_callback) {
 void server_add_on_receive_callback(server_event receive_callback) {
 	receive_handler = receive_callback;
 }
+
 void server_add_on_send_callback(server_event send_callback) {
 	send_handler = send_callback;
 }
+
 void server_add_on_disconnect_callback(server_event disconnect_callback) {
 	disconnect_handler = disconnect_callback;
 }
+
 int tcp_server_fd, udp_server_fd;
 struct sockaddr_in tcp_server_address, udp_server_address, udp_client_address;
 char err_message_buffer[1024] = {0};
@@ -48,11 +52,16 @@ static void on_socket_error(int socket, char *message, ...) {
 	}
 }
 
-static void on_socket_connect(int socket) {
+static void on_socket_connect(int socket, struct sockaddr_in* ipV4Addr) {
 	if(connect_handler != NULL) {
+		struct in_addr ipAddr = ipV4Addr->sin_addr;
+		char strIp[INET_ADDRSTRLEN];
+		inet_ntop( AF_INET, &ipAddr, strIp, INET_ADDRSTRLEN );
 		memset(err_message_buffer, 0, 1024);
-		sprintf(err_message_buffer, "Cliente conectado!\n");
+		sprintf(err_message_buffer, "CONNECT#%s\n", strIp);
 		connect_handler(socket, err_message_buffer);
+	} else {
+		fprintf(stdout, "connect_handler = NULL!\n");
 	}
 }
 
@@ -147,7 +156,8 @@ static void *server_wait_for_connection() { //TODO: aceita somente uma conexao, 
 		if ((new_tcp_client = accept(tcp_server_fd, (struct sockaddr *)&tcp_server_address, (socklen_t *)&addrlen)) < 0) {
 			on_socket_error(tcp_server_fd, "Nao foi possivel aceitar conexao: %s\n", strerror(errno));
 		} else {
-			on_socket_connect(new_tcp_client);
+			on_socket_connect(new_tcp_client, (struct sockaddr_in*)&tcp_server_address);
+			// fprintf(stdout, "SOCKET CONECTADO!\n");
 			while(active) {
 				memset(tcp_receive_buffer, 0, REC_BUFFER_SIZE);
 				tcp_socket_read_bytes = read(new_tcp_client, tcp_receive_buffer, REC_BUFFER_SIZE);
@@ -155,8 +165,8 @@ static void *server_wait_for_connection() { //TODO: aceita somente uma conexao, 
 					on_socket_error(new_tcp_client, "Erro lendo dados: %s\n", strerror(errno));
 					break;
 				} else if(tcp_socket_read_bytes == 0) {
-					if(strlen(tcp_receive_buffer) > 0)
-						on_socket_read(new_tcp_client, tcp_receive_buffer);
+					// if(strlen(tcp_receive_buffer) > 0)
+					// 	on_socket_read(new_tcp_client, tcp_receive_buffer);
 					on_socket_diconnect(new_tcp_client, "Cliente desconectado!\n");
 					break;
 				} else {
@@ -198,7 +208,7 @@ void server_get_ip_address(char *ip_address) {
 		if (ifa->ifa_addr == NULL)
 			continue;
 		s = getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
-		if((strcmp(ifa->ifa_name, "eth0")==0)&&(ifa->ifa_addr->sa_family==AF_INET)) {
+		if((!strcmp(ifa->ifa_name, "eth0") || !strcmp(ifa->ifa_name, "enp7s0") || !strcmp(ifa->ifa_name, "wlp6s0")) && (ifa->ifa_addr->sa_family == AF_INET)) {
 			if (s != 0) {
 				printf("getnameinfo() failed: %s\n", gai_strerror(s));
 				exit(EXIT_FAILURE);

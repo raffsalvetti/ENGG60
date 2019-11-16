@@ -15,8 +15,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.QuickContactBadge;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
@@ -72,7 +74,7 @@ class SmoothOrientation {
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity implements Orientation.Listener, NetWorks.Listener {
+public class FullscreenActivity extends AppCompatActivity implements Orientation.Listener, NetWorks.Listener, VlcSurfaceView.Listener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -150,6 +152,9 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
     private Orientation mOrientation;
     private NetWorks netWorks;
     private VlcSurfaceView vlcSurfaceView;
+    private ToggleButton toggleImagemCamera;
+    private String moduloControleCameraIp = "";
+    private int lastX, lastY;
 
 
     @Override
@@ -188,6 +193,20 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         textViewConectado = findViewById(R.id.textView_conctado);
         textViewStatus = findViewById(R.id.textView_status);
         textViewCoordenadas = findViewById(R.id.textView_coordenadas);
+        toggleImagemCamera = findViewById(R.id.button_camera);
+        toggleImagemCamera.setEnabled(false);
+        toggleImagemCamera.setChecked(false);
+        toggleImagemCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleImagemCamera.setEnabled(false);
+                if(toggleImagemCamera.isChecked()) {
+                    vlcSurfaceView.createPlayer(moduloControleCameraIp);
+                } else {
+                    vlcSurfaceView.releasePlayer();
+                }
+            }
+        });
 
         // Set up the user interaction to manually show or hide the system UI.
 //        mAzimutCalculated.setOnClickListener(new View.OnClickListener() {
@@ -203,9 +222,8 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
 //        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
 //        String uri = "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov";
-         String uri = "rtsp://192.168.25.20:8888/live.sdp";
         vlcSurfaceView = findViewById(R.id.vlc_surface_view);
-
+        vlcSurfaceView.addLisneter(this);
 
         mOrientation = new Orientation(this);
         netWorks = new NetWorks(true, this);
@@ -238,13 +256,15 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
     protected void onResume() {
         super.onResume();
 //        vlcSurfaceView.setSize(800, 600);
-        vlcSurfaceView.createPlayer("rtsp://192.168.25.20:8888/live.sdp");
+        if(toggleImagemCamera.isChecked())
+            vlcSurfaceView.createPlayer(moduloControleCameraIp);
     }
 
     protected void onPause() {
         super.onPause();
 //        mSensorManager.unregisterListener(this);
-        vlcSurfaceView.releasePlayer();
+        if(toggleImagemCamera.isChecked())
+            vlcSurfaceView.releasePlayer();
     }
 
     @Override
@@ -324,17 +344,23 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
                     textViewStatus.setText(String.format("Enviando coordenadas: %d:%d", x, y));
                 }
             });
-            netWorks.sendMessage(x + ";" + y);
+            if(lastX != x || lastY != y) {
+                netWorks.sendMessage(x + ";" + y);
+                lastX = x;
+                lastY = y;
+            }
         }
     }
 
     @Override
     public void onConnect(final String ipAddress) {
         Log.i(TAG, "Conectado em : " + ipAddress);
+        moduloControleCameraIp = ipAddress;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 aSwitchSendData.setClickable(true);
+                toggleImagemCamera.setEnabled(true);
                 textViewConectado.setText(String.format("Conectado em: %s", ipAddress));
                 textViewStatus.setText(String.format("Conectado no controlador %s", ipAddress));
             }
@@ -347,6 +373,8 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
             @Override
             public void run() {
                 aSwitchSendData.setChecked(false);
+                toggleImagemCamera.setEnabled(false);
+                toggleImagemCamera.setChecked(false);
                 aSwitchSendData.setClickable(false);
                 textViewConectado.setText(R.string.conectado_em);
                 textViewStatus.setText(String.format("Desconectado do controlador!"));
@@ -362,5 +390,17 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
                 textViewStatus.setText(String.format("Localizando controlador..."));
             }
         });
+    }
+
+    @Override
+    public void onCreateVideo() {
+        toggleImagemCamera.setEnabled(true);
+        netWorks.sendMessage("VIDEOSTART");
+    }
+
+    @Override
+    public void onReleaseVideo() {
+        toggleImagemCamera.setEnabled(true);
+        netWorks.sendMessage("VIDEOSTOP");
     }
 }

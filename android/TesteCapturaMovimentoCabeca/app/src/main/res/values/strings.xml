@@ -5,6 +5,7 @@
     <string name="calibrar_camera">Calibrar Câmera</string>
     <string name="enviar_coordenadas">Enviar Coordenadas</string>
     <string name="conectado_em">Conectado em: 0.0.0.0</string>
-    <string name="camera">Câmera</string>
     <string name="coordenadas">0;0</string>
+    <string name="iniciar_camera">Iniciar Câmera</string>
+    <string name="parar_camera">Parar Câmera</string>
 </resources>

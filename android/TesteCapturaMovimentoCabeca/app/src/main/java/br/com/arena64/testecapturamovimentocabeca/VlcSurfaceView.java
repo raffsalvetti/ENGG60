@@ -23,6 +23,12 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
+
+    public interface Listener {
+        void onCreateVideo();
+        void onReleaseVideo();
+    }
+
     public final static String TAG = "LibVLCAndroidSample/VideoActivity";
 
     // media player
@@ -30,6 +36,7 @@ public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
     private MediaPlayer mMediaPlayer = null;
     private int mVideoWidth;
     private int mVideoHeight;
+    private Listener listener = null;
 
     public VlcSurfaceView(Context context) {
         super(context);
@@ -52,6 +59,10 @@ public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setSize(mVideoWidth, mVideoHeight);
+    }
+
+    public void addLisneter(Listener listener){
+        this.listener = listener;
     }
 
     /*************
@@ -99,23 +110,23 @@ public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
      * Player
      *************/
 
-    public void createPlayer(String media) {
+    public void createPlayer(String ip) {
         releasePlayer();
         try {
-            if (media.length() > 0) {
-                Toast toast = Toast.makeText(getContext(), media, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
-                        0);
-                toast.show();
-            }
+//            if (media.length() > 0) {
+//                Toast toast = Toast.makeText(getContext(), media, Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
+//                        0);
+//                toast.show();
+//            }
 
             // Create LibVLC
             // TODO: make this more robust, and sync with audio demo
             ArrayList<String> options = new ArrayList<String>();
             //options.add("--subsdec-encoding <encoding>");
-            options.add("--aout=opensles");
-            options.add("--audio-time-stretch"); // time stretching
-            options.add("-vvv"); // verbosity
+//            options.add("--aout=opensles");
+//            options.add("--audio-time-stretch"); // time stretching
+//            options.add("-vvv"); // verbosity
             libvlc = new LibVLC(getContext());
             getHolder().setKeepScreenOn(true);
 
@@ -131,15 +142,15 @@ public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
             vout.attachViews();
 
             MemoryFile memoryFile = new MemoryFile("SDP", 1024 * 2);
-            memoryFile.getOutputStream().write("v=0\no=- 0 0 IN IP4 127.0.0.1\ns=No Name\nc=IN IP4 192.168.25.16\nt=0 0\na=tool:libavformat 57.56.101\nm=video 8888 RTP/AVP 96\nb=AS:256\na=rtpmap:96 H264/90000\na=fmtp:96 packetization-mode=1".getBytes());
+            memoryFile.getOutputStream().write(("v=0\no=- 0 0 IN IP4 127.0.0.1\ns=No Name\nc=IN IP4 " + ip + "\nt=0 0\na=tool:libavformat 57.56.101\nm=video 8888 RTP/AVP 96\nb=AS:256\na=rtpmap:96 H264/90000\na=fmtp:96 packetization-mode=1").getBytes());
             FileDescriptor fileDescriptor = (FileDescriptor) MemoryFile.class.getMethod("getFileDescriptor").invoke(memoryFile);
 
             Media m = new Media(libvlc, fileDescriptor);
 //            Media m = new Media(libvlc, Uri.parse(media));
             m.addOption(":fullscreen");
             mMediaPlayer.setMedia(m);
-            mMediaPlayer.setAspectRatio("16:9");
-            mMediaPlayer.setScale(4f);
+//            mMediaPlayer.setAspectRatio("16:9");
+            mMediaPlayer.setScale(2f);
             mMediaPlayer.play();
         } catch (Exception e) {
             Toast.makeText(getContext(), "Error creating player!", Toast.LENGTH_LONG).show();
@@ -159,6 +170,7 @@ public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
 
         mVideoWidth = 0;
         mVideoHeight = 0;
+        listener.onReleaseVideo();
     }
 
     /*************
@@ -180,12 +192,16 @@ public class VlcSurfaceView extends SurfaceView implements IVLCVout.Callback {
 
     @Override
     public void onSurfacesCreated(IVLCVout vout) {
-
+        Log.d(TAG, "onSurfacesCreated");
+        if(listener != null)
+            listener.onCreateVideo();
     }
 
     @Override
     public void onSurfacesDestroyed(IVLCVout vout) {
-
+        Log.d(TAG, "onSurfacesDestroyed");
+        if(listener != null)
+            listener.onReleaseVideo();
     }
 
     private static class MyPlayerListener implements MediaPlayer.EventListener {

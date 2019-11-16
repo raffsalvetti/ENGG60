@@ -68,7 +68,14 @@ O suporte dos motores servo e da câmera é uma estrutura moldada em plástico, 
 	\caption{Base de suporta para motores e câmera.}
 \end{figure}
 
-Com a intensão de testar os motores, e preservar o Raspberry Pi (um dispositivo menos tolerante a falhas quando se trata de níveis de tensão nos pinos de propósito geral), foi desenvolvido um circuito gerador de PWM (drive PWM), onde era possível ajustar tanto a frequência do sinal quanto a largura dos pulsos, através de mudança de resistores e um potenciômetro. O propósito do circuito foi descobrir a posição central dos motores e verificar sua estabilidade enquanto se variava a frequência do sinal. O drive foi montado usando o circuito integrado NE555, um componente eletrônico bastante usado em aplicações que envolve temporização, geração de pulso e PWM. \par
+Com a intensão de testar os motores, e preservar o Raspberry Pi (um dispositivo menos tolerante a falhas quando se trata de níveis de tensão nos pinos de propósito geral), foi desenvolvido um circuito gerador de PWM (drive PWM), ilustrado na \autoref{fig:pwmtestcircuit}, onde era possível ajustar tanto a frequência do sinal quanto a largura dos pulsos, através de ajustes no potenciômetro POT3 e substituição de um resistor que substituiu os potenciômetros POT1 e POT2 no circuito implementado na \textit{breadboard}. O propósito do circuito foi descobrir a posição central dos motores e verificar sua estabilidade enquanto se variava a frequência do sinal. O drive foi montado usando o circuito integrado NE555, um componente eletrônico bastante usado em aplicações que envolve temporização, geração de pulso e PWM. \par
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim={2.5cm 3cm 4cm 3cm},clip,width=0.7\textwidth]{figuras/pwm2.pdf}
+	\caption{Driver PWM de teste.}
+	\label{fig:pwmtestcircuit}
+\end{figure}
 
 Ativando individualmente os motores com o drive construído e com o auxilio de um osciloscópio, foi possível notar que os motores operam de forma estável com pulsos gerados numa frequência de 50Hz, e que é possível controlar a sua posição variando a largura do pulso entre valores próximos a 1ms, posição de angulo $180\degree$ (ângulo máximo), e valores próximos 2ms, posição de angulo $0\degree$ (ângulo mínimo), como ilustrado na \autoref{fig:pwmservo}. Foi possível observar também que existe uma correspondência linear entre a largura do pulso e a posição angular do eixo do motor, sendo assim, a posição de repouso ou centro, pode ser alcançada com uma largura de pulso próximo a 1,5 milissegundos. 
 
@@ -104,7 +111,7 @@ A alimentação dos motores é fornecida por um outro circuito composto por um r
 
 O módulo de controle de câmera é responsável por acionar os motores usados para movimentar a câmera e iniciar um serviço de \textit{stream} de mídia que disponibiliza na rede, usando um protocolo de tempo real, as imagens capturadas pela câmera.\par
 Um software de controle foi construído, usando a linguagem C, para receber valores de coordenadas enviados por um socket e acionar os motores.\par
-
+O software de controle possui dois modos de operação, um modo de produção, que opera consumindo recursos mínimos de memória e processador, e um modo de depuração/teste, habilitado através da diretiva \textbf{\#define DEV}.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -120,21 +127,126 @@ Um software de controle foi construído, usando a linguagem C, para receber valo
 	\caption{Captura de tela de depuração e teste dos motores do software de controle.}
 \end{figure}
 
-O software de controle possui um modo de depuração/teste habilitado através da diretiva \textbf{\#define DEV}, que mostra uma tela com um painel negro e quatro quadrantes, indicando a posição da câmera, através de um ponto branco (localizado no centro dos quadrantes quando o programa inicia); um indicador contendo a contagem de coordenadas recebidas por segundo (no canto superior esquerdo) e o endereço IP que está associado a interface de rede do Raspberry Pi (no canto superior direito), ilustrado na \autoref{fig:controlador_teste}. \par
-Através dessa interface é possível gerar posições da câmera usando o mouse. Para isso, o circulo branco deve ser clicado e arrastado para uma posição qualquer dos quadrantes. Ao arrastar e soltar o ponto branco, uma coordenada relativa a posição do ponto na tela é calculada e enviada para os motores, ilustrado na \autoref{fig:controlador_teste_coordenada}.\par
-Quando o ponto é movido no sentido horizontal, o motor horizontal é acionada, e de forma semelhante, quando o ponto se move na direção do eixo vertical, o motor vertical é acionado.\par
-As coordenadas do ponto branco são capturadas em relação a sua posição, em \textit{pixels} horizontais e verticais, dentro do painel negro, sendo a coordenada (0;0), a menor possível, localizada no canto superior esquerdo e a coordenada (640, 480), a maior possível, localizada no canto inferior direito do painel negro.
+No modo de depuração é mostrada uma tela com um painel negro e quatro quadrantes indicando a posição da câmera através de um ponto branco (localizado no centro dos quadrantes quando o programa inicia); um indicador contendo a contagem de coordenadas recebidas por segundo (no canto superior esquerdo) e o endereço IP que está associado a interface de rede do Raspberry Pi (no canto superior direito), ilustrado na \autoref{fig:controlador_teste} e na \autoref{fig:controlador_teste_coordenada}. \par
+
+Através dessa interface é possível simular posições da câmera usando o mouse. Para isso, o circulo branco deve ser clicado e arrastado para uma posição qualquer dos quadrantes. Ao arrastar e soltar o ponto branco, uma coordenada relativa a posição do ponto na tela é calculada e enviada para os motores, ilustrado na \autoref{fig:controlador_teste_coordenada}.\par
+
+Quando o ponto é movido no sentido horizontal, o motor horizontal é acionado, e de forma semelhante, quando o ponto se move na direção do eixo vertical, o motor vertical é acionado.\par
+
+As coordenadas do ponto branco são capturadas em relação a sua posição, em \textit{pixels} horizontais e verticais, dentro do painel negro, sendo a coordenada (0;0), a menor possível, localizada no canto superior esquerdo, ilustrado na \autoref{fig:sistcoord0x0}, e a coordenada (640, 480), a maior possível, localizada no canto inferior direito do painel negro, ilustrada na \autoref{fig:sistcoord100x100}.\par
+
+Conforme explicado na \autoref{sec:assemprototipo}, os motores servos deslocam seu eixo de acordo com a largura do pulso enviado para seu controlador interno. Entretanto, as coordenadas simuladas pela interface de depuração e as que são recebidas do modulo Android não possuem a informação de largura de pulso ou quantidade de ângulos que determinado motor deve ser movimentado. Para resolver esse problema, foi criado um sistema de posição independente da quantidade de \textit{pixels}, largura de pulso ou ângulos.\par
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/controlador0x0.jpg}
+		\caption{coordenada mínima}
+		\label{fig:sistcoord0x0}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/controlador100x100.jpg}
+		\caption{coordenada máxima}
+		\label{fig:sistcoord100x100}
+	\end{subfigure}
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/controlador-values.jpg}
+		\caption{orientação dos eixos.}
+		\label{fig:sistcoord}
+	\end{subfigure}
+	\caption{Sistema de coordenadas proporcional.}
+\end{figure}
+
+O sistema de posição proposto é baseado na proporção, ou porcentagem, máxima do movimento possível (do motor, da cabeça do operador e do mouse no painel do programa de teste). Desse modo, o ângulo máximo que o motor horizontal, e a cabeça do operador, podem deslocar é $180\degree$, sendo $90\degree$ para a esquerda e $90\degree$ para a direita (partindo-se do ângulo $90\degree$, local de descanso do motor e centro de visão do operador), e está relacionado diretamente ao valor máximo de \textit{pixels} que a componente $x$ da coordenada de posição pode assumir, 640 \textit{pixels}, sendo 320 para a esquerda e 320 para a direita (partindo-se do centro da interface). De forma semelhante, movem-se no eixo vertical, o motor e a cabeça do operador com angulo máximo de $180\degree$, mudando apenas a quantidade máxima de \textit{pixels} na interface de teste, que nesse caso é 480, sendo 240 para cima e 240 para baixo.\par
+A relação entre a largura de pulso enviada para os motores horizontal e vertical, em porcento, é dada respectivamente por:
+\begin{equation}
+	PWM_H = \frac{TARGET_X \times 100}{WIDTH}
+	\label{eq:pwm_screen_h}
+\end{equation}
+
+\begin{equation}
+	PWM_V = \frac{TARGET_Y \times 100}{HEIGHT}
+	\label{eq:pwm_screen_v}
+\end{equation}
+
+Sendo $WIDTH = 640$ e $HEIGHT = 480$, a largura e altura do painel de teste; $TARGET_X$ e $TARGET_Y$ a localização real em \textit{pixels} horizontais de verticais do circulo indicador.
+
+A \autoref{fig:sistcoord} mostra que o valor dos componentes das coordenada crescem no sentido esquerda-direita horizontalmente e cima-baixo verticalmente. Como o sistema está expresso em porcentagem, os valores das coordenadas são enviados diretamente para os motores, como será visto adiante, no final da \autoref{subsec:deiverpwm}.\par
+
+Um ajuste foi feito nas coordenadas que são enviadas para o motor servo que movimenta a câmera horizontalmente. Devido a montagem do motor inverter a posição do seu eixo, as coordenadas enviadas pela interface de depuração e pelo módulo de captura de movimento foram invertidas, sendo assim a \autoref{eq:pwm_screen_h} foi ajustada para:
+
+\begin{equation}
+	PWM_H = 100 - (\frac{TARGET_X \times 100}{WIDTH})
+	\label{eq:pwm_screen_h_inverse}
+\end{equation}
+
+\subsection{Driver PWM}
+\label{subsec:deiverpwm}
+
+A geração de PWM pode ser realizada através de software ou hardware, usando um dispositivo especializado implementado dentro do processador.\par
+
+Testes foram feitos no inicio do projeto na expectativa de gerar um sinal PWM adequado via software, usando a biblioteca \textbf{RPi.GPIO} escrita em \textit{pyton}, já que a ideia inicial era escrever todos os módulos, inclusive o programa de testes, em \textit{pyton}. Entretanto, os resultados não foram satisfatórios. Os pulsos PWM gerados pela biblioteca não mantinham a frequência e nem a largura do pulso, causando um movimento errático dos motores. A partir desse teste, optou-se por utilizar a linguagem de programação C, nas bibliotecas e ao escrever o código dos softwares utilizados no Raspberry Pi.\par
+
+Outros testes foram feitos com uma biblioteca chamada \textbf{WiringPi}, escrita usando a linguagem C. A biblioteca não oferecia um bom suporte para PWM, sendo mais utilizada para controle geral dos pinos de propósito geral do Raspberry Pi, e portanto foi descartada.\par
+
+A biblioteca \textbf{bcm2835} também foi testada. Foi observado que é uma biblioteca muito extensa e oferece suporte aos diversos dispositivos de hardware como SPI, I2C e PWM, disponíveis no Raspberry Pi. Entretanto, por não possuir uma documentação intuitiva e devido a sua complexidade associada ao curto tempo para a conclusão do projeto, sua utilização foi descartada.\par
+
+Por fim, o método utilizado para gerar um PWM estável, de forma rápida e confiável foi através do utilitário \textbf{ServoBlaster}, um software que provê uma interface de controle do drive PWM via árvore de dispositivos do sistema operacional Linux. Sendo assim, através de um dispositivo localizado em \textbf{/dev/servoblaster}, foi possível gerar sinais PWM estáveis para múltiplos pinos do Raspberry Pi.\par 
+
+Para acionar o drive PWM basta abrir o dispositivo \textbf{/dev/servoblaster}, como um arquivo, e escrever os comandos de acionamento dos motores.\par
+
+O utilitário \textbf{ServoBlaster} é instalado como um serviço no sistema operacional e fica esperando comandos serem escritos no dispositivo \textbf{/dev/servoblaster}, criado durante a instalação. Os comandos de acionamento dos servos são intuitivos e não é necessário conhecimento aprofundado em servo motores ou na eletrônica por trás da geração de PWM. Como exemplo, para mover um motor servo qualquer, conectado a um pino $X$ do Raspberry Pi, para a posição $90\degree$, seu centro ou ponto de descanso, basta usar um emulador de terminal, como o \textit{bash}, e digitar o comando \textbf{echo X=50\% > /dev/servoblaster}; para mover o mesmo motor para sua posição inicial, ou $0\degree$, basta digitar \textbf{echo X=0\% > /dev/servoblaster}, e assim sucessivamente para qualquer ângulo $\theta$, sendo $0 \le \theta \le 180$.\par
+
+O módulo de controle das câmeras usa o utilitário \textit{servoblaster} conforme descrito anteriormente, porém acessando o dispositivo \textbf{/dev/servoblaster} diretamente, isto é, através das funções de manipulação de arquivo (\textit{open} e \textit{write}), fornecidas pela API C básica do Linux, a \textit{stdlibc}.
+
+\subsection{Servidor de Imagens}
+\label{subsec:mediaserver}
+
+O módulo de câmera também é responsável por enviar as imagens da câmera, em tempo real, para o módulo de captura de movimento. Com esse objetivo, testes foram feitos com a \textit{GStreamer}, uma biblioteca bastante utilizada na criação e manipulação de som e video no ambiente \textit{Linux}. Contudo, devido a uma incompatibilidade do sistema operacional utilizado no \textit{Raspberry Pi} e a biblioteca, a \textit{GStreamer} não foi adotada.\par
+
+O \textit{VLC}, um \textit{player} bastante difundido e multi-plataforma, com suporte a vários formatos de som e imagem, capaz de realizar \textit{stream}, usando protocolos de tempo real, em modo \textit{headless} (sem carregar uma interface gráfica, via linha de comando) foi testado também. Entretanto, seu uso foi descartado por utilizar demasiadamente o processador (por volta dos 97\% de CPU e 71MB da memória RAM), possivelmente causando comportamentos erráticos no controle dos motores.\par
+
+Testes foram realizados também com o \textit{FFmpeg}, um utilitário multi-plataforma usado em manipulações de som e imagem, bastante versátil, com suporte a um grande número de \textit{codecs} e capacidade para realizar \textit{stream} de áudio e vídeo. O software foi recompilada para o \textit{Rasspberry Pi} com o objetivo de ativar seu suporte ao \textit{codec} de vídeo \textbf{h264\_omx}, implementado em hardware, no \textit{ASIC} (chip de silicio que contem o processador e todos os periféricos do \textit{Raspberry Pi}), visando reduzir o uso do processador para tarefas de decodificação do vídeo. Por apresentar melhor desempenho (em média 70\% do uso do CPU e 46MB de memória RAM), esse utilitário foi usado para enviar o vídeo para o módulo de captura de movimento.
 
 
-- construção da classe server\\
-- construção da classe servo\\
-- construção da classe display\\
-- construção da classe main\\
 
-\subsection{Montagem do Módulo de Captura de Movimento}
+\subsection{Construção do Módulo de Captura de Movimento}
 \label{subsec:assemmodcapmov}
 
-- instalação de pacotes necessarios para o desenvolvimento\\
-- construção da classe Orientation\\
-- construção da classe NetWorks\\
-- construção da classe FullscreenActivity\\
+O módulo de captura de movimento é responsável por obter, filtrar e enviar coordenadas relativas a posição da cabeça do operador para o módulo de controle de câmera. É formado por um software, programado em Java e roda num smartfone Android, que possui uma interface intuitiva de operação, ilustrado na \autoref{fig:moduloandroid}, e um conjunto de sensores embutidos no celular, que são capazes de fornecer dados relativos a orientação com uma boa acuracidade.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/modulo_android_1.png}
+	\caption{Interface do Módulo de Captura de Movimento.}
+	\label{fig:moduloandroid}
+\end{figure}
+
+A captura de tela da interface do Módulo de Captura de Movimento, ilustrada na \autoref{fig:moduloandroid}, mostra uma serie de componentes visuais que trazem informações pertinentes ao funcionamento do sistema e permitem interagir remotamente com o Módulo de Controle de Câmera. \par
+
+O \textbf{indicador de conexão}, localizado no canto superior esquerdo da interface, indica a qual endereço IP está associado ao servidor responsável por controlar os motores que movimentam a câmera que ao mesmo tempo disponibilizam as imagens capturadas. Quando o seu valor é \textbf{0.0.0.0}, significa que está desconectado de um servidor e não será possível enviar coordenadas ou receber imagens.\par
+
+O \textbf{indicador de coordenadas}, localizado na parte central superior da interface, indica qual coordenada está sendo capturada pelos sensores de movimento do celular em tempo real. Seu formato é semelhante a uma coordenada cartesiana, isto é, a componente da $x$ seguindo da componente $y$ e separada por um "ponto e virgula". Esse indicador mostra pontos do sistema de coordenadas proposto na \autoref{subsec:assemmodconcam}, desse modo, a coordenada \textbf{50;50} é equivalente ao centro da interface de depuração.\par
+
+No canto superior direito da interface, se encontra o \textbf{controle de envio de coordenada}, uma chave do tipo \textit{on-off} que somente é habilitada quando o Módulo de Captura de Movimento está conectado a um servidor de controle de câmera. Quando a chave está na posição \textit{on}, ou ativada, as coordenas são enviadas para o servidor de controle de câmera.\par
+
+Ao centro da interface, numa área em cor preta, está localizado o \textbf{painel de imagens}. Este é o local onde as imagens da câmera são mostradas quando recebidas do módulo de controle de câmera. O painel de imagens é dividido, verticalmente ao centro em duas porções, indicado pela linha tracejada em cor branca.\par
+
+A divisão é devida ao sistema de vídeo \textit{stereo} simulado, onde uma única imagem enviada pelo módulo de controle de câmera é duplicada e manipulada de forma a criar um efeito \textit{parallax}, isto é, criar a sensação de que existem duas fontes de vídeo (duas câmeras), capturando imagens de um mesmo objeto a partir de ângulos de visão distintos, trazendo a sensação 3D para o operador.\par
+
+A interface possui uma \textbf{barra de \textit{status}}, localizada na parte inferior, que indica qual tarefa está sendo executada no momento. A barra de \textit{status} mostrada na \autoref{fig:moduloandroid} indica que quando a imagem foi capturada o Módulo de Captura de Movimento estava buscando o Módulo de Controle de Câmera.\par
+
+O mecanismo de busca do Módulo de Controle de Câmera se dá através do disparo em \textit{broadcast} de pacotes do tipo \textit{User Datagram Protocol}, mais conhecido como pacotes UDP, com uma mensagem especifica, somente respondida pelo Módulo de Controle de Câmera com o seu endereço IP associado. Desse modo, o Módulo de Captura de Movimento configura o endereço IP respondido como um Módulo de Controle de Câmera válido e habilita o controle de envio de coordenadas.\par
+
+Acima da barra de \textit{status} e abaixo do painel de imagens, está localizado o menu de botões, contendo as funções de \textbf{calibração do celular}, que consiste em salvar as coordenadas referentes a posição atual do celular, usadas posteriormente para calcular uma nova coordenada ajustada que será enviada para o Módulo de Controle de Câmera; a função de \textbf{calibração de câmera}, que envia uma mensagem de calibração para o Módulo de Controle de Câmera para salvar a coordenada referentes a atual da câmera, usada posteriormente como referencia para movimentar a câmera; e, por fim, a função \textbf{Parar/Enviar Câmera}, que controla o envio de imagens do Módulo de Controle de Câmera.\par
+
+A função de vídeo \textit{stereo} simulado não foi concluída. Devido a escassez de recursos de hardware no Raspberry Pi (processador e memória RAM) associados a qualidade inferior da câmera utilizada no protótipo, a imagem capturada e enviada para o \textit{smartphone} tem péssima resolução (320x240 \textit{pixels}). Quando escalonada para preencher a área disponível na interface do celular, resultou numa imagem desforme que pouco representa o objeto filmado. Sendo assim, apenas uma imagem está sendo mostrada, em tamanho reduzido e fora de alinhamento com a interface, conforme ilustrado na \autoref{fig:moduloandroid_cam}. Também, devido aos mesmos problemas relacionados ao hardware e qualidade da câmera, existe um atraso de aproximadamente 4 segundos entre as imagens que são coletadas na câmera e as imagens que são exibidas no aplicativo do celular.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/modulo_android_2.png}
+	\caption{Imagem da câmera em tamanho original.}
+	\label{fig:moduloandroid_cam}
+\end{figure}
+
+Para mostrar as imagens capturadas pela câmera no celular e transmitida via \textit{RTP - Real Time Protocol} (Protocolo de Tempo Real), foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional Android e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional Android, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.

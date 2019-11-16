@@ -37,8 +37,8 @@ void test_display_set_xy(int x, int y)
     coordinates_per_second_counter++;
     pthread_mutex_unlock(&lock);
     if(!target.selected) {
-        target.x = (WIDTH / 2) + (x * (WIDTH / 2))/100;
-        target.y = (HEIGHT / 2) + (y * (HEIGHT / 2))/100;
+        target.x = (x * WIDTH)/100;
+        target.y = (y * HEIGHT)/100;
     }
 }
 
