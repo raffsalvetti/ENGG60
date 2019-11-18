@@ -1,0 +1,12 @@
+sudo apt update
+
+sudo apt install vim build-essential liballegro5.2 liballegro5-dev liballegro-image5.2 liballegro-image5-dev liballegro-ttf5.2 liballegro-ttf5-dev liballegro-video5.2 liballegro-video5-dev
+
+; capturado imagem de download dos pacotes
+; capturado imagem de instalação dos pacotes
+
+git clone repositorio
+cd RaspiCam
+cd rasp/RaspCamViewCPP
+make
+./controlador

@@ -3,7 +3,52 @@
 \chapter{RESULTADOS}
 \label{chap:resultados}
 
-Nesse capitulo será mostrado alguns testes comparativo entre as opções de integração das bibliotecas.
+Nesse capitulo será discutido brevemente os resultados globais obtidos com o desenvolvimento do protótipo e mostrado um teste comparativo entre dois \textit{codecs} de video testados com a biblioteca \textit{FFmpeg}.\par
+
+\subsection{Resultados Globais}
+\label{subsec:resglobais}
+
+De modo geral, o protótipo se comportou conforme o esperado. A captura de movimento da cabeça do operador funciona de maneira satisfatória e os motores respondem sem atrasos perceptíveis (que representassem desconforto ao operador).\par
+
+Por outro lado, o sistema de envio de imagens precisa ser optimizado. Talvez um dispositivo de captura com mais qualidade, como o módulo de câmera oficial do Raspverry Pi, que possui um drive especifico implementado em hardware, represente uma melhoria no sistema global de captura e enfio de imagens capturadas.\par
+
+O consumo da banda de dados, durante o envio de coordenadas, foi minimizado pela aplicação de um filtro que compara a última coordenada válida com a que será enviada. Desse modo somente as modificações de posição são enviadas ao módulo de controle de câmeras.\par
+
+Os eventos, gerados pela API do Android, ocorrem em um tempo especificado pelo desenvolvedor. Para identificar esse tempo, levou-se em consideração a responsividade necessária para os motores e o uso de banda de dados. Quando menor o intervalo de tempo entre os eventos, maior é a resolução do dado e maior o consumo de banda de dados. Para chegar-se a um valor adequado, testes práticos foram feitos variando-se o intervalo de eventos entre 10 e 500 milissegundos. Chegou-se a conclusão que valores entre 30 e 90 milissegundos são satisfatórios.\par
+
+\subsection{Comparação Entre \textit{codecs}}
+\label{subsec:compcodecs}
+
+Dentre os testes realizados com alguns dos \textit{codecs} de vídeo compatíveis com o FFmpeg, os que mais chamaram atenção e que representaram um ganho considerável foram o \textbf{h264\_omx} e \textbf{h264}, implementados em hardware e software respectivamente.
+Comparando-se a \autoref{fig:top_ffmpeg_h264} e a \autoref{fig:top_ffmpeg_h264_omx}, obtidas da interface do gerenciador de tarefas \textit{top}, fica claro que a implementação de \textit{codecs} via hardware traz um ganho, em tempo de processador e quantidade de memoria \textit{RAM} alocada, considerável. Existe um ganho de aproximadamente 28\% em tempo de processador e 35\% em uso de memoria \textit{RAM}. Uma parte do uso de recursos nas duas figuras está relacionada ao processo de \textit{streaming}, implementada via software. Como o \textit{streaming} é o mesmo para as duas comparações, não existe inconsistência na comparação.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/top_ffmpeg_h264_omx.png}
+	\caption{Consumo de recursos de hardware pelo FFmpeg usando o codec h264\_omx, implementado em hardware.}
+	\label{fig:top_ffmpeg_h264_omx}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/top_ffmpeg_h264.png}
+	\caption{Consumo de recursos de hardware pelo FFmpeg usando o codec h264, implementado em software.}
+	\label{fig:top_ffmpeg_h264}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/consumo_banda.jpg}
+	\caption{Consumo dos recursos de rede durante o recebimento de coordenadas.}
+	\label{fig:consumo_banda}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/consumo_banda_camera.png}
+	\caption{Consumo dos recursos de rede durante o envio de imagem da câmera.}
+	\label{fig:consumo_banda}
+\end{figure}
 
 
 
@@ -57,7 +102,7 @@ Em termos de torque, a \autoref{fig:resultCtPaFrontPost} apresenta o gráfico da
 \end{figure}
 
 \section{Próximas etapas}
-\label{sec:trabalhosFuturos}
+\label{sec:trabalhosFutuross}
 
 Os próximos passos a serem feitos estão sintetizados na \autoref{tab:cronograma}.
 

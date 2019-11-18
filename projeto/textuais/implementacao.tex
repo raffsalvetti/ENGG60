@@ -249,4 +249,14 @@ A função de vídeo \textit{stereo} simulado não foi concluída. Devido a esca
 	\label{fig:moduloandroid_cam}
 \end{figure}
 
-Para mostrar as imagens capturadas pela câmera no celular e transmitida via \textit{RTP - Real Time Protocol} (Protocolo de Tempo Real), foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional Android e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional Android, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.
+Para mostrar as imagens capturadas pela câmera no celular e transmitida via \textit{RTP - Real Time Protocol} (Protocolo de Tempo Real), foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional Android e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional Android, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.\par
+
+O programa de captura de coordenadas pode ser resumido basicamente em quatro partes principais, \textbf{coleta de dados} de posição da cabeça do operador, \textbf{envio de coordenadas}, \textbf{interação com o usuário} (operador) e \textbf{exibição do vídeo} capturado pela câmera.\par
+
+A coleta de dados de movimento, acontece a cada 30 milissegundos, através dos eventos de posição fornecidos pela API do sistema operacional Android, que simplificam bastante o desenvolvimento de aplicações, abstraindo toda configuração do hardware dos sensores e a densa matemática, necessária para converter leitura de forças exercidas sobre o aparelho e interações dos vetores aceleração, em uma estrutura de dados que representa numericamente a posição espacial em que se encontra o celular, sendo necessário apenas informar a orientação do aparelho, \autoref{fig:axisdevice}, em relação ao sistema de eixos do planeta, ilustrado na \autoref{fig:axisglobe}.\par
+
+O envio de coordenadas ocorre assim que um evento de posição é disparado. Ou seja, um novo envio de coordenada acontece a cada 30 milissegundos. Supondo que um par de coordenadas em média consuma 5 bytes (2 bytes para a coordenada x, 2 bytes para a coordenada y e 1 byte para um caractere separador), seriam enviados 167 bytes por segundo, desconsiderando o \textit{overhead} do protocolo TCP, usado durante a conexão. O consumo na banda de dados gerado pela transmissão pode ser cm siderado irrisório para uma banda disponível de 100Mbits porém, para reduzir a :TODO
+
+
+
+  
