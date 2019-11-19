@@ -26,7 +26,7 @@ projeto/**/*.brf
 projeto/**/*.lof
 projeto/**/*.log
 projeto/**/*.lot
-projeto/**/*.pdf
+#projeto/**/*.pdf
 projeto/**/*.gz
 projeto/**/*.ilg
 projeto/**/*.ind
