@@ -9,3 +9,11 @@ ARM         Advanced RISC Machine
 HAL         Hardware Abstraction Layer
 PWM         Pulse width modulation
 GPIO        General-Purpose Input/Output
+MCC         Módulo de Controle de Câmera
+MCM         Módulo de Captura de Movimento
+Wi-Fi
+IP          Internet Protocol
+PSU         Power Supply Unit
+ATX         Advanced Technology eXtended
+PWM         Pulse-Width Modulation
+VLC         VideoLAN Client

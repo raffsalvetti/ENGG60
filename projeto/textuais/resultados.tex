@@ -8,11 +8,15 @@ Nesse capitulo serão discutido, os resultados globais obtidos com o desenvolvim
 \subsection{Resultados Globais}
 \label{subsec:resglobais}
 
-De modo geral, o protótipo se comportou conforme o esperado. A captura de movimento da cabeça do operador funcionou de maneira satisfatória e os motores respondem sem atrasos perceptíveis (que representassem desconforto ao operador). Entretanto, em determinados momentos, os motores apresentaram movimentos bruscos, como se tivessem perdido coordenadas. Posteriormente, descobriu-se que o comportamento inesperado dos motores, acontece devido a um mau contato entre os pinos dos \textit{jumpers}, usado para fazer a conexões entre os componentes eletrônicos, os motores e a \textit{breadboard}. \par
+De modo geral, o protótipo se comportou conforme o esperado. A captura de movimento da cabeça do operador funcionou de maneira satisfatória e os motores respondem sem atrasos perceptíveis (que representassem desconforto ao operador). Entretanto, em determinados momentos, os motores apresentaram movimentos bruscos, como se estivessem perdendo coordenadas. Posteriormente, descobriu-se que o comportamento inesperado dos motores, acontece devido a um mau contato entre os pinos dos \textit{jumpers}, usado para fazer a conexões entre os componentes eletrônicos, os motores e a \textit{breadboard}. \par
 
-O sistema de envio de imagens precisa ser optimizado. Talvez um dispositivo de captura com mais qualidade, como o módulo de câmera oficial do Raspverry Pi, que possui um drive especifico implementado em hardware, represente uma melhoria no sistema global de captura e enfio de imagens para o celular.\par
+Durante os testes com o \textit{driver} PWM criado, ilustrado na \autoref{fig:pwmtestcircuit}, foi possível observar que o motor responde de forma estável para uma faixa de frequência, e não só em 50Hz. Testes foram feitos com a frequência variando entre aproximadamente 44Hz e 62Hz. Entretanto, é muito sensível quando a largura dos pulsos, apresentando um comportamento errático quando a largura do pulso oscilava.\par
 
-Os eventos de detecção de posição, gerados pela API do Android, ocorrem em um tempo especificado pelo desenvolvedor. Para identificar esse tempo, levou-se em consideração a responsividade necessária para os motores e o uso de banda de dados. Quanto menor o intervalo de tempo entre os eventos, maior a resolução do movimento,  consumo de banda de dados e custo computacional. Para chegar-se a um valor adequado, testes práticos foram feitos variando-se o intervalo de eventos entre 10 e 500 milissegundos. Chegou-se a conclusão que valores entre 30 e 100 milissegundos são satisfatórios.\par
+Conforme citado anteriormente, a fonte de tensão dos motores foi separada da fonte de tensão do \textit{Raspberry Pi} para evitar o ruido causado pelos motores. Contudo, foi possível notar um comportamento indesejado, que acontece esporadicamente, ao acionar os motores. Em determinados momentos, após acionar os motores, foi possível notar uma queda de tensão de pelo menos 0,5V na linha de 5V por alguns segundos, causando a desconexão da rede sem fio. Por ser intermitente, é provável que o comportamento indesejado seja causado por algum mau contato na \textit{breadboard}. \par
+
+O sistema de envio de imagens precisa ser optimizado. Talvez um dispositivo de captura com mais qualidade, como o módulo de câmera oficial do \textit{Raspberry Pi}, que possui um drive especifico implementado em hardware, represente uma melhoria no sistema global de captura e enfio de imagens para o celular.\par
+
+Os eventos de detecção de posição, gerados pela API do \textit{Android}, ocorrem em um tempo especificado pelo desenvolvedor. Para identificar esse tempo, levou-se em consideração a responsividade necessária para os motores e o uso de banda de dados. Quanto menor o intervalo de tempo entre os eventos, maior a resolução do movimento,  consumo de banda de dados e custo computacional. Para chegar-se a um valor adequado, testes práticos foram feitos variando-se o intervalo de eventos entre 10 e 500 milissegundos. Chegou-se a conclusão que valores entre 30 e 100 milissegundos são satisfatórios.\par
 
 O consumo da banda de dados, durante o envio de coordenadas, foi minimizado pela aplicação de um filtro que compara a última coordenada válida com a que será enviada, conforme explicado no final da \autoref{subsec:assemmodcapmov}. Desse modo somente as modificações de posição são enviadas ao módulo de controle de câmeras. O resultado da aplicação desse filtro pode ser visualizado comparando-se a \autoref{fig:consumo_banda_coord} e a \autoref{fig:consumo_banda_video}.\par
 
@@ -49,84 +53,3 @@ Comparando-se a \autoref{fig:top_ffmpeg_h264} e a \autoref{fig:top_ffmpeg_h264_o
 	\caption{Consumo de recursos de hardware pelo FFmpeg usando o codec h264, implementado em software.}
 	\label{fig:top_ffmpeg_h264}
 \end{figure}
-
-
-
-
-
-\begin{comment}
-
-\section{Análise modal numérica}
-\label{sec:resultmodal}
-
-Na análise modal, as frequências naturais obtidas para os dois casos mantiveram-se afastadas da faixa de operação da turbina. Considerando uma TSR entre 2 e 3,5 e uma faixa de velocidade comumente encontrada entre 1 e 2 $m/s$ tem-se uma faixa de frequências de operação variando entre 0,62 e 2,16 $Hz$ que se encontra distante das frequências naturais encontradas para os casos analisados conforme apresentado na \autoref{tab:resultfreqturbina}. Tal verificação vem confirmar a possibilidade de utilização da consideração de 1 GDL. 
-
-\begin{table}[h]
-	\centering
-	\caption{Frequências naturais obtidas [Hz].}
-	\label{tab:resultfreqturbina}	
-	\input{tabelas/resultfreqturbina.tex}
-	\fonte{Autoria própria.}
-\end{table}
-
-As \autoref{fig:resultmodomacico} e \autoref{fig:resultmodotubos} apresentam algumas respostas esperadas para o primeiro e sexto modo de vibração. Nelas é possível verificar a importância da verificação das frequências de operação da turbina, que caso negligenciado pode levar a sérios danos. Também pode-se verificar que a utilização do tubo em comparação aos eixos maciços levaram a maiores deformações.    
-
-\begin{figure}	
-	\caption{Modos de vibração do sistema com eixo e braço maciços.}
-	\label{fig:resultmodomacico}
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-		\includegraphics[width=1.0\textwidth]{figuras/resultmodalmacico1.pdf}
-		\caption{Primeiro modo.}
-		\label{subfig:resultmodomacicomodo1}
-	\end{subfigure}
-	\begin{subfigure}{0.5\textwidth}
-		\centering
-		\includegraphics[width=0.95\textwidth]{figuras/resultmodalmacico6.pdf}
-		\caption{Sexto modo.}
-		\label{subfig:resultmodomacicomodo6}
-	\end{subfigure}		
-	\fonte{Autoria própria.}
-\end{figure}
-
-
-\section{Double-multiple streamtube model}
-\label{sec:resultdmsm}
-
-Em termos de torque, a \autoref{fig:resultCtPaFrontPost} apresenta o gráfico da coeficiente de torque para uma pá, onde é possível verificar que uma maior quantidade de torque é extraído no primeiro meio ciclo (0 - 180 graus) quando comparado com o segundo (180 - 360 graus).
-
-\begin{figure}
-	\centering
-	\caption{Coeficiente de torque para uma pá.}
-	\includegraphics[width=0.8\textwidth]{figuras/resultCtPaFrontPost.eps}
-	\fonte{Autoria própria.}
-	\label{fig:resultCtPaFrontPost}
-\end{figure}
-
-\section{Próximas etapas}
-\label{sec:trabalhosFutuross}
-
-Os próximos passos a serem feitos estão sintetizados na \autoref{tab:cronograma}.
-
-\begin{table}[H]
-	\centering
-	\caption{Cronograma.}
-	\label{tab:cronograma}
-	\input{tabelas/cronograma.tex}
-	\fonte{Autoria Própria.}
-\end{table}
-
-\begin{quadro}[!htb]
-	\centering
-	\caption{Exemplo de Quadro.\label{qua:quadro-exemplo1}}
-	\begin{tabular}{|p{7cm}|p{7cm}|}
-		\hline
-		\textbf{BD Relacionais} & \textbf{BD Orientados a Objetos} \\
-		\hline
-		Os dados são passivos, ou seja, certas operações limitadas podem ser automaticamente acionadas quando os dados são usados. Os dados são ativos, ou seja, as solicitações fazem com que os objetos executem seus métodos. & Os processos que usam dados mudam constantemente. \\
-		\hline
-	\end{tabular}
-	\fonte{XXXXXXXXXXXX.}
-\end{quadro}
-
-\end{comment}

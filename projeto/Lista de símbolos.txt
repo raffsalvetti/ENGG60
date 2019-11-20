@@ -2,4 +2,6 @@ $\theta$            Ângulo de Rotação
 $\Delta_x$          Compoenente $x$ do Vetor de Rotação
 $\Delta_y$          Compoenente $y$ do Vetor de Rotação
 $\Delta_z$          Compoenente $z$ do Vetor de Rotação
-
+$\Omega$            Ohm
+V                   Volts
+$\degree$           Grau
