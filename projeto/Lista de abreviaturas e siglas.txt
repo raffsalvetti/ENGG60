@@ -1,0 +1,11 @@
+DOF         Degrees of freedom
+PAN         Panning
+TILT        Tilting
+VR          Virtual Reality
+API         Application Programming Interface
+SoC         System on Chip
+RAM         Random Access memory
+ARM         Advanced RISC Machine
+HAL         Hardware Abstraction Layer
+PWM         Pulse width modulation
+GPIO        General-Purpose Input/Output

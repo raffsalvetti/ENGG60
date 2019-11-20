@@ -3,7 +3,7 @@
 \chapter{Implementação do Protótipo}
 \label{chap:prototipo}
 
-Este capitulo descreve a montagem do protótipo para testes. Será feita uma introdução do funcionamento geral, e suas principais características. Posteriormente será mostrado o funcionamento da base de testes da câmera, conexões entre os servo motores e os pinos GPIO do Raspberry Pi, desenvolvimento do programa de controle dos servo motores, desenvolvimento do aplicativo Android, responsável por capturar dados dos sensores de posição e envio pela rede sem fio.
+Este capitulo descreve a montagem do protótipo para testes. Será feita uma introdução do funcionamento geral, e suas principais características. Posteriormente, será mostrado o funcionamento da base de testes da câmera, conexões entre os servo motores e os pinos GPIOs (\textit{General-Purpose Input/Output}) do \textit{Raspberry Pi}, desenvolvimento do programa de controle dos servo motores, desenvolvimento do aplicativo \textit{Android}, responsável por capturar dados dos sensores de posição e envio pela rede sem fio.
 
 \section{Especificação do Projeto}
 \label{sec:especificacao}
@@ -68,11 +68,11 @@ O suporte dos motores servo e da câmera é uma estrutura moldada em plástico, 
 	\caption{Base de suporta para motores e câmera.}
 \end{figure}
 
-Com a intensão de testar os motores, e preservar o Raspberry Pi (um dispositivo menos tolerante a falhas quando se trata de níveis de tensão nos pinos de propósito geral), foi desenvolvido um circuito gerador de PWM (drive PWM), ilustrado na \autoref{fig:pwmtestcircuit}, onde era possível ajustar tanto a frequência do sinal quanto a largura dos pulsos, através de ajustes no potenciômetro POT3 e substituição de um resistor que substituiu os potenciômetros POT1 e POT2 no circuito implementado na \textit{breadboard}. O propósito do circuito foi descobrir a posição central dos motores e verificar sua estabilidade enquanto se variava a frequência do sinal. O drive foi montado usando o circuito integrado NE555, um componente eletrônico bastante usado em aplicações que envolve temporização, geração de pulso e PWM. \par
+Com a intensão de testar os motores, e preservar o Raspberry Pi (um dispositivo menos tolerante a falhas quando se trata de níveis de tensão nos pinos de propósito geral), foi desenvolvido um circuito gerador de PWM (drive PWM), ilustrado na \autoref{fig:pwmtestcircuit}, onde era possível ajustar tanto a frequência do sinal quanto a largura dos pulsos, através de ajustes no potenciômetro POT3 e de um resistor que substituiu os potenciômetros POT1 e POT2 no circuito real, implementado na \textit{breadboard}. O propósito do circuito foi descobrir a posição central dos motores e verificar sua estabilidade enquanto se variava a frequência do sinal. O drive foi montado usando o circuito integrado NE555, um componente eletrônico bastante usado em aplicações que envolve temporização, geração de pulso e PWM. \par
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[trim={2.5cm 3cm 4cm 3cm},clip,width=0.7\textwidth]{figuras/pwm2.pdf}
+	\includegraphics[trim={2.5cm 3cm 4cm 5cm},clip,width=1\textwidth]{figuras/pwm2.pdf}
 	\caption{Driver PWM de teste.}
 	\label{fig:pwmtestcircuit}
 \end{figure}
@@ -111,7 +111,7 @@ A alimentação dos motores é fornecida por um outro circuito composto por um r
 
 O módulo de controle de câmera é responsável por acionar os motores usados para movimentar a câmera e iniciar um serviço de \textit{stream} de mídia que disponibiliza na rede, usando um protocolo de tempo real, as imagens capturadas pela câmera.\par
 Um software de controle foi construído, usando a linguagem C, para receber valores de coordenadas enviados por um socket e acionar os motores.\par
-O software de controle possui dois modos de operação, um modo de produção, que opera consumindo recursos mínimos de memória e processador, e um modo de depuração/teste, habilitado através da diretiva \textbf{\#define DEV}.
+O software de controle possui dois modos de operação, um modo de produção, que opera consumindo recursos mínimos de memória e processador, e um modo de depuração/teste, habilitado através da diretiva \textbf{\#define TEST\_DISPLAY}.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -213,7 +213,10 @@ Testes foram realizados também com o \textit{FFmpeg}, um utilitário multi-plat
 \subsection{Construção do Módulo de Captura de Movimento}
 \label{subsec:assemmodcapmov}
 
-O módulo de captura de movimento é responsável por obter, filtrar e enviar coordenadas relativas a posição da cabeça do operador para o módulo de controle de câmera. É formado por um software, programado em Java e roda num smartfone Android, que possui uma interface intuitiva de operação, ilustrado na \autoref{fig:moduloandroid}, e um conjunto de sensores embutidos no celular, que são capazes de fornecer dados relativos a orientação com uma boa acuracidade.
+O módulo de captura de movimento é responsável por obter, filtrar e enviar coordenadas relativas a posição da cabeça do operador para o módulo de controle de câmera. É formado por um software, programado em Java e roda num smartfone Android, que possui uma interface intuitiva de operação, ilustrado na \autoref{fig:moduloandroid}, e um conjunto de sensores embutidos no celular, que são capazes de fornecer dados relativos a orientação com uma boa acuracidade. \par
+
+O programa de captura de coordenadas pode ser resumido basicamente em quatro partes principais: \textbf{coleta de dados} de posição da cabeça do operador; \textbf{envio de coordenadas}; \textbf{interação com o operador} (interface do usuário); e, \textbf{exibição do vídeo} capturado pela câmera. Que serão detalhadas adiante, iniciando-se pela  interface com o usuário.\par
+
 
 \begin{figure}[H]
 	\centering
@@ -222,7 +225,7 @@ O módulo de captura de movimento é responsável por obter, filtrar e enviar co
 	\label{fig:moduloandroid}
 \end{figure}
 
-A captura de tela da interface do Módulo de Captura de Movimento, ilustrada na \autoref{fig:moduloandroid}, mostra uma serie de componentes visuais que trazem informações pertinentes ao funcionamento do sistema e permitem interagir remotamente com o Módulo de Controle de Câmera. \par
+A captura de tela da interface do Módulo de Captura de Movimento, ilustrada na \autoref{fig:moduloandroid}, mostra uma serie de componentes visuais, que trazem informações pertinentes ao funcionamento do sistema e permitem interagir remotamente com o Módulo de Controle de Câmera. \par
 
 O \textbf{indicador de conexão}, localizado no canto superior esquerdo da interface, indica a qual endereço IP está associado ao servidor responsável por controlar os motores que movimentam a câmera que ao mesmo tempo disponibilizam as imagens capturadas. Quando o seu valor é \textbf{0.0.0.0}, significa que está desconectado de um servidor e não será possível enviar coordenadas ou receber imagens.\par
 
@@ -240,7 +243,7 @@ O mecanismo de busca do Módulo de Controle de Câmera se dá através do dispar
 
 Acima da barra de \textit{status} e abaixo do painel de imagens, está localizado o menu de botões, contendo as funções de \textbf{calibração do celular}, que consiste em salvar as coordenadas referentes a posição atual do celular, usadas posteriormente para calcular uma nova coordenada ajustada que será enviada para o Módulo de Controle de Câmera; a função de \textbf{calibração de câmera}, que envia uma mensagem de calibração para o Módulo de Controle de Câmera para salvar a coordenada referentes a atual da câmera, usada posteriormente como referencia para movimentar a câmera; e, por fim, a função \textbf{Parar/Enviar Câmera}, que controla o envio de imagens do Módulo de Controle de Câmera.\par
 
-A função de vídeo \textit{stereo} simulado não foi concluída. Devido a escassez de recursos de hardware no Raspberry Pi (processador e memória RAM) associados a qualidade inferior da câmera utilizada no protótipo, a imagem capturada e enviada para o \textit{smartphone} tem péssima resolução (320x240 \textit{pixels}). Quando escalonada para preencher a área disponível na interface do celular, resultou numa imagem desforme que pouco representa o objeto filmado. Sendo assim, apenas uma imagem está sendo mostrada, em tamanho reduzido e fora de alinhamento com a interface, conforme ilustrado na \autoref{fig:moduloandroid_cam}. Também, devido aos mesmos problemas relacionados ao hardware e qualidade da câmera, existe um atraso de aproximadamente 4 segundos entre as imagens que são coletadas na câmera e as imagens que são exibidas no aplicativo do celular.
+Devido a escassez de recursos de hardware no Raspberry Pi (processador e memória RAM) associados a qualidade inferior da câmera utilizada no protótipo, a imagem capturada e enviada para o \textit{smartphone} tem péssima resolução (320x240 \textit{pixels}). Quando escalonada para preencher a área disponível na interface do celular, resultou numa figura desforme que pouco representa o objeto filmado. Sendo assim, apenas uma imagem está sendo mostrada, em tamanho reduzido e fora de alinhamento com a interface, conforme ilustrado na \autoref{fig:moduloandroid_cam}. Também, devido aos mesmos problemas relacionados ao hardware e qualidade da câmera, existe um atraso de aproximadamente 4 segundos entre as imagens que são coletadas na câmera e as imagens que são exibidas no aplicativo do celular.
 
 \begin{figure}[H]
 	\centering
@@ -251,12 +254,8 @@ A função de vídeo \textit{stereo} simulado não foi concluída. Devido a esca
 
 Para mostrar as imagens capturadas pela câmera no celular e transmitida via \textit{RTP - Real Time Protocol} (Protocolo de Tempo Real), foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional Android e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional Android, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.\par
 
-O programa de captura de coordenadas pode ser resumido basicamente em quatro partes principais, \textbf{coleta de dados} de posição da cabeça do operador, \textbf{envio de coordenadas}, \textbf{interação com o usuário} (operador) e \textbf{exibição do vídeo} capturado pela câmera.\par
+A coleta de dados de movimento, acontece a cada 30 milissegundos, através dos eventos de posição fornecidos pela API do sistema operacional Android, que simplificam bastante o desenvolvimento de aplicações, abstraindo toda configuração do hardware dos sensores e a densa matemática, necessária para converter leitura de forças exercidas sobre o aparelho e interações dos vetores aceleração, em uma estrutura de dados que representa numericamente a posição espacial em que se encontra o celular. Contudo, é necessário identificar a orientação do aparelho, \autoref{fig:axisdevice}, em relação ao sistema de eixos do planeta, ilustrado na \autoref{fig:axisglobe} para que a coleta de dados funcione adequadamente.\par
 
-A coleta de dados de movimento, acontece a cada 30 milissegundos, através dos eventos de posição fornecidos pela API do sistema operacional Android, que simplificam bastante o desenvolvimento de aplicações, abstraindo toda configuração do hardware dos sensores e a densa matemática, necessária para converter leitura de forças exercidas sobre o aparelho e interações dos vetores aceleração, em uma estrutura de dados que representa numericamente a posição espacial em que se encontra o celular, sendo necessário apenas informar a orientação do aparelho, \autoref{fig:axisdevice}, em relação ao sistema de eixos do planeta, ilustrado na \autoref{fig:axisglobe}.\par
-
-O envio de coordenadas ocorre assim que um evento de posição é disparado. Ou seja, um novo envio de coordenada acontece a cada 30 milissegundos. Supondo que um par de coordenadas em média consuma 5 bytes (2 bytes para a coordenada x, 2 bytes para a coordenada y e 1 byte para um caractere separador), seriam enviados 167 bytes por segundo, desconsiderando o \textit{overhead} do protocolo TCP, usado durante a conexão. O consumo na banda de dados gerado pela transmissão pode ser cm siderado irrisório para uma banda disponível de 100Mbits porém, para reduzir a :TODO
-
-
+O envio de coordenadas ocorre assim que um evento de posição é disparado. Ou seja, um novo envio de coordenada acontece a cada 30 milissegundos. Supondo que um par de coordenadas em média consuma 5 bytes (2 bytes para a coordenada x, 2 bytes para a coordenada y e 1 byte para um caractere separador), seriam enviados 167 bytes por segundo, desconsiderando o \textit{overhead} do protocolo TCP, usado para esta finalidade. O consumo da banda de dados, gerado pela transmissão, pode ser cm siderado irrisório para uma banda disponível de 100Mbit/s, atualmente comum em redes do tipo Ethernet. Entretanto, visando reduzir os recursos computacionais do celular, e consequentemente economizar bateria, um filtro verifica se houve mudança nas coordenadas antes de enviá-las, reduzindo o uso da banda de dados para aproximadamente 7 \textit{bytes} por segundo.\par
 
   

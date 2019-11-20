@@ -3,23 +3,37 @@
 \chapter{RESULTADOS}
 \label{chap:resultados}
 
-Nesse capitulo será discutido brevemente os resultados globais obtidos com o desenvolvimento do protótipo e mostrado um teste comparativo entre dois \textit{codecs} de video testados com a biblioteca \textit{FFmpeg}.\par
+Nesse capitulo serão discutido, os resultados globais obtidos com o desenvolvimento do protótipo e, mostrado um teste comparativo entre dois \textit{codecs} de video testados com a biblioteca \textit{FFmpeg}.\par
 
 \subsection{Resultados Globais}
 \label{subsec:resglobais}
 
-De modo geral, o protótipo se comportou conforme o esperado. A captura de movimento da cabeça do operador funciona de maneira satisfatória e os motores respondem sem atrasos perceptíveis (que representassem desconforto ao operador).\par
+De modo geral, o protótipo se comportou conforme o esperado. A captura de movimento da cabeça do operador funcionou de maneira satisfatória e os motores respondem sem atrasos perceptíveis (que representassem desconforto ao operador). Entretanto, em determinados momentos, os motores apresentaram movimentos bruscos, como se tivessem perdido coordenadas. Posteriormente, descobriu-se que o comportamento inesperado dos motores, acontece devido a um mau contato entre os pinos dos \textit{jumpers}, usado para fazer a conexões entre os componentes eletrônicos, os motores e a \textit{breadboard}. \par
 
-Por outro lado, o sistema de envio de imagens precisa ser optimizado. Talvez um dispositivo de captura com mais qualidade, como o módulo de câmera oficial do Raspverry Pi, que possui um drive especifico implementado em hardware, represente uma melhoria no sistema global de captura e enfio de imagens capturadas.\par
+O sistema de envio de imagens precisa ser optimizado. Talvez um dispositivo de captura com mais qualidade, como o módulo de câmera oficial do Raspverry Pi, que possui um drive especifico implementado em hardware, represente uma melhoria no sistema global de captura e enfio de imagens para o celular.\par
 
-O consumo da banda de dados, durante o envio de coordenadas, foi minimizado pela aplicação de um filtro que compara a última coordenada válida com a que será enviada. Desse modo somente as modificações de posição são enviadas ao módulo de controle de câmeras.\par
+Os eventos de detecção de posição, gerados pela API do Android, ocorrem em um tempo especificado pelo desenvolvedor. Para identificar esse tempo, levou-se em consideração a responsividade necessária para os motores e o uso de banda de dados. Quanto menor o intervalo de tempo entre os eventos, maior a resolução do movimento,  consumo de banda de dados e custo computacional. Para chegar-se a um valor adequado, testes práticos foram feitos variando-se o intervalo de eventos entre 10 e 500 milissegundos. Chegou-se a conclusão que valores entre 30 e 100 milissegundos são satisfatórios.\par
 
-Os eventos, gerados pela API do Android, ocorrem em um tempo especificado pelo desenvolvedor. Para identificar esse tempo, levou-se em consideração a responsividade necessária para os motores e o uso de banda de dados. Quando menor o intervalo de tempo entre os eventos, maior é a resolução do dado e maior o consumo de banda de dados. Para chegar-se a um valor adequado, testes práticos foram feitos variando-se o intervalo de eventos entre 10 e 500 milissegundos. Chegou-se a conclusão que valores entre 30 e 90 milissegundos são satisfatórios.\par
+O consumo da banda de dados, durante o envio de coordenadas, foi minimizado pela aplicação de um filtro que compara a última coordenada válida com a que será enviada, conforme explicado no final da \autoref{subsec:assemmodcapmov}. Desse modo somente as modificações de posição são enviadas ao módulo de controle de câmeras. O resultado da aplicação desse filtro pode ser visualizado comparando-se a \autoref{fig:consumo_banda_coord} e a \autoref{fig:consumo_banda_video}.\par
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/consumo_banda.jpg}
+	\caption{Consumo dos recursos de rede durante o recebimento de coordenadas.}
+	\label{fig:consumo_banda_coord}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figuras/consumo_banda_camera.png}
+	\caption{Consumo dos recursos de rede durante o envio de imagem da câmera.}
+	\label{fig:consumo_banda_video}
+\end{figure}
 
 \subsection{Comparação Entre \textit{codecs}}
 \label{subsec:compcodecs}
 
-Dentre os testes realizados com alguns dos \textit{codecs} de vídeo compatíveis com o FFmpeg, os que mais chamaram atenção e que representaram um ganho considerável foram o \textbf{h264\_omx} e \textbf{h264}, implementados em hardware e software respectivamente.
+Dentre os testes realizados com alguns dos \textit{codecs} de vídeo compatíveis com o FFmpeg, os que mais chamaram atenção e que representaram um ganho considerável, em relação ao custo computacional, foram os \textit{codecs} \textbf{h264\_omx} e \textbf{h264}, implementados em hardware e software respectivamente.
 Comparando-se a \autoref{fig:top_ffmpeg_h264} e a \autoref{fig:top_ffmpeg_h264_omx}, obtidas da interface do gerenciador de tarefas \textit{top}, fica claro que a implementação de \textit{codecs} via hardware traz um ganho, em tempo de processador e quantidade de memoria \textit{RAM} alocada, considerável. Existe um ganho de aproximadamente 28\% em tempo de processador e 35\% em uso de memoria \textit{RAM}. Uma parte do uso de recursos nas duas figuras está relacionada ao processo de \textit{streaming}, implementada via software. Como o \textit{streaming} é o mesmo para as duas comparações, não existe inconsistência na comparação.
 
 \begin{figure}[H]
@@ -36,19 +50,7 @@ Comparando-se a \autoref{fig:top_ffmpeg_h264} e a \autoref{fig:top_ffmpeg_h264_o
 	\label{fig:top_ffmpeg_h264}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1\textwidth]{figuras/consumo_banda.jpg}
-	\caption{Consumo dos recursos de rede durante o recebimento de coordenadas.}
-	\label{fig:consumo_banda}
-\end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1\textwidth]{figuras/consumo_banda_camera.png}
-	\caption{Consumo dos recursos de rede durante o envio de imagem da câmera.}
-	\label{fig:consumo_banda}
-\end{figure}
 
 
 
