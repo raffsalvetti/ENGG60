@@ -174,7 +174,7 @@ A alimentação dos motores é fornecida por um outro circuito composto por um r
 	\caption{Circuitos usados pelos motores.}
 \end{figure}
 
-\subsection{Construção do Módulo de Controle de Câmera}
+\subsection{Construção do Módulo de Controle de Câmera - MCC}
 \label{subsec:assemmodconcam}
 
 O MCC é responsável por acionar os motores, usados para movimentar a câmera, e iniciar um serviço de \textit{stream} de mídia, que disponibiliza na rede usando um protocolo de tempo real, as imagens capturadas pela câmera.\par
@@ -295,7 +295,7 @@ Testes foram realizados também com o \textit{FFmpeg}, um utilitário multi-plat
 
 
 
-\subsection{Construção do Módulo de Captura de Movimento}
+\subsection{Construção do Módulo de Captura de Movimento - MCM}
 \label{subsec:assemmodcapmov}
 
 O MCM é responsável por obter, filtrar e enviar coordenadas, relativas a posição da cabeça do operador, para o MCM. É formado por um software, programado em Java e roda num smartfone \textit{Android}, que possui uma interface intuitiva de operação, ilustrado na \autoref{fig:moduloandroid}, e um conjunto de sensores embutidos no celular, que são capazes de fornecer dados relativos a orientação com uma boa acuracidade. \par
@@ -337,10 +337,10 @@ Devido a escassez de recursos de hardware no Raspberry Pi (processador e memóri
 	\label{fig:moduloandroid_cam}
 \end{figure}
 
-Para mostrar as imagens capturadas pela câmera no celular e transmitida via \textit{RTP - Real Time Protocol} (Protocolo de Tempo Real), foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional Android e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional Android, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.\par
+Para mostrar as imagens capturadas pela câmera no celular e transmitida via RTP \textit{Real Time Protocol}, foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional \textit{Android} e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional \textit{Android}, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.\par
 
-A coleta de dados de movimento, acontece a cada 30 milissegundos, através dos eventos de posição fornecidos pela API do sistema operacional Android, que simplificam bastante o desenvolvimento de aplicações, abstraindo toda configuração do hardware dos sensores e a densa matemática, necessária para converter leitura de forças exercidas sobre o aparelho e interações dos vetores aceleração, em uma estrutura de dados que representa numericamente a posição espacial em que se encontra o celular. Contudo, é necessário identificar a orientação do aparelho, \autoref{fig:axisdevice}, em relação ao sistema de eixos do planeta, ilustrado na \autoref{fig:axisglobe} para que a coleta de dados funcione adequadamente.\par
+A coleta de dados de movimento, acontece a cada 30 milissegundos, através dos eventos de posição fornecidos pela API do sistema operacional \textit{Android}, que simplificam bastante o desenvolvimento de aplicações, abstraindo toda configuração do hardware dos sensores e a densa matemática, necessária para converter leitura de forças exercidas sobre o aparelho e interações dos vetores aceleração, em uma estrutura de dados que representa numericamente a posição espacial em que se encontra o celular. Contudo, é necessário identificar a orientação do aparelho, \autoref{fig:axisdevice}, em relação ao sistema de eixos do planeta, ilustrado na \autoref{fig:axisglobe} para que a coleta de dados funcione adequadamente.\par
 
-O envio de coordenadas ocorre assim que um evento de posição é disparado. Ou seja, um novo envio de coordenada acontece a cada 30 milissegundos. Supondo que um par de coordenadas em média consuma 5 bytes (2 bytes para a coordenada x, 2 bytes para a coordenada y e 1 byte para um caractere separador), seriam enviados 167 bytes por segundo, desconsiderando o \textit{overhead} do protocolo TCP, usado para esta finalidade. O consumo da banda de dados, gerado pela transmissão, pode ser cm siderado irrisório para uma banda disponível de 100Mbit/s, atualmente comum em redes do tipo Ethernet. Entretanto, visando reduzir os recursos computacionais do celular, e consequentemente economizar bateria, um filtro verifica se houve mudança nas coordenadas antes de enviá-las, reduzindo o uso da banda de dados para aproximadamente 7 \textit{bytes} por segundo.\par
+O envio de coordenadas ocorre assim que um evento de posição é disparado. Ou seja, um novo envio de coordenada acontece a cada 30 milissegundos. Supondo que um par de coordenadas em média consuma 5 bytes (2 bytes para a coordenada $x$, 2 bytes para a coordenada $y$ e 1 byte para um caractere separador), seriam enviados 167 bytes por segundo, desconsiderando o \textit{overhead} do protocolo TCP (\textit{Transmission Control Protocol}), usado para esta finalidade. O consumo da banda de dados, gerado pela transmissão das coordenadas, pode ser considerado irrisório para um \textit{link} de 100Mbit/s, atualmente comum em redes do tipo \textit{Ethernet}. Entretanto, visando reduzir os recursos computacionais do celular, e consequentemente economizar bateria, um filtro verifica se houve mudança nas coordenadas antes de enviá-las, reduzindo o uso da banda de dados para aproximadamente 7 \textit{bytes} por segundo.\par
 
   

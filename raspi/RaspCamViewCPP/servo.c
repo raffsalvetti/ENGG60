@@ -48,7 +48,7 @@ int servo_driver_init() {
 }
 
 void servo_driver_destroy() {
-    servo_driver_set_x_position(0);
-    servo_driver_set_y_position(0);
+    servo_driver_set_x_position(50);
+    servo_driver_set_y_position(50);
     close(fd);
 }

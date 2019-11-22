@@ -3,7 +3,7 @@ EXEC_NAME=controlador
 IDIR =./include
 #CC=gcc
 CC=gcc
-CFLAGS=-I$(IDIR) -Wall -g0 -O2
+FLAGS=-I$(IDIR) -Wall -g3 -O0 $(CFLAGS)
 
 ALLEGRO_LIBS=$(shell pkg-config --cflags --libs allegro_acodec-5 allegro_audio-5 allegro_dialog-5 allegro_image-5 allegro_physfs-5 allegro_ttf-5 allegro_video-5 allegro-5 allegro_color-5 allegro_font-5 allegro_main-5 allegro_memfile-5 allegro_primitives-5)
 
@@ -12,19 +12,19 @@ LDIR =./lib
 
 LIBS=-lm -lpthread $(ALLEGRO_LIBS)
 
-_DEPS = server.h display.h servo.h video.h
+_DEPS = server.h display.h servo.h video.h camdemo.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o server.o display.o servo.o video.o
+_OBJ = main.o server.o display.o servo.o video.o camdemo.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all: $(EXEC_NAME)
 
 $(ODIR)/%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC)  -c -o $@ $< $(FLAGS)
 
 $(EXEC_NAME): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(FLAGS) $(LIBS)
 
 .PHONY: clean, all
 
