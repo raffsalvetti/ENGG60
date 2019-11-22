@@ -7,9 +7,9 @@
 #include "include/video.h"
 #include "include/camdemo.h"
 
-#define DEV
+//#define DEV
 //#define TEST_DISPLAY
-#define CAMDEMO
+//#define CAMDEMO
 
 char ip_cliente[16] = {};
 

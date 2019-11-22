@@ -12,6 +12,8 @@
 #define CAMDEMO_STOP 100
 #define STEP (CAMDEMO_STOP - CAMDEMO_START) / RESOLUTION
 
+//#define USE_CIRCLE
+
 static int running = 0;
 static double t = 0;
 static pthread_t thread_run;
@@ -40,7 +42,11 @@ typedef struct t_coord {
 
 static void gen_ponit(double t, t_coord *coord) {
 	coord->x = t;
+#ifdef USE_CIRCLE
+	coord->y = 50 + (op == dec ? -1 : 1) * sqrt(pow(50, 2) - pow((t - 50), 2));
+#else
 	coord->y = AMPLITUDE + AMPLITUDE * (op == dec ? -1 : 1) * sin(M_PI * t * (M_PI / 105) + M_PI);
+#endif
 }
 
 static void *execute() {
