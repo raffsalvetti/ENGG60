@@ -1,7 +1,7 @@
 #ifndef __SERVO_DRIVER_H__
 #define __SERVO_DRIVER_H__
 
-#define SERVO_X_GPIO     0
+#define SERVO_X_GPIO     4
 #define SERVO_Y_GPIO     1
 
 int servo_driver_init();
