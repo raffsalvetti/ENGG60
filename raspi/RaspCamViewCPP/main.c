@@ -7,7 +7,6 @@
 #include "include/video.h"
 #include "include/camdemo.h"
 
-//#define DEV
 //#define TEST_DISPLAY
 //#define CAMDEMO
 
@@ -18,7 +17,9 @@ void print_socket_event(int socket, char *message) {
 	char *pc = strchr(message, '#');
 	if(pc != NULL) {
 		strcpy(ip_cliente, (pc + 1));
+#ifdef DEBUG
 		fprintf(stdout, "IP DO CLIETE:%s\n", ip_cliente);
+#endif
 	}
 	// if(!strcmp(message, "echo\n")) {
 	//   server_send(socket, "echo server!");
@@ -47,8 +48,11 @@ void change_coodinates(int socket, char *message) {
 		servo_driver_set_y_position(y);
 	} else if(!strcmp(message, "VIDEOSTART") || !strcmp(message, "VIDEOSTART\n")) {
 		video_start(ip_cliente);
+		servo_driver_calibrate();	
 	} else if(!strcmp(message, "VIDEOSTOP") || !strcmp(message, "VIDEOSTOP\n")) {
 		video_stop();
+	} else if(!strcmp(message, "CALIBRATECAM")) {
+		servo_driver_calibrate();	
 	} else if(!strcmp(message, "DISCOVER_CONTROLLER_REQUEST")) {
 		fprintf(stdout, "Negociando conexão com cliente!\n");
 	} else {
@@ -57,13 +61,17 @@ void change_coodinates(int socket, char *message) {
 }
 
 void change_coodinates_from_test_display(int x, int y) {
+#ifdef DEBUG	
 	fprintf(stdout, "ponto x=%d;y=%d gerado manualmente\n", x, y);
+#endif
 	servo_driver_set_x_position(x);
 	servo_driver_set_y_position(y);
 }
 
 void change_coordinates_from_camdemo(int x, int y){
+#ifdef DEBUG		
 	fprintf(stdout, "ponto x=%d;y=%d gerado pelo camdemo\n", x, y);
+#endif
 	servo_driver_set_x_position(x);
 	servo_driver_set_y_position(y);
 	test_display_set_xy(x, y);
@@ -80,7 +88,10 @@ int main(int argc, char *argv[]) {
 	server_add_on_send_callback(print_socket_event);
 	server_add_on_disconnect_callback(sock_disconnect);
 	server_get_ip_address(ip_address);
+
+#ifdef DEBUG	
 	fprintf(stdout, "endereco ip retornado: %s\n", ip_address);
+#endif
 
 	camdemo_set_on_coord_generation_handler(change_coordinates_from_camdemo);
 

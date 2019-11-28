@@ -9,6 +9,7 @@ raspi/RaspCamViewCPP/controlador
 raspi/RaspCamViewCPP/.cproject
 raspi/RaspCamViewCPP/.project
 raspi/RaspCamViewCPP/.settings/*
+raspi/RaspCamViewCPP/calibrated.bin
 
 android/TesteCapturaMovimentoCabeca/libvlc.aar
 android/TesteCapturaMovimentoCabeca/.idea/*
