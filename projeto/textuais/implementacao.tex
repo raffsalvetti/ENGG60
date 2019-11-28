@@ -134,6 +134,9 @@ O suporte dos motores servo e da câmera é uma estrutura moldada em plástico, 
 	\caption{Base de suporta para motores e câmera.}
 \end{figure}
 
+\subsection{Circuito de Teste para Servo Motor}
+\label{subsec:servotester}
+
 Com a intensão de testar os motores, e preservar o \textit{Raspberry Pi} (um dispositivo menos tolerante a falhas, quando se trata de níveis de tensão nos pinos GPIO), foi desenvolvido um circuito gerador de sinal PWM (\textit{Pulse width modulation}), também conhecido como \textbf{\textit{driver} PWM}, ilustrado na \autoref{fig:pwmtestcircuit}. O circuito permitia ajustar tanto a frequência do sinal quanto a largura dos pulsos, através de ajustes no potenciômetro POT3 e de um resistor que substituiu os potenciômetros POT1 e POT2 no circuito real, implementado na \textit{breadboard}. Utilizando o circuito foi possível identificar a posição central dos motores e verificar sua estabilidade, enquanto se variava a frequência do sinal. O drive foi montado usando o circuito integrado NE555, um componente eletrônico bastante usado em aplicações que envolve temporização, geração de pulso e PWM. \par
 
 \begin{figure}[H]
@@ -153,9 +156,15 @@ Ativando individualmente os motores com o \textit{driver} construído e com o au
 	\label{fig:pwmservo}
 \end{figure}
 
+\subsection{Circuitos de Acionamento dos Servo Motores}
+\label{subsec:servomotorcircacionamento}
+
 Para conectar os motores ao módulo de câmera \textit{Raspberry Pi}, foi necessário construir um circuito de acionamento dos motores, que consiste em dois transistores bipolares de junção (BJT 2N2222), um para cada motor, configurados no modo emissor-comum, funcionando como um interruptor acionado pelo sinal PWM gerado pelos pinos GPIO do \textit{Raspberry Pi}. A fonte do sinal PWM foi ligada ao terminal base do transistor através de um resistor de 1K$\Omega$, com a função de limitador de corrente $I_b$ e a via de sinal do motor, foi conectado ao terminal coletor do transistor juntamente a uma fonte de 5V através de um resistor de 10K$\Omega$, responsável por limitar a corrente $I_c$, máxima quando o transistor está ativado, como ilustrado no circuito da \autoref{fig:circprotecao}.\par
 
 Esse circuito foi construído numa mini \textit{breadboard} e tem o objetivo proteger o \textit{Raspberry Pi}, evitando o consumo excessivo de corrente (mais que 15mA), ou uma possível corrente de retorno para um dos pinos GPIO, numa eventual falha do circuito interno de controle dos motores. Como o circuito de proteção inverte o sinal PWM, foi necessário gerar um sinal invertido no MCC, para que esse fosse invertido novamente pelo circuito de proteção e assim chegar como devido ao circuito de controle interno do motor.\par
+
+\subsection{Circuitos de Alimentação dos Servo Motores}
+\label{subsec:servomotorcircalimentacao}
 
 A alimentação dos motores é fornecida por um outro circuito composto por um regulador linear de tensão, o LM7805, e dois capacitores, ilustrado na \autoref{fig:circfonte}, que reduz a tensão de 12V, fornecida pela PSU, pra 5V. A linha de 12V foi usada para isolar as fontes de alimentação dos motores e do \textit{Raspberry Pi}, para evitar ruídos causados pelo acionamento dos motores.
 
@@ -197,6 +206,9 @@ O MCC possui dois modos de operação, um modo de produção, que opera consumin
 	\caption{Captura de tela de depuração e teste dos motores do software de controle.}
 \end{figure}
 
+\subsection{Interface de Depuração / Testes}
+\label{subsec:iterfacedepuracao}
+
 No modo de depuração, é mostrada uma tela com um painel negro e quatro quadrantes indicando a posição da câmera, através de um ponto branco (localizado no centro dos quadrantes, quando o programa inicia); um indicador, contendo a contagem de coordenadas recebidas por segundo (no canto superior esquerdo) e o endereço IP que está associado a interface de rede do \textit{Raspberry Pi} (no canto superior direito), ilustrado na \autoref{fig:controlador_teste} e na \autoref{fig:controlador_teste_coordenada}. \par
 
 Através dessa interface é possível simular posições da câmera usando o mouse. Para isso, o circulo branco deve ser clicado e arrastado para uma posição qualquer dos quadrantes. Ao arrastar e soltar o ponto branco, uma coordenada relativa a posição do ponto na tela é calculada e enviada para os motores, ilustrado na \autoref{fig:controlador_teste_coordenada}.\par
@@ -204,8 +216,6 @@ Através dessa interface é possível simular posições da câmera usando o mou
 Quando o ponto é movido no sentido horizontal, o motor horizontal é acionado, e de forma semelhante, quando o ponto se move na direção do eixo vertical, o motor vertical é acionado.\par
 
 As coordenadas do ponto branco são capturadas em relação a sua posição, em \textit{pixels} horizontais e verticais, dentro do painel negro, sendo a coordenada (0;0) a menor possível, localizada no canto superior esquerdo, ilustrado na \autoref{fig:sistcoord0x0}, e a coordenada (640, 480) a maior possível, localizada no canto inferior direito do painel negro, ilustrada na \autoref{fig:sistcoord100x100}.\par
-
-O programa de teste também possui uma função de demonstração, que gera coordenadas de forma automática para os motores servo. A câmera segue o padrão de movimento definido por uma função seno, que varre os limites verticais e horizontais da interface, isto é, o padrão de movimento começa na coordenada (0;50) e oscila como uma senoide até a coordenada (100;50). Quando o movimento chega ao limite horizontal, a função é invertida e a câmera volta ao ponto de origem, conforme ilustrado na \autoref{fig:camdemo}. O modo de demonstração pode ser ativado através da diretiva \textit{\textbf{\#define CAMDEMO}} ou diretamente pelo \textit{script} \textit{Makefile} passando o parâmetro \textbf{\textit{CFLAGS=-CAMDEMO}}.
 
 Conforme explicado na \autoref{sec:pwm}, os motores servos deslocam seu eixo de acordo com a largura do pulso, enviado para seu controlador interno. Entretanto, as coordenadas simuladas pela interface de depuração e as que são recebidas do modulo \textit{Android}, não possuem a informação de largura de pulso ou quantidade de ângulos que determinado motor deve ser movimentado. Para resolver esse problema, foi proposto um sistema de posição independente da quantidade de \textit{pixels}, largura de pulso ou ângulos.\par
 
@@ -242,6 +252,9 @@ Conforme explicado na \autoref{sec:pwm}, os motores servos deslocam seu eixo de 
 	\caption{Sistema de coordenadas proporcional.}
 \end{figure}
 
+\subsection{Sistema de Coordenadas}
+\label{subsec:sistemacoordenadas}
+
 O sistema de posição proposto é baseado na proporção, ou porcentagem, máxima do movimento possível (do motor, da cabeça do operador e do mouse no painel do programa de teste). Desse modo, o ângulo máximo que o motor horizontal, e a cabeça do operador, podem deslocar é $180\degree$, sendo $90\degree$ para a esquerda e $90\degree$ para a direita (partindo-se do ângulo $90\degree$, local de descanso do motor e centro de visão do operador), e está relacionado diretamente ao valor máximo de \textit{pixels} que a componente $x$ da coordenada de posição pode assumir, 640 \textit{pixels}, sendo 320 para a esquerda e 320 para a direita (partindo-se do centro da interface). De forma semelhante, movem-se no eixo vertical, o motor e a cabeça do operador com angulo máximo de $180\degree$, mudando apenas a quantidade máxima de \textit{pixels} na interface de teste, que nesse caso é 480, sendo 240 para cima e 240 para baixo.\par
 A relação entre a largura de pulso enviada para os motores horizontal e vertical, em porcento, é dada respectivamente por:
 \begin{equation}
@@ -266,6 +279,27 @@ Um ajuste foi feito nas coordenadas que são enviadas para o motor servo que mov
 \end{equation}
 
 Na \autoref{fig:sistcoord0x0} é possível visualizar o marcador de posição em verde, na posição (0;0), selecionado manualmente com o mouse, e seu reflexo nos motores, mostrado na \autoref{fig:camera0x0}. O mesmo acontece com o ponto máximo, ilustrado na \autoref{fig:sistcoord100x100} e o reflexo da seleção nos motores, na \autoref{fig:camera100x100}.\par
+
+\subsection{Modo de Demonstração}
+\label{subsec:camdemo}
+
+O programa de teste também possui uma função de demonstração, que gera coordenadas de forma automática para os motores servo, assim não é necessário escolher uma posição manualmente ou conectar o MCM. A câmera segue o padrão de movimento definido por uma função seno, que varre os limites verticais e horizontais da interface, isto é, o padrão de movimento começa na coordenada (0;50) e oscila como uma senoide até a coordenada (100;50), ilustrado na \autoref{fig:camdemo_inc}. Quando o movimento chega ao limite horizontal, a função é invertida e a câmera volta ao ponto de origem, conforme ilustrado na \autoref{fig:camdemo_dec}. O modo de demonstração pode ser ativado através da diretiva \textit{\textbf{\#define CAMDEMO}} ou diretamente pelo \textit{script} \textit{Makefile} passando o parâmetro \textbf{\textit{CFLAGS=-DCAMDEMO}}.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/camdemo_inc.pdf}
+		\caption{movimento crescente}
+		\label{fig:camdemo_inc}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=0.95\textwidth]{figuras/camdemo_dec.pdf}
+		\caption{movimento decrescente}
+		\label{fig:camdemo_dec}
+	\end{subfigure}
+	\caption{Coordenadas geradas pela função \textit{CAMDEMO}}
+	\label{fig:camdemo}	
+\end{figure}
 
 \subsection{Driver PWM}
 \label{subsec:deiverpwm}
@@ -312,6 +346,9 @@ O programa de captura de coordenadas pode ser resumido basicamente em quatro par
 	\label{fig:moduloandroid}
 \end{figure}
 
+\subsection{Interface do Usuário / Operador}
+\label{subsec:interfaceusuariooperador}
+
 A captura de tela da interface do MCM, ilustrada na \autoref{fig:moduloandroid}, mostra uma serie de componentes visuais, que trazem informações pertinentes ao funcionamento do sistema e permitem interagir remotamente com o MCC. \par
 
 O \textbf{indicador de conexão}, localizado no canto superior esquerdo da interface, indica a qual endereço IP está associado ao servidor, responsável por controlar os motores que movimentam a câmera, e ao mesmo tempo disponibilizam as imagens capturadas. Quando o valor mostrado é \textbf{0.0.0.0}, significa que está desconectado de um servidor e não será possível enviar coordenadas ou receber imagens.\par
@@ -326,11 +363,17 @@ A divisão é devida ao sistema de vídeo \textit{stereo} simulado, onde uma ún
 
 A interface possui uma \textbf{barra de \textit{status}}, localizada na parte inferior, que indica qual tarefa está sendo executada no momento. A barra de \textit{status} mostrada na \autoref{fig:moduloandroid} indica que quando a imagem foi capturada o Módulo de Captura de Movimento estava buscando o Módulo de Controle de Câmera.\par
 
+\subsection{Mecanismo de Busca do MCC}
+\label{subsec:mecanismobuscamcc}
+
 O mecanismo de busca do Módulo de Controle de Câmera se dá através do disparo em \textit{broadcast} de pacotes do tipo \textit{User Datagram Protocol}, mais conhecido como pacotes UDP, com uma mensagem especifica, somente respondida pelo Módulo de Controle de Câmera com o seu endereço IP associado. Desse modo, o Módulo de Captura de Movimento configura o endereço IP respondido como um Módulo de Controle de Câmera válido e habilita o controle de envio de coordenadas.\par
 
 Acima da barra de \textit{status} e abaixo do painel de imagens, está localizado o menu de botões, contendo as funções de \textbf{calibração do celular}, que consiste em salvar as coordenadas referentes a posição atual do celular, usadas posteriormente para calcular uma nova coordenada ajustada que será enviada para o Módulo de Controle de Câmera; a função de \textbf{calibração de câmera}, que envia uma mensagem de calibração para o Módulo de Controle de Câmera para salvar a coordenada referentes a atual da câmera, usada posteriormente como referencia para movimentar a câmera; e, por fim, a função \textbf{Parar/Enviar Câmera}, que controla o envio de imagens do Módulo de Controle de Câmera.\par
 
-Devido a escassez de recursos de hardware no Raspberry Pi (processador e memória RAM) associados a qualidade inferior da câmera utilizada no protótipo, a imagem capturada e enviada para o \textit{smartphone} tem péssima resolução (320x240 \textit{pixels}). Quando escalonada para preencher a área disponível na interface do celular, resultou numa figura desforme que pouco representa o objeto filmado. Sendo assim, apenas uma imagem está sendo mostrada, em tamanho reduzido e fora de alinhamento com a interface, conforme ilustrado na \autoref{fig:moduloandroid_cam}. Também, devido aos mesmos problemas relacionados ao hardware e qualidade da câmera, existe um atraso de aproximadamente 4 segundos entre as imagens que são coletadas na câmera e as imagens que são exibidas no aplicativo do celular.
+\subsection{Sistema de Vídeo}
+\label{subsec:sistemadevideo}
+
+Devido a escassez de recursos de hardware no Raspberry Pi (processador e memória RAM), para esse tipo de aplicação, associados a qualidade inferior da câmera utilizada no protótipo, a imagem capturada e enviada para o \textit{smartphone} não tem uma boa resolução (320x240 \textit{pixels}). Quando escalonada para preencher a área disponível na interface do celular, resultou numa figura desforme que pouco representava o objeto capturado. Sendo assim, apenas uma imagem está sendo mostrada, em tamanho reduzido e fora de alinhamento com a interface, conforme ilustrado na \autoref{fig:moduloandroid_cam}. Também, devido aos mesmos problemas relacionados ao hardware e qualidade da câmera, existe um atraso de aproximadamente 4 segundos entre as imagens que são coletadas na câmera e as imagens que são exibidas no aplicativo do celular.
 
 \begin{figure}[H]
 	\centering
@@ -340,6 +383,9 @@ Devido a escassez de recursos de hardware no Raspberry Pi (processador e memóri
 \end{figure}
 
 Para mostrar as imagens capturadas pela câmera no celular e transmitida via RTP \textit{Real Time Protocol}, foi utilizado a biblioteca do \textit{VLC}, a mesma testada na \autoref{subsec:mediaserver}. Foi recompilada para o sistema operacional \textit{Android} e integrada ao programa de captura de movimento. Essa biblioteca foi selecionada para ser integrada por oferecer opções de compatibilidade com o sistema operacional \textit{Android}, ser compatível com diversos formatos de vídeo e ter suporte ao \textit{RTP}.\par
+
+\subsection{Sistema de Captura de Coordenadas}
+\label{subsec:sistemacapturacoordenadas}
 
 A coleta de dados de movimento, acontece a cada 30 milissegundos, através dos eventos de posição fornecidos pela API do sistema operacional \textit{Android}, que simplificam bastante o desenvolvimento de aplicações, abstraindo toda configuração do hardware dos sensores e a densa matemática, necessária para converter leitura de forças exercidas sobre o aparelho e interações dos vetores aceleração, em uma estrutura de dados que representa numericamente a posição espacial em que se encontra o celular. Contudo, é necessário identificar a orientação do aparelho, \autoref{fig:axisdevice}, em relação ao sistema de eixos do planeta, ilustrado na \autoref{fig:axisglobe} para que a coleta de dados funcione adequadamente.\par
 
