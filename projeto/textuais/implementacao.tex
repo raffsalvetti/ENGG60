@@ -181,7 +181,7 @@ O MCC é responsável por acionar os motores, usados para movimentar a câmera, 
 
 O software de controle foi construído, usando a linguagem C, para receber valores de coordenadas enviados por uma conexão \textit{socket} e acionar os motores.\par
 
-O MCC possui dois modos de operação, um modo de produção, que opera consumindo recursos mínimos de memória e processador, e um modo de depuração/teste, habilitado através da diretiva \textbf{\textit{\#define TEST\_DISPLAY}}.
+O MCC possui dois modos de operação, um modo de produção, que opera consumindo recursos mínimos de memória e processador, e um modo de depuração/teste, habilitado através da diretiva \textbf{\textit{\#define TEST\_DISPLAY}} ou diretamente pelo \textit{script} \textit{Makefile} passando o parâmetro \textbf{\textit{CFLAGS=-DTEST\_DISPLAY}}.
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -205,7 +205,9 @@ Quando o ponto é movido no sentido horizontal, o motor horizontal é acionado, 
 
 As coordenadas do ponto branco são capturadas em relação a sua posição, em \textit{pixels} horizontais e verticais, dentro do painel negro, sendo a coordenada (0;0) a menor possível, localizada no canto superior esquerdo, ilustrado na \autoref{fig:sistcoord0x0}, e a coordenada (640, 480) a maior possível, localizada no canto inferior direito do painel negro, ilustrada na \autoref{fig:sistcoord100x100}.\par
 
-Conforme explicado na \autoref{sec:assemprototipo}, os motores servos deslocam seu eixo de acordo com a largura do pulso, enviado para seu controlador interno. Entretanto, as coordenadas simuladas pela interface de depuração e as que são recebidas do modulo \textit{Android}, não possuem a informação de largura de pulso ou quantidade de ângulos que determinado motor deve ser movimentado. Para resolver esse problema, foi proposto um sistema de posição independente da quantidade de \textit{pixels}, largura de pulso ou ângulos.\par
+O programa de teste também possui uma função de demonstração, que gera coordenadas de forma automática para os motores servo. A câmera segue o padrão de movimento definido por uma função seno, que varre os limites verticais e horizontais da interface, isto é, o padrão de movimento começa na coordenada (0;50) e oscila como uma senoide até a coordenada (100;50). Quando o movimento chega ao limite horizontal, a função é invertida e a câmera volta ao ponto de origem, conforme ilustrado na \autoref{fig:camdemo}. O modo de demonstração pode ser ativado através da diretiva \textit{\textbf{\#define CAMDEMO}} ou diretamente pelo \textit{script} \textit{Makefile} passando o parâmetro \textbf{\textit{CFLAGS=-CAMDEMO}}.
+
+Conforme explicado na \autoref{sec:pwm}, os motores servos deslocam seu eixo de acordo com a largura do pulso, enviado para seu controlador interno. Entretanto, as coordenadas simuladas pela interface de depuração e as que são recebidas do modulo \textit{Android}, não possuem a informação de largura de pulso ou quantidade de ângulos que determinado motor deve ser movimentado. Para resolver esse problema, foi proposto um sistema de posição independente da quantidade de \textit{pixels}, largura de pulso ou ângulos.\par
 
 \begin{figure}[H]
 	\centering
