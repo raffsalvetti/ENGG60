@@ -3,26 +3,70 @@
 \begin{apendicesenv}
 \partapendices
 
-% Primeiro apêndice------------------------------------------------------------
-\chapter{Nome do apêndice} % Edite para alterar o título deste apêndice
-\label{chap:apendiceA}
 
-Lembre-se que a diferença entre apêndice e anexo diz respeito à autoria do texto e/ou material ali colocado.
 
-Caso o material ou texto suplementar ou complementar seja de sua autoria, então ele deverá ser colocado como um apêndice. Porém, caso a autoria seja de terceiros, então o material ou texto deverá ser colocado como anexo.
+\includepdf[pages=-,offset=0 -20,angle=-90,scale=0.9,pagecommand={
+	\chapter{Diagrama de Circuitos} % Edite para alterar o título deste apêndice
+	\label{chap:board}
+}]{../board/hat.pdf}
 
-Caso seja conveniente, podem ser criados outros apêndices para o seu trabalho acadêmico. Basta recortar e colar este trecho neste mesmo documento. Lembre-se de alterar o "label"{} do apêndice.
+\chapter{Fotos do Protótipo} % Edite para alterar o título deste apêndice
+\label{chap:fotosprototipo}
 
-Não é aconselhável colocar tudo que é complementar em um único apêndice. Organize os apêndices de modo que, em cada um deles, haja um único tipo de conteúdo. Isso facilita a leitura e compreensão para o leitor do trabalho.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_frontal}
+	\caption{Visão frontal.}
+	\label{fig:vistafrontal}
+\end{figure}
 
-% Novo apêndice----------------------------------------------------------------
-\chapter{Instalação e Configuração do Sistema Operacional do Raspberri Pi (Raspbian)}
-\label{chap:apendiceB}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_traseira}
+	\caption{Visão traseira.}
+	\label{fig:vistatraseira}
+\end{figure}
 
-conteúdo do novo apêndice
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_esquerda}
+	\caption{Visão lateral esquerda.}
+	\label{fig:vistaesquerda}
+\end{figure}
 
-\chapter{Fotos do Protótipo}
-\label{chap:apendiceC}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_direita}
+	\caption{Visão lateral direita.}
+	\label{fig:vistadireita}
+\end{figure}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_superior}
+	\caption{Visão superior.}
+	\label{fig:vistasuperior}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_detalhe_fixacao_camera}
+	\caption{Fixação da câmera com cola quente.}
+	\label{fig:vistadetalhefixacaocamera}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_detalhe_fixacao_raspi}
+	\caption{Fixação do gabinete do \textit{Raspberry Pi} com cola quente.}
+	\label{fig:vistadetalhefixacaoraspi}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/vista_detalhe_circuito}
+	\caption{Detalhe da montagem do circuito na mini \textit{breadboard}.}
+	\label{fig:vistadetalhecircuito}
+\end{figure}
 
 \end{apendicesenv}
