@@ -146,7 +146,7 @@ Com a intensão de testar os motores, e preservar o \textit{Raspberry Pi} (um di
 	\label{fig:pwmtestcircuit}
 \end{figure}
 
-Ativando individualmente os motores com o \textit{driver} construído e com o auxilio de um osciloscópio, foi possível notar que os motores operam de forma estável com pulsos gerados numa frequência de 50Hz, e que é possível controlar a sua posição variando a largura do pulso entre valores próximos a 1ms, posição de angulo $180\degree$ (ângulo máximo), e valores próximos 2ms, posição de angulo $0\degree$ (ângulo mínimo), como ilustrado na \autoref{fig:pwmservo}. Foi possível observar também que existe uma correspondência linear entre a largura do pulso e a posição angular do eixo do motor, sendo assim, a posição de repouso ou centro, pode ser alcançada com uma largura de pulso próximo a 1,5 milissegundos. 
+Ativando individualmente os motores com o \textit{driver} construído e com o auxilio de um osciloscópio, foi possível notar que os motores operam de forma estável com pulsos gerados numa frequência de 50Hz, e que é possível controlar a sua posição variando a largura do pulso entre valores próximos a 1ms, posição de ângulo $180\degree$ (ângulo máximo), e valores próximos 2ms, posição de ângulo $0\degree$ (ângulo mínimo), como ilustrado na \autoref{fig:pwmservo}. Foi possível observar também que existe uma correspondência linear entre a largura do pulso e a posição angular do eixo do motor, sendo assim, a posição de repouso ou centro, pode ser alcançada com uma largura de pulso próximo a 1,5 milissegundos. 
 
 \begin{figure}[H]
 	\centering
@@ -255,7 +255,7 @@ Conforme explicado na \autoref{sec:pwm}, os motores servos deslocam seu eixo de 
 \subsection{Sistema de Coordenadas}
 \label{subsec:sistemacoordenadas}
 
-O sistema de posição proposto é baseado na proporção, ou porcentagem, máxima do movimento possível (do motor, da cabeça do operador e do mouse no painel do programa de teste). Desse modo, o ângulo máximo que o motor horizontal, e a cabeça do operador, podem deslocar é $180\degree$, sendo $90\degree$ para a esquerda e $90\degree$ para a direita (partindo-se do ângulo $90\degree$, local de descanso do motor e centro de visão do operador), e está relacionado diretamente ao valor máximo de \textit{pixels} que a componente $x$ da coordenada de posição pode assumir, 640 \textit{pixels}, sendo 320 para a esquerda e 320 para a direita (partindo-se do centro da interface). De forma semelhante, movem-se no eixo vertical, o motor e a cabeça do operador com angulo máximo de $180\degree$, mudando apenas a quantidade máxima de \textit{pixels} na interface de teste, que nesse caso é 480, sendo 240 para cima e 240 para baixo.\par
+O sistema de posição proposto é baseado na proporção, ou porcentagem, máxima do movimento possível (do motor, da cabeça do operador e do mouse no painel do programa de teste). Desse modo, o ângulo máximo que o motor horizontal, e a cabeça do operador, podem deslocar é $180\degree$, sendo $90\degree$ para a esquerda e $90\degree$ para a direita (partindo-se do ângulo $90\degree$, local de descanso do motor e centro de visão do operador), e está relacionado diretamente ao valor máximo de \textit{pixels} que a componente $x$ da coordenada de posição pode assumir, 640 \textit{pixels}, sendo 320 para a esquerda e 320 para a direita (partindo-se do centro da interface). De forma semelhante, movem-se no eixo vertical, o motor e a cabeça do operador com ângulo máximo de $180\degree$, mudando apenas a quantidade máxima de \textit{pixels} na interface de teste, que nesse caso é 480, sendo 240 para cima e 240 para baixo.\par
 A relação entre a largura de pulso enviada para os motores horizontal e vertical, em porcento, é dada respectivamente por:
 \begin{equation}
 	PWM_H = \frac{TARGET_X \times 100}{WIDTH}
@@ -349,7 +349,7 @@ O programa de captura de coordenadas pode ser resumido basicamente em quatro par
 \subsection{Interface do Usuário / Operador}
 \label{subsec:interfaceusuariooperador}
 
-A captura de tela da interface do MCM, ilustrada na \autoref{fig:moduloandroid}, mostra uma serie de componentes visuais, que trazem informações pertinentes ao funcionamento do sistema e permitem interagir remotamente com o MCC. \par
+A captura de tela da interface do MCM, ilustrada na \autoref{fig:moduloandroid}, mostra uma série de componentes visuais, que trazem informações pertinentes ao funcionamento do sistema e permitem interagir remotamente com o MCC. \par
 
 O \textbf{indicador de conexão}, localizado no canto superior esquerdo da interface, indica a qual endereço IP está associado ao servidor, responsável por controlar os motores que movimentam a câmera, e ao mesmo tempo disponibilizam as imagens capturadas. Quando o valor mostrado é \textbf{0.0.0.0}, significa que está desconectado de um servidor e não será possível enviar coordenadas ou receber imagens.\par
 

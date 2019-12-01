@@ -28,18 +28,18 @@ Robôs equipados com ferramentas adequadas para cada tarefa, dotados de um siste
 
 Independente de um robô ser controlado diretamente por uma pessoa, ou operar em modo completamente autônomo, em algum momento, a observação, supervisão e o julgamento humano ainda é um elemento crítico da atividade robótica.\par
 
-A maior ligação perceptiva entre um ambiente remoto e o operador de um robô, acontece através do vídeo enviado por uma (ou mais) câmera montada no robô. Existe uma relação forte entre problemas de localização da câmera e sua montagem, bem como angulo de visão e outros fatores que podem degradar essa ligação e deixar o operador vulnerável a uma serie de erros tais como: desorientação, falha ao reconhecer danos ou simplesmente não notar um ponto importante durante uma inspeção.\par
+A maior ligação perceptiva entre um ambiente remoto e o operador de um robô, acontece através do vídeo enviado por uma (ou mais) câmera montada no robô. Existe uma relação forte entre problemas de localização da câmera e sua montagem, bem como ângulo de visão e outros fatores que podem degradar essa ligação e deixar o operador vulnerável a uma série de erros tais como: desorientação, falha ao reconhecer danos ou simplesmente não notar um ponto importante durante uma inspeção.\par
 
 Estudos sugerem que disponibilizar uma câmera controlada independentemente da orientação de um robô, pode facilitar tarefas de localização num ambiente. \citeonline{hughes2004robotic}
 
 A complexidade de operação de um robô é proporcional ao seu DOF (\textit{Degrees of Freedom}), isto é, quanto maior a variedade de movimentos o robô pode executar (considerando seu deslocamento, movimento de braços mecânicos e câmera), mais difícil é o controle manual para o operador.
-Pensando nisso, o desenvolvimento de controles mais intuitivos para a câmera embarcada, diminui a complexidade geral do controle de movimentos globais do robô. \par
+Pensando nisso, o desenvolvimento de controles mais intuitivos para a câmera embarcada diminui a complexidade geral do controle de movimentos globais do robô. \par
 
-Com o objetivo de aprofundar os conhecimentos adquiridos ao longo do curso, este trabalho visa criar um controle de câmera do tipo \textit{Pan} e \textit{Tilt}, baseando-se nos dados de movimento, coletados e enviados, através de rede sem fio, por um \textit{smartphone} acoplado a cabeça do operador, por um óculos VR (\textit{Virtual Reality}). Dessa forma, os movimentos de rotação da cabeça do operador (\textit{yaw} e \textit{pitch}) são traduzidos em movimentos da câmera (\textit{Pan} e \textit{Tilt}), montada no robô. \par 
+Com o objetivo de aprofundar os conhecimentos adquiridos ao longo do curso, este trabalho visa criar um controle de câmera do tipo \textit{Pan} e \textit{Tilt}, baseando-se nos dados de movimento, coletados e enviados, através de rede sem fio, por um \textit{smartphone} acoplado à cabeça do operador, por um óculos VR (\textit{Virtual Reality}). Dessa forma, os movimentos de rotação da cabeça do operador (\textit{yaw} e \textit{pitch}) são traduzidos em movimentos da câmera (\textit{Pan} e \textit{Tilt}), montada no robô. \par 
 
 No projeto, pretende-se utilizar um \textit{Raspberry Pi}, como unidade computacional e de controle dos servo motores da câmera, e um celular \textit{smartphone} \textit{Android}, responsável por coletar e enviar informações referentes a posição espacial do aparelho. \par
 
-Com o desenvolvimento do projeto procura-se um melhor entendimento em aspetos relacionados a rede de computadores, sistemas operacionais, interfaces de hardware, modulação por largura de pulso, eletrônica geral e desenvolvimento de sistemas para plataformas móveis.\par
+Com o desenvolvimento do projeto, procura-se um melhor entendimento em aspectos relacionados a rede de computadores, sistemas operacionais, interfaces de hardware, modulação por largura de pulso, eletrônica geral e desenvolvimento de sistemas para plataformas móveis.\par
 
 Competências ligadas a construção de software, utilizando múltiplas linguagens de programação, devem ser evoluídas, já que o módulo de controle, embarcado no \textit{Raspberry Pi}, deve ser construído em linguagem C e o módulo de coleta de dados desenvolvido em Java, usando a API (\textit{Application Programming Interface}) fornecida pelo sistema operacional \textit{Android}.\par
 

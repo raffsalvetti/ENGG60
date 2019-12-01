@@ -3,14 +3,14 @@
 \chapter{FUNDAMENTAÇÃO TEÓRICA}
 \label{chap:fundamentacao-teorica}
 
-Este capítulo descreve as tecnologias e conceitos centrais, utilizados durante a concepção do projeto. As definições apresentadas, são embasadas no material bibliográfico revisado, que serviu de apoio no desenvolvimento de um trabalho fundamentado nas teorias existentes.
+Este capítulo descreve as tecnologias e conceitos centrais utilizados durante a concepção do projeto. As definições apresentadas são embasadas no material bibliográfico revisado, que serviu de apoio no desenvolvimento de um trabalho fundamentado nas teorias existentes.
 
 \section{\textit{Raspberry Pi}}
 \label{sec:raspi}
 
-O \textit{Raspberry Pi}, é uma família de computadores, com arquitetura de processador ARM (\textit{Advanced RISC Machine}), desenvolvido em um único chip de silício, chamados de SoC (\textit{System on Chip}), com o tamanho de um cartão de crédito. Inicialmente, seu objetivo era promover o ensino de computação (programação) básica em escolas, principalmente públicas, de todo o mundo. Entretanto, por possuir um poder computacional razoável, uma boa quantidade de memória RAM (\textit{Random Access memory}) (a partir do modelo B, ilustrado na \autoref{fig:raspi_modelb}) e um preço relativamente baixo, passou a ser usado para outros objetivos como: console de videogame clássico (emulação de jogos), gerencia de mídia (vídeos, fotos e musicas), estudos em eletrônica, domótica (automação residencial), internet das coisas e robótica. \citeonline{jucapereira2018aplicacoes} \par
-Uma versão do sistema operacional \textit{Debian Linux}, chamada \textit{Raspbian}, foi portada para o \textit{Raspberry Pi}, levando também uma serie de aplicativos e ferramentas de desenvolvimento, já existentes para computadores com arquitetura x86. Dessa modo, o desenvolvimento de programas se torna uma tarefa extremamente simples, já que o sistema operacional fornece a HAL (\textit{Hardware Abstraction Layer}), não sendo necessário o conhecimento especifico do \textit{hardware} do \textit{Raspberry Pi}. \par
-Existem várias linguagens de programação portadas para o \textit{Raspberry Pi}, as mais utilizadas para desenvolvimento de software, com bibliotecas disponíveis para interação com o \textit{hardware}, são o C/C++ e Python porém, é possível desenvolver em outras linguagens de programação como o PHP e Java. \citeonline{jucapereira2018aplicacoes} \par
+O \textit{Raspberry Pi} é uma família de computadores com arquitetura de processador ARM (\textit{Advanced RISC Machine}), desenvolvido em um único chip de silício, chamados de SoC (\textit{System on Chip}), com o tamanho de um cartão de crédito. Inicialmente, seu objetivo era promover o ensino de computação (programação) básica em escolas, principalmente públicas, de todo o mundo. Entretanto, por possuir um poder computacional razoável, uma boa quantidade de memória RAM (\textit{Random Access memory}) (a partir do modelo B, ilustrado na \autoref{fig:raspi_modelb}) e um preço relativamente baixo, passou a ser usado para outros objetivos como: console de videogame clássico (emulação de jogos), gerencia de mídia (vídeos, fotos e músicas), estudos em eletrônica, domótica (automação residencial), internet das coisas e robótica. \citeonline{jucapereira2018aplicacoes} \par
+Uma versão do sistema operacional \textit{Debian Linux}, chamada \textit{Raspbian}, foi portada para o \textit{Raspberry Pi}, levando também uma série de aplicativos e ferramentas de desenvolvimento já existentes para computadores com arquitetura x86. Desse modo, o desenvolvimento de programas se torna uma tarefa extremamente simples, já que o sistema operacional fornece a HAL (\textit{Hardware Abstraction Layer}), não sendo necessário o conhecimento especifico do \textit{hardware} do \textit{Raspberry Pi}. \par
+Existem várias linguagens de programação portadas para o \textit{Raspberry Pi}. As mais utilizadas para desenvolvimento de software, com bibliotecas disponíveis para interação com o \textit{hardware}, são o C/C++ e Python, porém é possível desenvolver em outras linguagens de programação, como o PHP e Java. \citeonline{jucapereira2018aplicacoes} \par
 
 \begin{figure}[H]
 	\centering
@@ -23,7 +23,7 @@ Existem várias linguagens de programação portadas para o \textit{Raspberry Pi
 \section{Servo Motor}
 \label{sec:servomotor}
 
-Um servo motor, visto na \autoref{fig:servo_g9}, é um atuador rotatório, ou atuador linear, que permite um controle preciso da posição linear ou angular, velocidade e aceleração de uma carga ligada ao seu eixo. Consiste basicamente em um motor, normalmente de corrente continua, acoplado a um sensor (potenciômetro), para ler sua posição durante o movimento, conforme ilustrado na \autoref{fig:insideaservo}. Normalmente, os motores servos são controlador por um sinal PWM (\textit{Pulse Width Modulation}). \citeonline{petruzella2009electric} \par
+Um servo motor, visto na \autoref{fig:servo_g9}, é um atuador rotatório ou atuador linear, que permite um controle preciso da posição linear ou angular, velocidade e aceleração de uma carga ligada ao seu eixo. Consiste basicamente em um motor, normalmente de corrente contínua, acoplado a um sensor (potenciômetro) para ler sua posição durante o movimento, conforme ilustrado na \autoref{fig:insideaservo}. Normalmente, os motores servos são controlados por um sinal PWM (\textit{Pulse Width Modulation}). \citeonline{petruzella2009electric} \par
 
 \begin{figure}[h]
 	\centering
@@ -55,7 +55,7 @@ O servo motor opera em malha fechada, isto é, seu controlador compara a velocid
 \section{Modulação por Largura de Pulso - PWM}
 \label{sec:pwm}
 
-A modulação por largura de pulso é uma técnica empregada em diversas áreas da eletrônica. Sendo utilizada para controlar fontes chaveadas, velocidade de motores, luminosidade, servo motores e diversas outras aplicações. Consiste em variar a o tempo, em que um pulso de tensão oscila entre os níveis alto e baixo, numa taxa rápida o suficiente, para que a média dos pulsos crie um valor médio de tensão efetivo, ilustrado na \autoref{fig:pwm}. Ao valor definido pela divisão entre a largura de pulso, com a tensão em nível alto, e o período do sinal, é dado o nome \textbf{ciclo de trabalho} ou \textit{dutty cycle}. Variar o \textit{dutty cycle} significa variar a tensão média gerada pelo sinal, isto é, a potência é proporcional a tensão média resultante. \citeonline{pinckney2006pulse}.
+A modulação por largura de pulso é uma técnica empregada em diversas áreas da eletrônica. Sendo utilizada para controlar fontes chaveadas, velocidade de motores, luminosidade, servo motores e diversas outras aplicações. Consiste em variar o tempo em que um pulso de tensão oscila entre os níveis alto e baixo, numa taxa rápida o suficiente para que a média dos pulsos crie um valor médio de tensão efetivo, ilustrado na \autoref{fig:pwm}. É dado o nome \textbf{ciclo de trabalho} ou \textit{dutty cycle} ao valor definido pela divisão entre a largura de pulso, com a tensão em nível alto, e o período do sinal,. Variar o \textit{dutty cycle} significa variar a tensão média gerada pelo sinal. Como a potência de um dispositivo é proporcional a tensão, reduzir a potencia de um dispositivo operado por PWM (a exemplo, um LED ou motor DC), é o mesmo que reduzir o \textit{dutty cycle} do sinal. \citeonline{pinckney2006pulse}.
 
 \begin{figure}[h]
 	\centering
@@ -65,23 +65,23 @@ A modulação por largura de pulso é uma técnica empregada em diversas áreas 
 	\label{fig:pwm}
 \end{figure}
 
-A largura de pulso pode ser calculada usando a equação \autoref{eq:duttycicle}.
+A largura de pulso pode ser calculada usando a \autoref{eq:duttycicle}.
 
 \begin{equation}
-{DuttyCycle} = 100 \times \frac{LarguraPulso}{Período}  
+{C} = 100 \times \frac{LP}{P}  
 \label{eq:duttycicle}
 \end{equation}
 
-Onde: \textbf{\textit{DutyCycle}} é um valor dado em porcento, \textbf{LarguraPulso} e \textbf{Período} são valores dados em segundos.\par
+Onde: \textbf{C} é um valor dado em percentual, \textbf{LP} e \textbf{P} são valores dados em segundos.\par
 
 Uma vez calculado o ciclo de trabalho, é possível calcular o valor da tensão média gerada pelo sinal através da \autoref{eq:avervoltage}.
 
 \begin{equation}
-{TensãoMédia} = {TensãoPulso} \times {DutyCycle}
+{TM} = {TP} \times {C}
 \label{eq:avervoltage}
 \end{equation}
 
-Onde: \textbf{TensãoMédia} é a tensão média resultante, dado em volts, \textbf{TensãoPulso} é a tensão usada na geração do pulso PWM, também dado em volts, e \textbf{\textit{DutyCycle}} é o valor encontrado com a \autoref{eq:duttycicle}, dado em porcentagem.
+Onde: \textbf{TM} é a tensão média resultante, dado em volts, \textbf{TP} é a tensão usada na geração do pulso PWM, também dado em volts, e \textbf{\textit{D}} é o valor encontrado com a \autoref{eq:duttycicle}, dado em percentual.
 
 \section{Smartfone Android}
 \label{sec:android}
@@ -131,7 +131,7 @@ De forma geral, os sensores usam um sistema de coordenadas com três eixos para 
 	\fonte{ \citeonline{google2019devsensors}.}
 \end{figure}
 
-O sensor \textbf{vetor de rotação}, representa a orientação do aparelho como uma combinação de um angulo e um eixo, no qual o dispositivo rotacionou com um ângulo $\theta$ em torno de um eixo ($x$, $y$ ou $z$) \citeonline{google2019devsensors}. \par
+O sensor \textbf{vetor de rotação}, representa a orientação do aparelho como uma combinação de um ângulo e um eixo, no qual o dispositivo rotacionou com um ângulo $\theta$ em torno de um eixo ($x$, $y$ ou $z$) \citeonline{google2019devsensors}. \par
 Os três componentes do vetor re rotação são expressos como:\\
 
 \begin{equation}
