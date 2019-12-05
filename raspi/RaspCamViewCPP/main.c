@@ -48,7 +48,6 @@ void change_coodinates(int socket, char *message) {
 		servo_driver_set_y_position(y);
 	} else if(!strcmp(message, "VIDEOSTART") || !strcmp(message, "VIDEOSTART\n")) {
 		video_start(ip_cliente);
-		servo_driver_calibrate();	
 	} else if(!strcmp(message, "VIDEOSTOP") || !strcmp(message, "VIDEOSTOP\n")) {
 		video_stop();
 	} else if(!strcmp(message, "CALIBRATECAM")) {

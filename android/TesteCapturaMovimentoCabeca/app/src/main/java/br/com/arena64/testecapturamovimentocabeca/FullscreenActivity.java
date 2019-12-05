@@ -15,7 +15,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.QuickContactBadge;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -146,7 +145,7 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
     };
 
     private static final String TAG = "FullscreenActivity";
-    private Button mButtonReset;
+    private Button mButtonCalibrarCelular, mButtonCalibrarCamera;
     private Switch aSwitchSendData;
     private TextView textViewConectado, textViewStatus, textViewCoordenadas;
     private Orientation mOrientation;
@@ -172,11 +171,20 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         mControlsView = findViewById(R.id.fullscreen_content_controls);
 //        mContentView = findViewById(R.id.fullscreen_content);
 
-        mButtonReset = findViewById(R.id.button_calibrar_celular);
-        mButtonReset.setOnClickListener(new View.OnClickListener() {
+        mButtonCalibrarCelular = findViewById(R.id.button_calibrar_celular);
+        mButtonCalibrarCelular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calibrate();
+            }
+        });
+
+        mButtonCalibrarCamera = findViewById(R.id.button_calibrar_camera);
+        mButtonCalibrarCamera.setEnabled(false);
+        mButtonCalibrarCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                netWorks.sendMessage("CALIBRATECAM");
             }
         });
 
@@ -359,6 +367,7 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mButtonCalibrarCamera.setEnabled(true);
                 aSwitchSendData.setClickable(true);
                 toggleImagemCamera.setEnabled(true);
                 textViewConectado.setText(String.format("Conectado em: %s", ipAddress));
@@ -372,6 +381,7 @@ public class FullscreenActivity extends AppCompatActivity implements Orientation
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mButtonCalibrarCamera.setEnabled(false);
                 aSwitchSendData.setChecked(false);
                 toggleImagemCamera.setEnabled(false);
                 toggleImagemCamera.setChecked(false);
